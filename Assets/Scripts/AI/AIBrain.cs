@@ -1,0 +1,240 @@
+// ============================================================
+//  AIBrain.cs  –  AI decision logic
+//
+//  Strategy tiers:
+//  Easy  – mostly random; rarely plays No Bueno
+//  Normal – greedy (maximise own score, sabotage leader)
+//  Hard  – full look-ahead: protects Hot Sauce Boss,
+//          targets leader with Crafty Crow / Order Envy,
+//          saves No Bueno for when opponent has HotSauceBoss
+// ============================================================
+
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace TacoVsBurrito
+{
+    public enum AIDifficulty { Easy, Normal, Hard }
+
+    public struct AIDecision
+    {
+        public int cardIndex;         // index in AI's hand
+        public int destPlayerIndex;   // -1 = self (for meal placements)
+    }
+
+    public static class AIBrain
+    {
+        public static AIDecision Decide(Player ai, IReadOnlyList<Player> allPlayers,
+                                         DeckManager deck, AIDifficulty difficulty = AIDifficulty.Normal)
+        {
+            return difficulty switch
+            {
+                AIDifficulty.Easy  => DecideEasy(ai, allPlayers),
+                AIDifficulty.Hard  => DecideHard(ai, allPlayers, deck),
+                _                  => DecideNormal(ai, allPlayers)
+            };
+        }
+
+        // ===========================================================
+        //  EASY  –  random legal move
+        // ===========================================================
+        private static AIDecision DecideEasy(Player ai, IReadOnlyList<Player> allPlayers)
+        {
+            int idx = Random.Range(0, ai.Hand.Count);
+            var card = ai.Hand.GetAt(idx);
+
+            int dest = -1; // default = own meal
+            if (card.IsPlaceableInMeal && Random.value < 0.25f)
+            {
+                // 25% chance to dump a Tummy Ache on a random opponent
+                if (card is TummyAcheCard)
+                    dest = PickRandomOpponent(ai, allPlayers);
+            }
+
+            return new AIDecision { cardIndex = idx, destPlayerIndex = dest };
+        }
+
+        // ===========================================================
+        //  NORMAL  –  greedy heuristic
+        // ===========================================================
+        private static AIDecision DecideNormal(Player ai, IReadOnlyList<Player> allPlayers)
+        {
+            var hand = ai.Hand;
+
+            // Priority 1: Play Hot Sauce Boss into own meal (huge value)
+            int hsb = FindFirstInHand<HotSauceBossCard>(ai);
+            if (hsb >= 0) return new AIDecision { cardIndex = hsb, destPlayerIndex = ai.Index };
+
+            // Priority 2: Play highest-value ingredient into own meal
+            int bestIng = FindBestIngredient(ai);
+            if (bestIng >= 0) return new AIDecision { cardIndex = bestIng, destPlayerIndex = ai.Index };
+
+            // Priority 3: Dump Tummy Ache on the leader
+            int ta = FindFirstInHand<TummyAcheCard>(ai);
+            if (ta >= 0)
+            {
+                int leader = GetLeaderIndex(ai, allPlayers);
+                return new AIDecision { cardIndex = ta, destPlayerIndex = leader };
+            }
+
+            // Priority 4: Play any action card
+            int act = FindFirstAction(ai, typeof(CraftyCrowCard),
+                                        typeof(TrashPandaCard),
+                                        typeof(FoodFightCard),
+                                        typeof(OrderEnvyCard));                              
+            if (act >= 0)
+                return new AIDecision { cardIndex = act,
+                    destPlayerIndex = GetLeaderIndex(ai, allPlayers) };
+
+            // // Fallback: discard first card
+             return new AIDecision { cardIndex = 0, destPlayerIndex = -1 };
+        }
+
+        // ===========================================================
+        //  HARD  –  look-ahead strategic
+        // ===========================================================
+        private static AIDecision DecideHard(Player ai, IReadOnlyList<Player> allPlayers,
+                                              DeckManager deck)
+        {
+            //1. If we have Hot Sauce Boss AND at least 3 ingredients in meal → play it
+            int hsb = FindFirstInHand<HotSauceBossCard>(ai);
+            if (hsb >= 0 && ai.Meal.IngredientCardCount >= 3)
+                return new AIDecision { cardIndex = hsb, destPlayerIndex = ai.Index };
+
+            // 2. Use Crafty Crow to steal leader's Hot Sauce Boss
+            int cc = FindFirstAction(ai, typeof(CraftyCrowCard));
+            if (cc >= 0)
+            {
+                var leader = GetLeader(ai, allPlayers);
+                if (leader != null && leader.Meal.HotSauceBossCardCount > 0)
+                    return new AIDecision { cardIndex = cc, destPlayerIndex = leader.Index };
+            }
+
+            // 3. Order Envy if leader has way more points
+            int oe = FindFirstAction(ai, typeof(OrderEnvyCard));
+            if (oe >= 0)
+            {
+                var leader = GetLeader(ai, allPlayers);
+                if (leader != null && leader.Score > ai.Score + 5)
+                    return new AIDecision { cardIndex = oe, destPlayerIndex = leader.Index };
+            }
+
+            // 4. Play HSB now if available
+            if (hsb >= 0)
+                return new AIDecision { cardIndex = hsb, destPlayerIndex = ai.Index };
+
+            // 5. Best ingredient into own meal
+            int bestIng = FindBestIngredient(ai);
+            if (bestIng >= 0) return new AIDecision { cardIndex = bestIng, destPlayerIndex = ai.Index };
+
+            // 6. Tummy ache to leader
+            int ta = FindFirstInHand<TummyAcheCard>(ai);
+            if (ta >= 0)
+                return new AIDecision { cardIndex = ta,
+                    destPlayerIndex = GetLeaderIndex(ai, allPlayers) };
+
+            // 7. Trash Panda
+            int tp = FindFirstAction(ai, typeof(TrashPandaCard));
+            if (tp >= 0 && deck.TrashCount > 0)
+                return new AIDecision { cardIndex = tp, destPlayerIndex = -1 };
+
+            // 8. Food Fight
+            int ff = FindFirstAction(ai, typeof(FoodFightCard));
+            if (ff >= 0) return new AIDecision { cardIndex = ff, destPlayerIndex = -1 };
+
+            // 9. Crafty Crow against anyone with a meal card
+            if (cc >= 0)
+            {
+                var victim = allPlayers.Where(p => p != ai && p.Meal.CardCount > 0)
+                                       .OrderByDescending(p => p.Score).FirstOrDefault();
+                if (victim != null)
+                    return new AIDecision { cardIndex = cc, destPlayerIndex = victim.Index };
+            }
+
+            return new AIDecision { cardIndex = 0, destPlayerIndex = -1 };
+        }
+
+        // ===========================================================
+        //  No Bueno reaction
+        // ===========================================================
+        /// Returns true if the AI should play No Bueno against this card.
+        public static bool ShouldPlayNoBueno(Player ai, CardBase cardBeingPlayed,
+                                              IReadOnlyList<Player> allPlayers)
+        {
+            // Always block Order Envy targeting us
+            if (cardBeingPlayed is OrderEnvyCard) return true;
+
+            // Block Crafty Crow if we have a Hot Sauce Boss in our meal
+            if (cardBeingPlayed is CraftyCrowCard &&
+                ai.Meal.HotSauceBossCardCount > 0) return true;
+
+            // Block a Tummy Ache being placed in our meal if we have Hot Sauce Boss
+            if (cardBeingPlayed is TummyAcheCard &&
+                ai.Meal.HotSauceBossCardCount > 0) return true;
+
+            // Easy AI: rarely blocks
+            return Random.value < 0.1f;
+        }
+
+        // ===========================================================
+        //  Helpers
+        // ===========================================================
+        private static int FindFirstInHand<T>(Player p) where T : CardBase
+        {
+            for (int i = 0; i < p.Hand.Count; i++)
+            {
+                if (p.Hand.GetAt(i) is T)
+                    return i;
+            }
+            return -1;
+        }
+
+        private static int FindBestIngredient(Player p)
+        {
+            int best = -1, bestVal = -1;
+            for (int i = 0; i < p.Hand.Count; i++)
+            {
+                var c = p.Hand.GetAt(i);
+                if (c is IngredientCardBase @base && @base.CardValue > bestVal)
+                { bestVal = @base.CardValue; best = i; }
+            }
+            return best;
+        }
+
+        private static int FindFirstAction(Player p, params System.Type[] actionTypes)
+        {
+            for (int i = 0; i < p.Hand.Count; i++)
+            {
+                var card = p.Hand.GetAt(i);
+
+                if (card is not ActionCardBase) 
+                    continue;
+
+                foreach (var type in actionTypes)
+                {
+                    if (type.IsAssignableFrom(card.GetType()))
+                        return i;
+                }
+            }
+            return -1;
+        }
+
+        private static int GetLeaderIndex(Player ai, IReadOnlyList<Player> all)
+        {
+            Player leader = GetLeader(ai, all);
+            return leader?.Index ?? ((ai.Index + 1) % all.Count);
+        }
+
+        private static Player GetLeader(Player ai, IReadOnlyList<Player> all)
+        {
+            return all.Where(p => p != ai).OrderByDescending(p => p.Score).FirstOrDefault();
+        }
+
+        private static int PickRandomOpponent(Player ai, IReadOnlyList<Player> all)
+        {
+            var others = all.Where(p => p != ai).ToList();
+            return others.Count > 0 ? others[Random.Range(0, others.Count)].Index : -1;
+        }
+    }
+}
