@@ -252,7 +252,7 @@ namespace TacoVsBurrito
         }
 
         private int ValueForFoodFight(CardBase card) =>
-            card is IngredientCardBase ? ((IngredientCardBase)card).CardValue : 0;
+            card is IngredientCardBase @base ? @base.CardValue : 0;
 
         // ==========================================================
         //  ORDER ENVY

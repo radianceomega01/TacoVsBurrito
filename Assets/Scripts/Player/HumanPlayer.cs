@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace TacoVsBurrito
 {
-    public class SelfPlayer : HumanPlayer
+    public class HumanPlayer : PlayerBase
     {
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()

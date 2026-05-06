@@ -151,7 +151,7 @@ namespace TacoVsBurrito
             RefreshDrawCount();
 
             // Show hand only for the current human playerBase
-            if (playerBase.Type == PlayerType.Human)
+            if (playerBase is HumanPlayer)
                 BuildHandUI(playerBase);
             else
                 ClearHandUI($"{playerBase.Name} (AI) is thinking…");
@@ -162,8 +162,8 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         private void OnHandChanged(PlayerBase playerBase)
         {
-            if (playerBase == GameManager.Instance.CurrentPlayerBase &&
-                playerBase.Type == PlayerType.Human)
+            if (playerBase == GameManager.Instance.CurrentPlayer &&
+                playerBase is HumanPlayer)
                 BuildHandUI(playerBase);
         }
 
@@ -199,8 +199,8 @@ namespace TacoVsBurrito
 
         private void OnHandCardClicked(int idx, CardBase card)
         {
-            var playerBase = GameManager.Instance.CurrentPlayerBase;
-            if (playerBase.Type != PlayerType.Human) return;
+            var playerBase = GameManager.Instance.CurrentPlayer;
+            if (playerBase is HumanPlayer) return;
 
             if (card.IsPlaceableInMeal)
             {
@@ -235,10 +235,10 @@ namespace TacoVsBurrito
 
                 // Colour-code: own meal = green tint, opponent = normal
                 if (go.TryGetComponent<Image>(out var img))
-                    img.color = (p == GameManager.Instance.CurrentPlayerBase)
+                    img.color = (p == GameManager.Instance.CurrentPlayer)
                         ? new Color(0.6f, 1f, 0.6f) : Color.white;
 
-                bool isSelf = p == GameManager.Instance.CurrentPlayerBase;
+                bool isSelf = p == GameManager.Instance.CurrentPlayer;
                 if (lbl) lbl.text = isSelf
                     ? $"Your {p.MealChoice} ({p.Score} pts)"
                     : $"{p.Name}'s {p.MealChoice} ({p.Score} pts)";
@@ -262,7 +262,7 @@ namespace TacoVsBurrito
             bool anyHumanHasNoBueno = false;
             foreach (var p in GameManager.Instance.Players)
             {
-                if (p.Type == PlayerType.Human && p != active)
+                if (p is HumanPlayer && p != active)
                 {
                     foreach (var c in p.Hand.Cards)
                         if (c is NoBuenoCard) { anyHumanHasNoBueno = true; break; }
@@ -281,7 +281,7 @@ namespace TacoVsBurrito
                 // Find first human playerBase's No Bueno
                 foreach (var p in GameManager.Instance.Players)
                 {
-                    if (p.Type == PlayerType.Human && p != active)
+                    if (p is HumanPlayer && p != active)
                     {
                         foreach (var c in p.Hand.Cards)
                         {

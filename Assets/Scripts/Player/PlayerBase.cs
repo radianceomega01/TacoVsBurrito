@@ -7,7 +7,6 @@ namespace TacoVsBurrito
         public int        Index      { get; private set; }
         public string     Name       { get; private set; }
         public MealType   MealChoice { get; private set; }
-        public PlayerType Type       { get; private set; }
 
         public Hand Hand { get; private set; } = new Hand();
         public Meal Meal { get; private set; }
@@ -43,10 +42,4 @@ namespace TacoVsBurrito
             $"Player {Index}: {Name} | {MealChoice} | Score: {Score} | Hand: {Hand.Count}";
   
     }
-    public enum PlayerType
-    {
-        Human,
-        AI
-    }
-
 }

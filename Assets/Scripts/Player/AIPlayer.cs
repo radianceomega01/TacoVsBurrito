@@ -1,18 +1,16 @@
+using Unity.VisualScripting;
 using UnityEngine;
 namespace TacoVsBurrito
 {
     public class AIPlayer : PlayerBase
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
+        private AIBrain aIBrain;
 
+        void Awake()
+        {
+            aIBrain = transform.AddComponent<AIBrain>();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        public AIBrain GetBrain() => aIBrain;
     }
 }

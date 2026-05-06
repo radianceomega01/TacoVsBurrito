@@ -42,12 +42,7 @@ namespace TacoVsBurrito
 {
     public class GameManager : MonoBehaviour
     {
-        // -------------------------------------------------------
-        //  Inspector fields
-        // -------------------------------------------------------
 
-        [Header("Game Settings")]
-        [Range(2, 8)] public int numberOfPlayerBases = 4;
         private const int STARTING_HAND_SIZE = 5;
 
         // -------------------------------------------------------
@@ -79,7 +74,7 @@ namespace TacoVsBurrito
         //  Public accessors
         // -------------------------------------------------------
         public IReadOnlyList<PlayerBase> Players     => _players;
-        public PlayerBase CurrentPlayerBase              => _players[_currentIndex];
+        public PlayerBase CurrentPlayer              => _players[_currentIndex];
         public bool   IsDrawPileEmpty              => _isDrawPileGone;
         public DeckManager Deck => _deck;
 
@@ -99,22 +94,14 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  Game Start
         // -------------------------------------------------------
-        public void StartGame(List<PlayerBaseSetupData> setupData)
+
+        public void AddPlayerBeforeGameStarts(PlayerBase player)
         {
-            int count = setupData.Count;
-            if (count < 2 || count > 8)
-            {
-                Debug.LogError("[GameManager] PlayerBase count must be 2–8.");
-                return;
-            }
+            _players.Add(player);
+        }
 
-            _players.Clear();
-
-            for (int i = 0; i < count; i++)
-            {
-                var d = setupData[i];
-                //_playerBasePlayerBases.Add(new PlayerBase(i, d.playerBasePlayerBaseName, d.mealType, d.playerBasePlayerBaseType));
-            }
+        public void StartGame()
+        {
 
             // Deal starting hands (Health Inspectors filtered out)
             foreach (var p in _players)
@@ -130,7 +117,7 @@ namespace TacoVsBurrito
 
             GameEvents.OnGameStarted?.Invoke(_players);
             GameEvents.OnLogMessage?.Invoke(
-                $"🎮 Game started! {count} playerBasePlayerBases. Youngest goes first. Play clockwise.");
+                $"🎮 Game started! {_players.Count} players. Youngest goes first. Play clockwise.");
 
             StartCoroutine(GameLoop());
         }
@@ -142,7 +129,7 @@ namespace TacoVsBurrito
         {
             while (_gameRunning)
             {
-                var current = CurrentPlayerBase;
+                var current = CurrentPlayer;
                 GameEvents.OnTurnStarted?.Invoke(current);
                 GameEvents.OnLogMessage?.Invoke($"\n--- {current.Name}'s turn ---");
 
@@ -227,7 +214,7 @@ namespace TacoVsBurrito
         public void HumanPlacesCardInMeal(int handIndex, int destPlayerBaseIndex)
         {
             if (!IsHumanTurn()) return;
-            var current = CurrentPlayerBase;
+            var current = CurrentPlayer;
             var card    = current.Hand.GetAt(handIndex);
             if (card == null || !card.IsPlaceableInMeal) return;
 
@@ -256,7 +243,7 @@ namespace TacoVsBurrito
         public void HumanPlaysActionCard(int handIndex, int targetPlayerBaseIndex = -1)
         {
             if (!IsHumanTurn()) return;
-            var current = CurrentPlayerBase;
+            var current = CurrentPlayer;
             var card    = current.Hand.GetAt(handIndex);
             if (card == null) return;
 
@@ -281,7 +268,7 @@ namespace TacoVsBurrito
         public void HumanDiscardsCard(int handIndex)
         {
             if (!IsHumanTurn()) return;
-            var current = CurrentPlayerBase;
+            var current = CurrentPlayer;
             var card    = current.Hand.GetAt(handIndex);
             if (card == null) return;
 
@@ -299,7 +286,7 @@ namespace TacoVsBurrito
         public void HumanPlaysNoBueno(int handIndex)
         {
             if (!_noBuenoWindowOpen) return;
-            var current = CurrentPlayerBase; // the blocker can be ANY playerBasePlayerBase (human only here)
+            var current = CurrentPlayer; // the blocker can be ANY playerBasePlayerBase (human only here)
             // Find the human playerBasePlayerBase who has this No Bueno
             // For simplicity we allow any human playerBasePlayerBase to trigger this
             foreach (var p in _players)
@@ -518,7 +505,7 @@ namespace TacoVsBurrito
         {
             yield return new WaitForSeconds(0.8f); // thinking delay
 
-            var decision = AIBrain.Decide(ai, _players, _deck);
+            var decision = ai.GetBrain().Decide(ai, _players, _deck);
 
             if (decision.cardIndex < 0 || decision.cardIndex >= ai.Hand.Count)
             {
@@ -573,7 +560,7 @@ namespace TacoVsBurrito
         private void AIConsiderNoBueno(AIPlayer aiPlayer, CardBase cardBeingPlayed)
         {
             if (!_noBuenoWindowOpen) return;
-            if (AIBrain.ShouldPlayNoBueno(aiPlayer, cardBeingPlayed, _players))
+            if (aiPlayer.GetBrain().ShouldPlayNoBueno(aiPlayer, cardBeingPlayed, _players))
             {
                 for (int i = 0; i < aiPlayer.Hand.Count; i++)
                 {
@@ -683,7 +670,7 @@ namespace TacoVsBurrito
             (index >= 0 && index < _players.Count) ? _players[index] : null;
 
         private bool IsHumanTurn() =>
-            _gameRunning && CurrentPlayerBase is HumanPlayer && !_humanPlayedCard;
+            _gameRunning && CurrentPlayer is HumanPlayer && !_humanPlayedCard;
 
         // ---- AI helpers ----
         private PlayerBase AIPickTarget(PlayerBase ai) =>
@@ -711,10 +698,9 @@ namespace TacoVsBurrito
     //  PlayerBase setup data (passed from setup UI to StartGame)
     // -------------------------------------------------------
     [System.Serializable]
-    public struct PlayerBaseSetupData
+    public struct PlayerSetupData
     {
-        public string     playerBasePlayerBaseName;
-        public MealType   mealType;
-        public PlayerType playerBasePlayerBaseType;
+        public string playerName;
+        public MealType mealType;
     }
 }

@@ -66,8 +66,7 @@ namespace TacoVsBurrito
             int idx = _rows.Count;
 
             row.Initialise(idx, $"Player {idx + 1}",
-                           idx % 2 == 0 ? MealType.Taco : MealType.Burrito,
-                           PlayerType.Human);
+                           idx % 2 == 0 ? MealType.Taco : MealType.Burrito);
             _rows.Add(row);
             Refresh();
         }
