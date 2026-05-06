@@ -88,6 +88,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2820955911516130074, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f3f6b34fe04af0042ab5d1500fafbcef, type: 3}
     - target: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_Name
       value: HealthInspectorCard
