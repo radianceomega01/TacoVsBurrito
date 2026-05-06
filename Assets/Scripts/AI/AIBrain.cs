@@ -146,7 +146,7 @@ namespace TacoVsBurrito
             // 9. Crafty Crow against anyone with a meal card
             if (cc >= 0)
             {
-                var victim = allPlayers.Where(p => p != ai && p.Meal.CardCount > 0)
+                var victim = allPlayers.Where(p => p != ai && p.Meal.Cards.Count > 0)
                                        .OrderByDescending(p => p.Score).FirstOrDefault();
                 if (victim != null)
                     return new AIDecision { cardIndex = cc, destPlayerIndex = victim.Index };

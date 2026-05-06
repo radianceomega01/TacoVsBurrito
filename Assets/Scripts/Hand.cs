@@ -6,7 +6,7 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Hand  (private cards held by a player)
     // ----------------------------------------------------------
-    public class Hand
+    public class Hand: MonoBehaviour
     {
         private readonly List<CardBase> _cards = new List<CardBase>();
 

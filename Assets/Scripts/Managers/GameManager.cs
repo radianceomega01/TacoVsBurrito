@@ -490,7 +490,7 @@ namespace TacoVsBurrito
             }
             else
             {
-                var targets = _players.Where(p => p != caster && p.Meal.CardCount > 0).ToList();
+                var targets = _players.Where(p => p != caster && p.Meal.Cards.Count > 0).ToList();
                 if (targets.Count == 0) { trashPile.Trash(card); done = true; }
                 else
                 {
@@ -686,7 +686,7 @@ namespace TacoVsBurrito
         private CardBase AIPickCardFromMeal(PlayerBase target)
         {
             // Prefer stealing Hot Sauce Boss, then highest ingredient
-            var cards = target.Meal.Cards.ToList();
+            var cards = target.Meal.Cards;
             return cards.OrderByDescending(c =>
                 c is HotSauceBossCard ? 10 : 0).FirstOrDefault();
         }

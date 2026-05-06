@@ -10,6 +10,7 @@ namespace TacoVsBurrito {
         [SerializeField] GameMode gameMode = GameMode.VsAI;
         
         [SerializeField] Transform playersParent;
+        [SerializeField] PlayerBase SelfPlayer;
         [SerializeField] GameObject opponentPlayerPrefab;
         [SerializeField] List<Transform> playerPositions;
 
@@ -32,9 +33,10 @@ namespace TacoVsBurrito {
                 {
                     playerObj.AddComponent<HumanPlayer>();
                 }
-                PlayerBase player= playerObj.GetComponent<PlayerBase>();
+                PlayerBase player = playerObj.GetComponent<PlayerBase>();
                 GameManager.Instance.AddPlayerBeforeGameStarts(player);
             }
+            GameManager.Instance.AddPlayerBeforeGameStarts(SelfPlayer);
         }
     }
     public enum GameMode

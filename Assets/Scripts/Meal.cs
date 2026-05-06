@@ -7,15 +7,14 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Meal  (the face-up cards in front of a player)
     // ----------------------------------------------------------
-    public class Meal
+    public class Meal: MonoBehaviour
     {
-        public MealType MealType { get; }
-        private readonly List<CardBase> _cards = new List<CardBase>();
+        public MealType Type { get; }
+        private List<CardBase> _cards = new List<CardBase>();
 
         public IReadOnlyList<CardBase> Cards => _cards;
-        public int CardCount => _cards.Count;
 
-        public Meal(MealType type) { MealType = type; }
+        public Meal(MealType type) { Type = type; }
         public int HotSauceBossCardCount { get; private set; }
         public int IngredientCardCount { get; private set; }
 
@@ -77,7 +76,7 @@ namespace TacoVsBurrito
         public override string ToString()
         {
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"  [{MealType} Meal | Score: {CalculateScore()}]");
+            sb.AppendLine($"  [{Type} Meal | Score: {CalculateScore()}]");
             foreach (var c in _cards) sb.AppendLine($"    {c}");
             return sb.ToString();
         }

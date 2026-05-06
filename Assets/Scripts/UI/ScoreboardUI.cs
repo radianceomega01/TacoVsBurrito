@@ -56,10 +56,10 @@ namespace TacoVsBurrito
 
             winnerNameLabel.text  = winner.Name;
             winnerScoreLabel.text = $"{winner.Score} pts";
-            winnerMealLabel.text  = winner.MealChoice == MealType.Taco ? "🌮 Team Taco" : "🌯 Team Burrito";
+            winnerMealLabel.text  = winner.Meal.Type == MealType.Taco ? "🌮 Team Taco" : "🌯 Team Burrito";
 
             if (winnerBanner)
-                winnerBanner.color = winner.MealChoice == MealType.Taco
+                winnerBanner.color = winner.Meal.Type == MealType.Taco
                     ? new Color(1f, 0.9f, 0.2f, 0.4f)
                     : new Color(0.9f, 0.9f, 0.9f, 0.4f);
 
@@ -80,7 +80,7 @@ namespace TacoVsBurrito
                 if (labels.Length >= 4)
                 {
                     labels[0].text = $"#{i + 1}";
-                    labels[1].text = $"{p.Name}\n({p.MealChoice})";
+                    labels[1].text = $"{p.Name}\n({p.Meal.Type})";
                     labels[2].text = BuildBreakdown(p);
                     labels[3].text = $"{p.Score} pts";
                 }
@@ -100,7 +100,7 @@ namespace TacoVsBurrito
         private string BuildBreakdown(PlayerBase p)
         {
             var meal = p.Meal;
-            if (meal.CardCount == 0) return "Empty meal = 0";
+            if (meal.Cards.Count == 0) return "Empty meal = 0";
 
             int ingSum = 0, taSum = 0, hsb = 0;
             var parts = new List<string>();

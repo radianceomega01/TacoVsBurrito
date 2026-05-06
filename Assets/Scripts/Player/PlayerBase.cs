@@ -4,12 +4,13 @@ namespace TacoVsBurrito
 {
     public abstract class PlayerBase: MonoBehaviour
     {
+        private Hand hand;
+        private Meal meal;
         public int        Index      { get; private set; }
         public string     Name       { get; private set; }
-        public MealType   MealChoice { get; private set; }
 
-        public Hand Hand { get; private set; } = new Hand();
-        public Meal Meal { get; private set; }
+        public Hand Hand { get {return hand; } }
+        public Meal Meal { get { return meal; } }
 
         // Turn-state flags
         public bool SkipNextTurn    { get; set; } = false;   // (not in base rules but useful for expansions)
@@ -18,12 +19,15 @@ namespace TacoVsBurrito
         // Trash Panda usage counter (max 2 Trash Pandas retrieved per game per official FAQ)
         //public int TrashPandaRetrievedCount { get; set; } = 0;
 
+        void Awake()
+        {
+            hand = GetComponentInChildren<Hand>();
+            meal = GetComponentInChildren<Meal>();
+        }
         public void InitPlayer(int index, string name, MealType meal)
         {
             Index      = index;
             Name       = name;
-            MealChoice = meal;
-            Meal       = new Meal(meal);
         }
 
         public int Score => Meal.CalculateScore();
@@ -39,7 +43,7 @@ namespace TacoVsBurrito
         }
 
         public override string ToString() =>
-            $"Player {Index}: {Name} | {MealChoice} | Score: {Score} | Hand: {Hand.Count}";
+            $"Player {Index}: {Name} | Score: {Score} | Hand: {Hand.Count}";
   
     }
 }
