@@ -1,10 +1,13 @@
 using TacoVsBurrito;
 using UnityEngine;
 
-public class NoBuenoCard : ActionCardBase
+namespace TacoVsBurrito
 {
-    public override void ExecuteAction()
+    public class NoBuenoCard : ActionCardBase
     {
-        throw new System.NotImplementedException();
+        public override void ExecuteAction()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

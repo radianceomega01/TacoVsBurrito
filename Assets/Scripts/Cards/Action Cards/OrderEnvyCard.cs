@@ -1,10 +1,13 @@
 using TacoVsBurrito;
 using UnityEngine;
 
-public class OrderEnvyCard : ActionCardBase
+namespace TacoVsBurrito
 {
-    public override void ExecuteAction()
+    public class OrderEnvyCard : ActionCardBase
     {
-        throw new System.NotImplementedException();
+        public override void ExecuteAction()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

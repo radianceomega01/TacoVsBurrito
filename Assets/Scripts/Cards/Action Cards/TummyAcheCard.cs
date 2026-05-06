@@ -1,11 +1,25 @@
 using TacoVsBurrito;
+using TMPro;
 using UnityEngine;
 
-public class TummyAcheCard : ActionCardBase
+namespace TacoVsBurrito
 {
-    [SerializeField] int cardValue = -1;
-    public int CardValue {get{ return cardValue; } }
-    public override void ExecuteAction() { }
+    public class TummyAcheCard : ActionCardBase
+    {
+        [SerializeField] int cardValue = -1;
+        
+        [Header("Fields")]
+        [SerializeField] TextMeshProUGUI ValueTxtField;
+        public int CardValue { get { return cardValue; } }
 
-    public override int GetModifiedMealScore(int currentScore) => currentScore + cardValue;
+        protected override void Start()
+        {
+            base.Start();
+            ValueTxtField.text = cardValue.ToString();
+        }
+
+        public override void ExecuteAction() { }
+
+        public override int GetModifiedMealScore(int currentScore) => currentScore + cardValue;
+    }
 }

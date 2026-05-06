@@ -2,13 +2,13 @@
 //  GameHUD.cs  –  Main in-game UI controller
 //
 //  Displays:
-//  - Current player indicator + draw pile count
-//  - All players' meals (face-up cards with score)
-//  - Active player's hand (clickable cards)
+//  - Current playerBase indicator + draw pile count
+//  - All playerBases' meals (face-up cards with score)
+//  - Active playerBase's hand (clickable cards)
 //  - Action log panel
-//  - No Bueno interrupt button (reactive, any player)
+//  - No Bueno interrupt button (reactive, any playerBase)
 //  - Target selection overlays:
-//      · Pick a player
+//      · Pick a playerBase
 //      · Pick a card from a meal (Crafty Crow)
 //      · Pick a card from Trash pile (Trash Panda)
 // ============================================================
@@ -25,16 +25,16 @@ namespace TacoVsBurrito
     {
         // -------------------------------------------------------
         [Header("Turn Info Bar")]
-        public TextMeshProUGUI turnLabel;        // "Player X's Turn"
+        public TextMeshProUGUI turnLabel;        // "PlayerBase X's Turn"
         public TextMeshProUGUI drawPileLabel;    // "Draw Pile: N cards"
         public TextMeshProUGUI statusLabel;      // "Playing…" / "Draw pile empty!"
 
-        [Header("Hand Panel (active human player)")]
+        [Header("Hand Panel (active human playerBase)")]
         public Transform        handContainer;       // HorizontalLayoutGroup
         public GameObject       cardButtonPrefab;    // Button + Image + TMP label
         public TextMeshProUGUI  handOwnerLabel;      // "Your Hand"
 
-        [Header("Meal Panels (one per player, created at runtime)")]
+        [Header("Meal Panels (one per playerBase, created at runtime)")]
         public Transform        mealsContainer;      // parent for all meal panels
         public GameObject       mealPanelPrefab;     // MealPanelUI component
 
@@ -105,10 +105,10 @@ namespace TacoVsBurrito
             GameEvents.OnGameOver               += OnGameOver;
 
             GameEvents.OnCardAboutToBePlayed    += OnCardAboutToBePlayed;
-            GameEvents.OnNeedPlayerTarget       += ShowPlayerTargetOverlay;
+            GameEvents.OnNeedPlayerBaseTarget       += ShowPlayerBaseTargetOverlay;
             GameEvents.OnNeedCardFromMeal       += ShowMealCardOverlay;
             GameEvents.OnNeedCardFromTrash      += ShowTrashOverlay;
-            GameEvents.OnNeedPlayerAndMealCard  += ShowPlayerThenMealCardFlow;
+            GameEvents.OnNeedPlayerBaseAndMealCard  += ShowPlayerBaseThenMealCardFlow;
         }
 
         private void UnsubscribeEvents()
@@ -125,13 +125,13 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  Game started
         // -------------------------------------------------------
-        private void OnGameStarted(List<Player> players)
+        private void OnGameStarted(List<PlayerBase> playerBases)
         {
-            // Build one meal panel per player
+            // Build one meal panel per playerBase
             foreach (Transform t in mealsContainer) Destroy(t.gameObject);
             _mealPanels.Clear();
 
-            foreach (var p in players)
+            foreach (var p in playerBases)
             {
                 var go    = Instantiate(mealPanelPrefab, mealsContainer);
                 var panel = go.GetComponent<MealPanelUI>();
@@ -145,36 +145,36 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  Turn started
         // -------------------------------------------------------
-        private void OnTurnStarted(Player player)
+        private void OnTurnStarted(PlayerBase playerBase)
         {
-            turnLabel.text = $"{player.Name}'s Turn ({player.MealChoice})";
+            turnLabel.text = $"{playerBase.Name}'s Turn ({playerBase.MealChoice})";
             RefreshDrawCount();
 
-            // Show hand only for the current human player
-            if (player.Type == PlayerType.Human)
-                BuildHandUI(player);
+            // Show hand only for the current human playerBase
+            if (playerBase.Type == PlayerType.Human)
+                BuildHandUI(playerBase);
             else
-                ClearHandUI($"{player.Name} (AI) is thinking…");
+                ClearHandUI($"{playerBase.Name} (AI) is thinking…");
         }
 
         // -------------------------------------------------------
         //  Hand UI
         // -------------------------------------------------------
-        private void OnHandChanged(Player player)
+        private void OnHandChanged(PlayerBase playerBase)
         {
-            if (player == GameManager.Instance.CurrentPlayer &&
-                player.Type == PlayerType.Human)
-                BuildHandUI(player);
+            if (playerBase == GameManager.Instance.CurrentPlayerBase &&
+                playerBase.Type == PlayerType.Human)
+                BuildHandUI(playerBase);
         }
 
-        private void BuildHandUI(Player player)
+        private void BuildHandUI(PlayerBase playerBase)
         {
-            ClearHandUI($"Your Hand ({player.Hand.Count} cards):");
+            ClearHandUI($"Your Hand ({playerBase.Hand.Count} cards):");
 
-            for (int i = 0; i < player.Hand.Count; i++)
+            for (int i = 0; i < playerBase.Hand.Count; i++)
             {
                 int idx  = i;
-                var card = player.Hand.GetAt(i);
+                var card = playerBase.Hand.GetAt(i);
                 var go   = Instantiate(cardButtonPrefab, handContainer);
 
                 var img = go.GetComponent<Image>();
@@ -199,8 +199,8 @@ namespace TacoVsBurrito
 
         private void OnHandCardClicked(int idx, CardBase card)
         {
-            var player = GameManager.Instance.CurrentPlayer;
-            if (player.Type != PlayerType.Human) return;
+            var playerBase = GameManager.Instance.CurrentPlayerBase;
+            if (playerBase.Type != PlayerType.Human) return;
 
             if (card.IsPlaceableInMeal)
             {
@@ -225,8 +225,8 @@ namespace TacoVsBurrito
 
             foreach (Transform t in destMealButtonsParent) Destroy(t.gameObject);
 
-            var players = GameManager.Instance.Players;
-            foreach (var p in players)
+            var playerBases = GameManager.Instance.Players;
+            foreach (var p in playerBases)
             {
                 var pCopy = p;
                 var go    = Instantiate(destMealButtonPrefab, destMealButtonsParent);
@@ -235,10 +235,10 @@ namespace TacoVsBurrito
 
                 // Colour-code: own meal = green tint, opponent = normal
                 if (go.TryGetComponent<Image>(out var img))
-                    img.color = (p == GameManager.Instance.CurrentPlayer)
+                    img.color = (p == GameManager.Instance.CurrentPlayerBase)
                         ? new Color(0.6f, 1f, 0.6f) : Color.white;
 
-                bool isSelf = p == GameManager.Instance.CurrentPlayer;
+                bool isSelf = p == GameManager.Instance.CurrentPlayerBase;
                 if (lbl) lbl.text = isSelf
                     ? $"Your {p.MealChoice} ({p.Score} pts)"
                     : $"{p.Name}'s {p.MealChoice} ({p.Score} pts)";
@@ -253,12 +253,12 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  No Bueno interrupt
         // -------------------------------------------------------
-        private void OnCardAboutToBePlayed(Player active, CardBase card, bool isLastCard,
-                                            System.Action<Player, CardBase> noBuenoCallback)
+        private void OnCardAboutToBePlayed(PlayerBase active, CardBase card, bool isLastCard,
+                                            System.Action<PlayerBase, CardBase> noBuenoCallback)
         {
             if (isLastCard || card is HealthInspectorCard) return;
 
-            // Check if any human player holds a No Bueno
+            // Check if any human playerBase holds a No Bueno
             bool anyHumanHasNoBueno = false;
             foreach (var p in GameManager.Instance.Players)
             {
@@ -278,7 +278,7 @@ namespace TacoVsBurrito
             noBuenoButton.onClick.RemoveAllListeners();
             noBuenoButton.onClick.AddListener(() => {
                 noBuenoPanel.SetActive(false);
-                // Find first human player's No Bueno
+                // Find first human playerBase's No Bueno
                 foreach (var p in GameManager.Instance.Players)
                 {
                     if (p.Type == PlayerType.Human && p != active)
@@ -307,10 +307,10 @@ namespace TacoVsBurrito
         }
 
         // -------------------------------------------------------
-        //  Player target overlay
+        //  PlayerBase target overlay
         // -------------------------------------------------------
-        private void ShowPlayerTargetOverlay(string prompt, List<Player> validTargets,
-                                              System.Action<Player> callback)
+        private void ShowPlayerBaseTargetOverlay(string prompt, List<PlayerBase> validTargets,
+                                              System.Action<PlayerBase> callback)
         {
             targetOverlay.SetActive(true);
             targetPromptLabel.text = prompt;
@@ -379,35 +379,35 @@ namespace TacoVsBurrito
         }
 
         // -------------------------------------------------------
-        //  Two-step: pick player THEN pick card from their meal
+        //  Two-step: pick playerBase THEN pick card from their meal
         // -------------------------------------------------------
-        private void ShowPlayerThenMealCardFlow(string prompt, List<Player> targets,
-                                                System.Action<Player, CardBase> callback)
+        private void ShowPlayerBaseThenMealCardFlow(string prompt, List<PlayerBase> targets,
+                                                System.Action<PlayerBase, CardBase> callback)
         {
-            ShowPlayerTargetOverlay(prompt, targets, chosenPlayer => {
-                var mealCards = chosenPlayer.Meal.Cards as IReadOnlyList<CardBase>;
+            ShowPlayerBaseTargetOverlay(prompt, targets, chosenPlayerBase => {
+                var mealCards = chosenPlayerBase.Meal.Cards as IReadOnlyList<CardBase>;
                 if (mealCards == null || mealCards.Count == 0)
                 {
-                    AppendLog($"  {chosenPlayer.Name}'s meal is empty – Crafty Crow fizzles.");
-                    callback?.Invoke(chosenPlayer, null);
+                    AppendLog($"  {chosenPlayerBase.Name}'s meal is empty – Crafty Crow fizzles.");
+                    callback?.Invoke(chosenPlayerBase, null);
                     return;
                 }
-                ShowMealCardOverlay($"Steal which card from {chosenPlayer.Name}'s meal?",
+                ShowMealCardOverlay($"Steal which card from {chosenPlayerBase.Name}'s meal?",
                     new List<CardBase>(mealCards),
-                    chosenCard => callback?.Invoke(chosenPlayer, chosenCard));
+                    chosenCard => callback?.Invoke(chosenPlayerBase, chosenCard));
             });
         }
 
         // -------------------------------------------------------
         //  Meal panel refresh
         // -------------------------------------------------------
-        private void RefreshMeal(Player p)
+        private void RefreshMeal(PlayerBase p)
         {
             if (_mealPanels.TryGetValue(p.Index, out var panel))
                 panel.Refresh(p);
         }
 
-        private void OnMealCleared(Player p)
+        private void OnMealCleared(PlayerBase p)
         {
             if (_mealPanels.TryGetValue(p.Index, out var panel))
                 panel.Refresh(p);
@@ -428,13 +428,13 @@ namespace TacoVsBurrito
         private void OnDrawPileEmpty()
         {
             RefreshDrawCount();
-            AppendLog("📭 Draw pile exhausted. Players skip the draw step from now on.");
+            AppendLog("📭 Draw pile exhausted. PlayerBases skip the draw step from now on.");
         }
 
         // -------------------------------------------------------
         //  Game over
         // -------------------------------------------------------
-        private void OnGameOver(Player winner)
+        private void OnGameOver(PlayerBase winner)
         {
             turnLabel.text = $"🏆 {winner.Name} WINS!";
             ClearHandUI();
@@ -465,24 +465,24 @@ namespace TacoVsBurrito
     }
 
     // ============================================================
-    //  MealPanelUI  –  Shows one player's meal + score
+    //  MealPanelUI  –  Shows one playerBase's meal + score
     //  Attach to mealPanelPrefab
     // ============================================================
     public class MealPanelUI : MonoBehaviour
     {
-        public TextMeshProUGUI  playerNameLabel;
+        public TextMeshProUGUI  playerBaseNameLabel;
         public TextMeshProUGUI  scoreLabel;
         public TextMeshProUGUI  multiplierLabel;    // shows "×2" or "×4" if Hot Sauce Boss
         public Transform        cardListParent;      // VerticalLayoutGroup
         public GameObject       mealCardChipPrefab; // small label chip per card
 
-        public void Setup(Player p)
+        public void Setup(PlayerBase p)
         {
-            playerNameLabel.text = $"{p.Name}\n({p.MealChoice})";
+            playerBaseNameLabel.text = $"{p.Name}\n({p.MealChoice})";
             Refresh(p);
         }
 
-        public void Refresh(Player p)
+        public void Refresh(PlayerBase p)
         {
             scoreLabel.text = $"{p.Score} pts";
 

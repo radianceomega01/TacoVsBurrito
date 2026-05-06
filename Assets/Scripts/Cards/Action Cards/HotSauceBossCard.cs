@@ -1,10 +1,24 @@
 using TacoVsBurrito;
+using TMPro;
 using UnityEngine;
 
-public class HotSauceBossCard : ActionCardBase
+namespace TacoVsBurrito
 {
-    private const int VALUE_MULTIPLIER = 2;
-    public override void ExecuteAction() { }
+    public class HotSauceBossCard : ActionCardBase
+    {
+        [Header("Fields")]
+        [SerializeField] TextMeshProUGUI ValueTxtField;
 
-    public override int GetModifiedMealScore(int currentScore) => currentScore * VALUE_MULTIPLIER;
+        private const int VALUE_MULTIPLIER = 2;
+        
+        protected override void Start()
+        {
+            base.Start();
+            ValueTxtField.text = $"X{VALUE_MULTIPLIER}";
+        }
+
+        public override void ExecuteAction() { }
+
+        public override int GetModifiedMealScore(int currentScore) => currentScore * VALUE_MULTIPLIER;
+    }
 }

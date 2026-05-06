@@ -14,11 +14,11 @@
 //      effect triggers immediately upon taking it
 //
 //  NO BUENO
-//    - Can be played by ANY player at ANY time another card
+//    - Can be played by ANY PlayerBase at ANY time another card
 //      is being played (reactive/interrupt)
 //    - Cancels the target card; sends it to Trash (no effect)
 //    - Can block another No Bueno (Si Bueno chain)
-//    - CANNOT block: Health Inspector, a player's LAST card
+//    - CANNOT block: Health Inspector, a PlayerBase's LAST card
 //    - Multiple No Buenos can chain (each blocks the previous)
 //
 //  CRAFTY CROW
@@ -34,17 +34,17 @@
 //    - After use, Trash Panda itself goes to Trash pile
 //
 //  FOOD FIGHT
-//    - Starting with the player who played Food Fight,
-//      moving clockwise, each player flips ONE card from draw pile
-//    - Compare all flipped cards: player who revealed the
+//    - Starting with the PlayerBase who played Food Fight,
+//      moving clockwise, each PlayerBase flips ONE card from draw pile
+//    - Compare all flipped cards: PlayerBase who revealed the
 //      HIGHEST-VALUE INGREDIENT card wins
 //    - Winner picks ONE of the flipped cards to keep in hand
 //    - All remaining flipped cards are shuffled back into draw pile
 //    - Non-ingredient flips count 0 for comparison
-//    - Ties → tied players each keep their card
+//    - Ties → tied PlayerBases each keep their card
 //
 //  ORDER ENVY
-//    - Swap YOUR entire hand AND entire meal with chosen player
+//    - Swap YOUR entire hand AND entire meal with chosen PlayerBase
 //    - Cannot be blocked AFTER the swap happens
 //    - If played as last card: swap happens, then game ends
 //    - You can optionally swap physical seats (cosmetic only)
@@ -61,25 +61,25 @@ namespace TacoVsBurrito
     public class ActionResolver
     {
         private readonly DeckManager                 _deck;
-        private readonly Func<IReadOnlyList<Player>> _getPlayers;
+        private readonly Func<IReadOnlyList<PlayerBase>> _getPlayerBases;
 
         // Tracks total Trash Pandas retrieved across the game (FAQ: max 2)
-        // Keyed by player index
+        // Keyed by PlayerBase index
         private Dictionary<int, int> _trashPandaRetrieved = new Dictionary<int, int>();
 
-        public ActionResolver(DeckManager deck, Func<IReadOnlyList<Player>> getPlayers)
+        public ActionResolver(DeckManager deck, Func<IReadOnlyList<PlayerBase>> getPlayerBases)
         {
             _deck       = deck;
-            _getPlayers = getPlayers;
+            _getPlayerBases = getPlayerBases;
         }
 
         // ==========================================================
         //  HEALTH INSPECTOR  (triggered on draw, not on play)
         // ==========================================================
 
-        /// Call this when a player draws a Health Inspector.
+        /// Call this when a PlayerBase draws a Health Inspector.
         /// Returns a log string. All meal cards are trashed.
-        public string TriggerHealthInspector(Player victim, HealthInspectorCard healthInspectorCard)
+        public string TriggerHealthInspector(PlayerBase victim, HealthInspectorCard healthInspectorCard)
         {
             // Trash the Health Inspector card itself
             _deck.Trash(healthInspectorCard);
@@ -99,7 +99,7 @@ namespace TacoVsBurrito
         // ==========================================================
 
         /// Returns true if No Bueno can legally be played right now.
-        /// blocker = player trying to play No Bueno
+        /// blocker = PlayerBase trying to play No Bueno
         /// targetCard = the card being blocked
         /// isLastCard = is targetCard the very last card in the target's hand?
         public bool CanPlayNoBueno(NoBuenoCard noBuenoCard, CardBase targetCard, bool isLastCard)
@@ -111,7 +111,7 @@ namespace TacoVsBurrito
 
         /// Execute a No Bueno block.
         /// noBueno goes to Trash. targetCard goes to Trash. Returns log.
-        public string ResolveNoBueno(Player blocker, NoBuenoCard noBuenoCard, CardBase targetCard)
+        public string ResolveNoBueno(PlayerBase blocker, NoBuenoCard noBuenoCard, CardBase targetCard)
         {
             _deck.Trash(noBuenoCard);
             _deck.Trash(targetCard);
@@ -124,8 +124,8 @@ namespace TacoVsBurrito
         // ==========================================================
 
         /// Steal stealTarget card from victim's meal into caster's meal.
-        public string ResolveCraftyCrow(Player caster, CraftyCrowCard craftyCrow,
-                                         Player victim, CardBase stealTarget)
+        public string ResolveCraftyCrow(PlayerBase caster, CraftyCrowCard craftyCrow,
+                                         PlayerBase victim, CardBase stealTarget)
         {
             if (!victim.Meal.RemoveCard(stealTarget))
                 return $"⚠ Crafty Crow: '{stealTarget.Name}' not found in {victim.Name}'s meal.";
@@ -147,7 +147,7 @@ namespace TacoVsBurrito
         /// If chosenCard is a Health Inspector, trigger it immediately.
         /// Returns (logMessage, healthInspectorTriggered).
         public (string log, bool healthInspectorTriggered) ResolveTrashPanda(
-            Player caster, TrashPandaCard trashPandaCard, CardBase chosenCard)
+            PlayerBase caster, TrashPandaCard trashPandaCard, CardBase chosenCard)
         {
             // Enforce max 2 Trash Panda retrievals per game (official FAQ)
             if (chosenCard is TrashPandaCard)
@@ -194,16 +194,16 @@ namespace TacoVsBurrito
         // ==========================================================
 
         /// Executes the Food Fight.
-        /// players = all players in clockwise order, starting with the caster.
-        /// Returns a log. Winning player gets to keep one card; rest shuffle back.
-        public string ResolveFoodFight(Player caster, FoodFightCard foodFightCard,
-                                        List<Player> clockwisePlayers)
+        /// PlayerBases = all PlayerBases in clockwise order, starting with the caster.
+        /// Returns a log. Winning PlayerBase gets to keep one card; rest shuffle back.
+        public string ResolveFoodFight(PlayerBase caster, FoodFightCard foodFightCard,
+                                        List<PlayerBase> clockwisePlayerBases)
         {
             _deck.Trash(foodFightCard);
 
-            // Each player flips one card from draw pile
-            var flipped = new Dictionary<Player, CardBase>();
-            foreach (var p in clockwisePlayers)
+            // Each PlayerBase flips one card from draw pile
+            var flipped = new Dictionary<PlayerBase, CardBase>();
+            foreach (var p in clockwisePlayerBases)
             {
                 CardBase f = _deck.FlipTop();
                 if (f != null)
@@ -260,9 +260,9 @@ namespace TacoVsBurrito
 
         /// Swap caster's hand + meal with target's hand + meal.
         /// After swap, cannot be blocked.
-        public string ResolveOrderEnvy(Player caster, OrderEnvyCard orderEnvyCard, Player target)
+        public string ResolveOrderEnvy(PlayerBase caster, OrderEnvyCard orderEnvyCard, PlayerBase target)
         {
-            caster.SwapHandAndMeal(target);
+            caster.SwapMeal(target);
             _deck.Trash(orderEnvyCard);
 
             GameEvents.OnOrderEnvySwap?.Invoke(caster, target);
@@ -274,18 +274,18 @@ namespace TacoVsBurrito
         // ==========================================================
 
         /// Place an ingredient-type card from caster's hand into the destination meal.
-        /// destPlayer may be self or any opponent.
-        public string PlaceCardInMeal(Player caster, CardBase card, Player destPlayer)
+        /// destPlayerBase may be self or any opponent.
+        public string PlaceCardInMeal(PlayerBase caster, CardBase card, PlayerBase destPlayerBase)
         {
             if (!card.IsPlaceableInMeal)
                 return $"⚠ '{card.Name}' cannot be placed in a meal.";
 
             caster.Hand.RemoveCard(card);
-            destPlayer.Meal.AddCard(card);
+            destPlayerBase.Meal.AddCard(card);
 
-            GameEvents.OnCardPlacedInMeal?.Invoke(caster, destPlayer, card);
+            GameEvents.OnCardPlacedInMeal?.Invoke(caster, destPlayerBase, card);
 
-            string dest = (caster == destPlayer) ? "their own meal" : $"{destPlayer.Name}'s meal";
+            string dest = (caster == destPlayerBase) ? "their own meal" : $"{destPlayerBase.Name}'s meal";
 
             return $"🍽 {caster.Name} placed '{card.Name}' into {dest}.";
         }

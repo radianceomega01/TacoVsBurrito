@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace TacoVsBurrito
@@ -10,6 +11,10 @@ namespace TacoVsBurrito
         [SerializeField]  bool isPlaceableInMeal = false;
         [SerializeField] bool isBlockable = false;
 
+        [Header("Fields")]
+        [SerializeField] protected TextMeshProUGUI nameTxtField;
+        [SerializeField] protected TextMeshProUGUI DescriptionTxtField;
+
         public string Name { get { return cardName; } }
 
         // Common helpers
@@ -18,6 +23,10 @@ namespace TacoVsBurrito
 
         public virtual int GetModifiedMealScore(int currentScore) { return currentScore; }
 
-
+        protected virtual void Start()
+        {
+            nameTxtField.text = cardName;
+            DescriptionTxtField.text = DescriptionText;
+        }
     }
 }

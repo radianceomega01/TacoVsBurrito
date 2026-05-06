@@ -23,9 +23,9 @@ namespace TacoVsBurrito
         public int destPlayerIndex;   // -1 = self (for meal placements)
     }
 
-    public static class AIBrain
+    public class AIBrain: MonoBehaviour
     {
-        public static AIDecision Decide(Player ai, IReadOnlyList<Player> allPlayers,
+        public static AIDecision Decide(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers,
                                          DeckManager deck, AIDifficulty difficulty = AIDifficulty.Normal)
         {
             return difficulty switch
@@ -39,7 +39,7 @@ namespace TacoVsBurrito
         // ===========================================================
         //  EASY  –  random legal move
         // ===========================================================
-        private static AIDecision DecideEasy(Player ai, IReadOnlyList<Player> allPlayers)
+        private static AIDecision DecideEasy(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
         {
             int idx = Random.Range(0, ai.Hand.Count);
             var card = ai.Hand.GetAt(idx);
@@ -58,7 +58,7 @@ namespace TacoVsBurrito
         // ===========================================================
         //  NORMAL  –  greedy heuristic
         // ===========================================================
-        private static AIDecision DecideNormal(Player ai, IReadOnlyList<Player> allPlayers)
+        private static AIDecision DecideNormal(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
         {
             var hand = ai.Hand;
 
@@ -94,7 +94,7 @@ namespace TacoVsBurrito
         // ===========================================================
         //  HARD  –  look-ahead strategic
         // ===========================================================
-        private static AIDecision DecideHard(Player ai, IReadOnlyList<Player> allPlayers,
+        private static AIDecision DecideHard(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers,
                                               DeckManager deck)
         {
             //1. If we have Hot Sauce Boss AND at least 3 ingredients in meal → play it
@@ -159,8 +159,8 @@ namespace TacoVsBurrito
         //  No Bueno reaction
         // ===========================================================
         /// Returns true if the AI should play No Bueno against this card.
-        public static bool ShouldPlayNoBueno(Player ai, CardBase cardBeingPlayed,
-                                              IReadOnlyList<Player> allPlayers)
+        public static bool ShouldPlayNoBueno(AIPlayer ai, CardBase cardBeingPlayed,
+                                              IReadOnlyList<PlayerBase> allPlayers)
         {
             // Always block Order Envy targeting us
             if (cardBeingPlayed is OrderEnvyCard) return true;
@@ -180,7 +180,7 @@ namespace TacoVsBurrito
         // ===========================================================
         //  Helpers
         // ===========================================================
-        private static int FindFirstInHand<T>(Player p) where T : CardBase
+        private static int FindFirstInHand<T>(PlayerBase p) where T : CardBase
         {
             for (int i = 0; i < p.Hand.Count; i++)
             {
@@ -190,7 +190,7 @@ namespace TacoVsBurrito
             return -1;
         }
 
-        private static int FindBestIngredient(Player p)
+        private static int FindBestIngredient(PlayerBase p)
         {
             int best = -1, bestVal = -1;
             for (int i = 0; i < p.Hand.Count; i++)
@@ -202,7 +202,7 @@ namespace TacoVsBurrito
             return best;
         }
 
-        private static int FindFirstAction(Player p, params System.Type[] actionTypes)
+        private static int FindFirstAction(PlayerBase p, params System.Type[] actionTypes)
         {
             for (int i = 0; i < p.Hand.Count; i++)
             {
@@ -220,18 +220,18 @@ namespace TacoVsBurrito
             return -1;
         }
 
-        private static int GetLeaderIndex(Player ai, IReadOnlyList<Player> all)
+        private static int GetLeaderIndex(AIPlayer ai, IReadOnlyList<PlayerBase> all)
         {
-            Player leader = GetLeader(ai, all);
+            PlayerBase leader = GetLeader(ai, all);
             return leader?.Index ?? ((ai.Index + 1) % all.Count);
         }
 
-        private static Player GetLeader(Player ai, IReadOnlyList<Player> all)
+        private static PlayerBase GetLeader(AIPlayer ai, IReadOnlyList<PlayerBase> all)
         {
             return all.Where(p => p != ai).OrderByDescending(p => p.Score).FirstOrDefault();
         }
 
-        private static int PickRandomOpponent(Player ai, IReadOnlyList<Player> all)
+        private static int PickRandomOpponent(AIPlayer ai, IReadOnlyList<PlayerBase> all)
         {
             var others = all.Where(p => p != ai).ToList();
             return others.Count > 0 ? others[Random.Range(0, others.Count)].Index : -1;

@@ -122,19 +122,19 @@ namespace TacoVsBurrito
             Validate();
             if (!startButton.interactable) return;
 
-            var setupData = new List<PlayerSetupData>();
-            foreach (var row in _rows)
-            {
-                setupData.Add(new PlayerSetupData
-                {
-                    playerName = row.PlayerName.Trim(),
-                    mealType   = row.SelectedMeal,
-                    playerType = row.SelectedType
-                });
-            }
+            // var setupData = new List<PlayerSetupData>();
+            // foreach (var row in _rows)
+            // {
+            //     setupData.Add(new PlayerSetupData
+            //     {
+            //         playerName = row.PlayerName.Trim(),
+            //         mealType   = row.SelectedMeal,
+            //         playerType = row.SelectedType
+            //     });
+            // }
 
-            setupPanel.SetActive(false);
-            GameManager.Instance.StartGame(setupData);
+            // setupPanel.SetActive(false);
+            // GameManager.Instance.StartGame(setupData);
         }
     }
 }

@@ -1,10 +1,13 @@
 using TacoVsBurrito;
 using UnityEngine;
 
-public class CraftyCrowCard : ActionCardBase
+namespace TacoVsBurrito
 {
-    public override void ExecuteAction()
+    public class CraftyCrowCard : ActionCardBase
     {
-        throw new System.NotImplementedException();
+        public override void ExecuteAction()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

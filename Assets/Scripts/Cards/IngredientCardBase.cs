@@ -1,4 +1,5 @@
 using System.Drawing;
+using TMPro;
 using UnityEngine;
 
 namespace TacoVsBurrito
@@ -7,8 +8,16 @@ namespace TacoVsBurrito
     {
         [Header("Scoring")]
         [SerializeField] int cardValue = 1;
-        public int CardValue {get{ return cardValue; } }
 
+        [Header("Fields")]
+        [SerializeField] TextMeshProUGUI ValueTxtField;
+        public int CardValue { get { return cardValue; } }
+
+        protected override void Start()
+        {
+            base.Start();
+            ValueTxtField.text = cardValue.ToString();
+        }
         public override int GetModifiedMealScore(int currentScore)
         {
             return currentScore + cardValue;

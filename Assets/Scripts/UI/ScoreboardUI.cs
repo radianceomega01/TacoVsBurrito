@@ -50,7 +50,7 @@ namespace TacoVsBurrito
         private void OnDestroy() => GameEvents.OnGameOver -= Show;
 
         // -------------------------------------------------------
-        private void Show(Player winner)
+        private void Show(PlayerBase winner)
         {
             panel.SetActive(true);
 
@@ -97,7 +97,7 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  Score breakdown string  e.g. "(+3+2-1) × 2 = 8"
         // -------------------------------------------------------
-        private string BuildBreakdown(Player p)
+        private string BuildBreakdown(PlayerBase p)
         {
             var meal = p.Meal;
             if (meal.CardCount == 0) return "Empty meal = 0";

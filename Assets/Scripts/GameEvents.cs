@@ -12,47 +12,47 @@ namespace TacoVsBurrito
     public static class GameEvents
     {
         // ---- Lifecycle ----
-        public static Action<List<Player>>          OnGameStarted;      // (all players)
-        public static Action<Player>                OnTurnStarted;
-        public static Action<Player>                OnTurnEnded;
-        public static Action<Player>                OnGameOver;         // winner
+        public static Action<List<PlayerBase>>          OnGameStarted;      // (all playerBases)
+        public static Action<PlayerBase>                OnTurnStarted;
+        public static Action<PlayerBase>                OnTurnEnded;
+        public static Action<PlayerBase>                OnGameOver;         // winner
 
         // ---- Draw pile ----
-        public static Action<Player, CardBase>          OnCardDrawn;        // (drawer, card drawn)
+        public static Action<PlayerBase, CardBase>          OnCardDrawn;        // (drawer, card drawn)
         public static Action                        OnDrawPileEmpty;    // draw pile exhausted
 
         // ---- Hand changes ----
-        public static Action<Player, CardBase>          OnCardAddedToHand;
-        public static Action<Player>                OnHandChanged;      // general refresh
+        public static Action<PlayerBase, CardBase>          OnCardAddedToHand;
+        public static Action<PlayerBase>                OnHandChanged;      // general refresh
 
         // ---- Meal changes ----
-        public static Action<Player, Player, CardBase>  OnCardPlacedInMeal; // (placer, destPlayer, card)
-        public static Action<Player>                OnMealCleared;      // Health Inspector wipe
-        public static Action<Player, Player, CardBase>  OnCardStolenFromMeal; // (thief, victim, card)
-        public static Action<Player, Player>        OnOrderEnvySwap;    // (swapper, swapTarget)
-        public static Action<Player>                OnMealScoreChanged; // any meal update
+        public static Action<PlayerBase, PlayerBase, CardBase>  OnCardPlacedInMeal; // (placer, destPlayerBase, card)
+        public static Action<PlayerBase>                OnMealCleared;      // Health Inspector wipe
+        public static Action<PlayerBase, PlayerBase, CardBase>  OnCardStolenFromMeal; // (thief, victim, card)
+        public static Action<PlayerBase, PlayerBase>        OnOrderEnvySwap;    // (swapper, swapTarget)
+        public static Action<PlayerBase>                OnMealScoreChanged; // any meal update
 
         // ---- Action cards ----
-        public static Action<Player, CardBase>          OnNoBuenoPlayed;    // (blocker, blocked card)
-        public static Action<Player>                OnHealthInspector;  // (victim)
+        public static Action<PlayerBase, CardBase>          OnNoBuenoPlayed;    // (blocker, blocked card)
+        public static Action<PlayerBase>                OnHealthInspector;  // (victim)
 
         // ---- No Bueno interrupt window ----
-        // Fired when a card is ABOUT to be played; any player can respond with No Bueno
-        public static Action<Player, CardBase, bool, Action<Player, CardBase>>  OnCardAboutToBePlayed;
-        //   ^ (activePlayer, cardBeingPlayed, isLastCard, noBuenoCallback)
+        // Fired when a card is ABOUT to be played; any playerBase can respond with No Bueno
+        public static Action<PlayerBase, CardBase, bool, Action<PlayerBase, CardBase>>  OnCardAboutToBePlayed;
+        //   ^ (activePlayerBase, cardBeingPlayed, isLastCard, noBuenoCallback)
 
         // ---- Target selection (UI calls back into game logic) ----
-        public static Action<string, List<Player>, Action<Player>>      OnNeedPlayerTarget;
+        public static Action<string, List<PlayerBase>, Action<PlayerBase>>      OnNeedPlayerBaseTarget;
         //   ^ (prompt, validTargets, callback)
         public static Action<string, List<CardBase>, Action<CardBase>>          OnNeedCardFromMeal;
         //   ^ (prompt, cards in target's meal, callback)
         public static Action<string, List<CardBase>, Action<CardBase>>          OnNeedCardFromTrash;
         //   ^ (prompt, trash pile contents, callback)
-        public static Action<string, List<Player>, Action<Player, CardBase>> OnNeedPlayerAndMealCard;
-        //   ^ (prompt, validTargets, callback(player, card))
+        public static Action<string, List<PlayerBase>, Action<PlayerBase, CardBase>> OnNeedPlayerBaseAndMealCard;
+        //   ^ (prompt, validTargets, callback(playerBase, card))
 
         // ---- Scoring ----
-        public static Action<Player, int>           OnScoreChanged;     // (player, newScore)
+        public static Action<PlayerBase, int>           OnScoreChanged;     // (playerBase, newScore)
 
         // ---- Game log ----
         public static Action<string>                OnLogMessage;
@@ -61,7 +61,7 @@ namespace TacoVsBurrito
         public static Action<bool>                  OnDrawPhaseSkipped; // draw pile empty
 
         // ---- Food Fight specific ----
-        public static Action<Player, CardBase>          OnFoodFightFlip;    // (player, flipped card)
+        public static Action<PlayerBase, CardBase>          OnFoodFightFlip;    // (playerBase, flipped card)
 
         // Clears all subscriptions (call on scene reload)
         public static void Clear()
@@ -82,10 +82,10 @@ namespace TacoVsBurrito
             OnNoBuenoPlayed         = null;
             OnHealthInspector       = null;
             OnCardAboutToBePlayed   = null;
-            OnNeedPlayerTarget      = null;
+            OnNeedPlayerBaseTarget      = null;
             OnNeedCardFromMeal      = null;
             OnNeedCardFromTrash     = null;
-            OnNeedPlayerAndMealCard = null;
+            OnNeedPlayerBaseAndMealCard = null;
             OnScoreChanged          = null;
             OnLogMessage            = null;
             OnDrawPhaseSkipped      = null;
