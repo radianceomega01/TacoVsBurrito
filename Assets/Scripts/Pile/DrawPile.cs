@@ -1,15 +1,32 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 namespace TacoVsBurrito
 {
     public class DrawPile : MonoBehaviour
     {
         private List<CardBase> _drawPile = new();
+        private const int STARTING_HAND_SIZE = 5;
 
         public int DrawCount  => _drawPile.Count;
         public bool IsDrawPileEmpty => _drawPile.Count == 0;
 
-        public void InitDrawPile()
+        void Awake()
+        {
+            GameEvents.OnCardShuffled += ManageCardShuffle;
+        }
+
+        void OnDestroy()
+        {
+            GameEvents.OnCardShuffled -= ManageCardShuffle;
+        }
+
+        void Start()
+        {
+            InitDrawPile();
+        }
+
+        void InitDrawPile()
         {
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -17,22 +34,15 @@ namespace TacoVsBurrito
                     continue;
                 _drawPile.Add(card);
             }
+            Debug.Log(_drawPile.Count);
         }
         
-        public void BuildAndShuffle(CardBase db)
+        public void ManageCardShuffle()
         {
-            // _drawPile.Clear();
-            // _trashPile.Clear();
-
-            // List<CardData> defs = db != null && db.allCardAssets.Count > 0
-            //     ? db.allCardAssets
-            //     : CardDatabase.BuildDefaultDeck();
-
-            // foreach (var def in defs)
-            //     _drawPile.Add(new Card(def));
-
-            // Shuffle(_drawPile);
+            Shuffle(_drawPile);
             Debug.Log($"[DeckManager] Built deck: {_drawPile.Count} cards.");
+            InitiateCardDistribution();
+            
         }
 
         public CardBase Draw()
@@ -53,14 +63,13 @@ namespace TacoVsBurrito
             return result;
         }
 
-        public List<CardBase> DealStartingHand(int handSize)
+        public void DealStartingHand(List<PlayerBase> players)
         {
-            var hand = new List<CardBase>();
-
-            while (hand.Count < handSize)
+            int cardsDistributed = 0;
+            int playerIndex = 0;
+            while (cardsDistributed <= players.Count* STARTING_HAND_SIZE)
             {
                 var card = Draw();
-                if (card == null) break;                   // edge case: tiny deck
 
                 if (card is HealthInspectorCard)
                 {
@@ -71,19 +80,31 @@ namespace TacoVsBurrito
                     continue;                               // draw again
                 }
 
-                hand.Add(card);
+                players[playerIndex % players.Count].Hand.AddCard(card);
+                cardsDistributed++;
+                playerIndex++;
             }
-
-            return hand;
         }
 
-        private void Shuffle(List<CardBase> list)
+        void Shuffle(List<CardBase> list)
         {
             for (int i = list.Count - 1; i > 0; i--)
             {
                 int j = Random.Range(0, i + 1);
                 (list[i], list[j]) = (list[j], list[i]);
             }
+
+            // Sync hierarchy order with list order
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i].transform.SetSiblingIndex(i);
+            }
+        }
+
+        async void InitiateCardDistribution()
+        {
+            await Task.Delay(1500);
+            GameEvents.OnCardDistributed?.Invoke();
         }
 
         /// Flip the top card from the draw pile (Food Fight).

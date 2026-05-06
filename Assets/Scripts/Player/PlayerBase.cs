@@ -19,7 +19,7 @@ namespace TacoVsBurrito
         // Trash Panda usage counter (max 2 Trash Pandas retrieved per game per official FAQ)
         //public int TrashPandaRetrievedCount { get; set; } = 0;
 
-        void Awake()
+        protected virtual void Awake()
         {
             hand = GetComponentInChildren<Hand>();
             meal = GetComponentInChildren<Meal>();

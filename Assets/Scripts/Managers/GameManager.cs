@@ -44,7 +44,6 @@ namespace TacoVsBurrito
     {
         [SerializeField] DrawPile drawPile;
         [SerializeField] TrashPile trashPile;
-        private const int STARTING_HAND_SIZE = 5;
 
         // -------------------------------------------------------
         //  Singleton
@@ -87,9 +86,14 @@ namespace TacoVsBurrito
             Instance = this;
             DontDestroyOnLoad(gameObject);
             _resolver = new ActionResolver(drawPile, trashPile, () => _players);
+
+            GameEvents.OnCardDistributed += StartGame;
         }
 
-        private void OnDestroy() => GameEvents.Clear();
+        private void OnDestroy()
+        {
+            GameEvents.OnCardDistributed -= StartGame;
+        }
 
         // -------------------------------------------------------
         //  Game Start
@@ -100,27 +104,21 @@ namespace TacoVsBurrito
             _players.Add(player);
         }
 
-        public void StartGame()
+        void StartGame()
         {
 
             // Deal starting hands (Health Inspectors filtered out)
-            foreach (var p in _players)
-            {
-                var hand = drawPile.DealStartingHand(STARTING_HAND_SIZE);
-                foreach (var c in hand) p.Hand.AddCard(c);
-                GameEvents.OnHandChanged?.Invoke(p);
-            }
+            drawPile.DealStartingHand(_players);
 
             _currentIndex = 0;
             _gameRunning = true;
             _isDrawPileGone = false;
 
             GameEvents.OnGameStarted?.Invoke(_players);
-            GameEvents.OnGameStateChanged?.Invoke(GameState.Init);
             GameEvents.OnLogMessage?.Invoke(
                 $"🎮 Game started! {_players.Count} players. Youngest goes first. Play clockwise.");
 
-            StartCoroutine(GameLoop());
+            //StartCoroutine(GameLoop());
         }
 
         // -------------------------------------------------------
@@ -176,7 +174,7 @@ namespace TacoVsBurrito
                 }
 
                 // ---- 2. PLAY PHASE ----
-                // Check if this playerBasePlayerBase is out of cards (game ends if so)
+                // Check if this player is out of cards (game ends if so)
                 if (current.Hand.Count == 0)
                 {
                     // Should not normally happen mid-loop but guard it
@@ -704,6 +702,7 @@ namespace TacoVsBurrito
     {
         None,
         Init,
+        CardShuffle,
         CardDistribution,
         Running,
         Completed

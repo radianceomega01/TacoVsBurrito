@@ -6,8 +6,9 @@ namespace TacoVsBurrito
     {
         private AIBrain aIBrain;
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             aIBrain = transform.AddComponent<AIBrain>();
         }
 

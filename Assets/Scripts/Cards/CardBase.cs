@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace TacoVsBurrito
 
         public void ChangePosition(Vector3 newPos)
         {
-            transform.position = newPos;
+            transform.DOMove(newPos, 0.5f);
         }
         public void ChangeParent(Transform newParent)
         {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace TacoVsBurrito {
@@ -16,12 +17,14 @@ namespace TacoVsBurrito {
 
         void Start()
         {
+            GameEvents.OnGameInit?.Invoke();
             SetupPlayers();
-            GameManager.Instance.StartGame();
+            InitCardShuffle();
         }
 
         void SetupPlayers()
         {
+            GameManager.Instance.AddPlayerBeforeGameStarts(SelfPlayer);
             for (int i = 0; i < numberOfPlayers - 1; i++)
             {
                 GameObject playerObj = Instantiate(opponentPlayerPrefab, playerPositions[0].position, Quaternion.identity, playersParent);
@@ -36,7 +39,12 @@ namespace TacoVsBurrito {
                 PlayerBase player = playerObj.GetComponent<PlayerBase>();
                 GameManager.Instance.AddPlayerBeforeGameStarts(player);
             }
-            GameManager.Instance.AddPlayerBeforeGameStarts(SelfPlayer);
+        }
+
+        async void InitCardShuffle()
+        {
+            await Task.Delay(1500);
+            GameEvents.OnCardShuffled?.Invoke();
         }
     }
     public enum GameMode

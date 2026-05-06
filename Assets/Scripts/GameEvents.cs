@@ -12,8 +12,10 @@ namespace TacoVsBurrito
     public static class GameEvents
     {
         // ---- Lifecycle ----
+        public static Action                            OnGameInit;     
+        public static Action                            OnCardShuffled;     
+        public static Action                            OnCardDistributed;     
         public static Action<List<PlayerBase>>          OnGameStarted;     
-        public static Action<GameState>          OnGameStateChanged;     
         public static Action<PlayerBase>                OnTurnStarted;
         public static Action<PlayerBase>                OnTurnEnded;
         public static Action<PlayerBase>                OnGameOver;         // winner

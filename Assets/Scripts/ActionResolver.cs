@@ -62,16 +62,16 @@ namespace TacoVsBurrito
     {
         private DrawPile drawPile;
         private TrashPile trashPile;
-        private readonly Func<IReadOnlyList<PlayerBase>> _getPlayerBases;
+        private readonly Func<IReadOnlyList<PlayerBase>> _getPlayers;
 
         // Tracks total Trash Pandas retrieved across the game (FAQ: max 2)
         // Keyed by PlayerBase index
         private Dictionary<int, int> _trashPandaRetrieved = new Dictionary<int, int>();
 
-        public ActionResolver(DrawPile deck, TrashPile trashPile, Func<IReadOnlyList<PlayerBase>> getPlayerBases)
+        public ActionResolver(DrawPile deck, TrashPile trashPile, Func<IReadOnlyList<PlayerBase>> getPlayers)
         {
             drawPile = deck;
-            _getPlayerBases = getPlayerBases;
+            _getPlayers = getPlayers;
         }
 
         // ==========================================================
