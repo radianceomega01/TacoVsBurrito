@@ -1,33 +1,24 @@
-// ============================================================
-//  DeckManager.cs
-//  Draw pile + Trash pile management.
-//
-//  REAL RULES implemented:
-//  - Health Inspector cards are REMOVED from starting hands.
-//    If a player is dealt one, it is shuffled back and they
-//    draw a replacement (no-reshuffle of trash during game).
-//  - Trash pile is NEVER reshuffled during play.
-//  - When draw pile is empty: players keep playing from hand
-//    but skip the draw step. Game ends when a player empties
-//    their hand.
-// ============================================================
-
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace TacoVsBurrito
 {
-    public class DeckManager
+    public class DrawPile : MonoBehaviour
     {
         private List<CardBase> _drawPile = new();
-        private List<CardBase> _trashPile = new();
 
         public int DrawCount  => _drawPile.Count;
-        public int TrashCount => _trashPile.Count;
-        public bool DrawPileEmpty => _drawPile.Count == 0;
+        public bool IsDrawPileEmpty => _drawPile.Count == 0;
 
-        // ---- Build ----
-
+        public void InitDrawPile()
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                if (!transform.GetChild(i).TryGetComponent<CardBase>(out var card))
+                    continue;
+                _drawPile.Add(card);
+            }
+        }
+        
         public void BuildAndShuffle(CardBase db)
         {
             // _drawPile.Clear();
@@ -44,9 +35,6 @@ namespace TacoVsBurrito
             Debug.Log($"[DeckManager] Built deck: {_drawPile.Count} cards.");
         }
 
-        // ---- Draw ----
-
-        /// Draw one card. Returns null if draw pile is empty (do NOT reshuffle trash).
         public CardBase Draw()
         {
             if (_drawPile.Count == 0) return null;
@@ -54,7 +42,6 @@ namespace TacoVsBurrito
             _drawPile.RemoveAt(0);
             return c;
         }
-
         public List<CardBase> DrawMany(int count)
         {
             var result = new List<CardBase>();
@@ -66,11 +53,6 @@ namespace TacoVsBurrito
             return result;
         }
 
-        // ---- Deal starting hands --------------------------------------------------------
-        // RULE: No player should start with a Health Inspector in hand.
-        // If one is dealt, shuffle it back and deal a replacement card.
-        // This loops until the hand is Health-Inspector-free.
-        // ---------------------------------------------------------------------------------
         public List<CardBase> DealStartingHand(int handSize)
         {
             var hand = new List<CardBase>();
@@ -94,30 +76,6 @@ namespace TacoVsBurrito
 
             return hand;
         }
-
-        // ---- Trash pile ----
-
-        public void Trash(CardBase card)
-        {
-            if (card != null) _trashPile.Add(card);
-        }
-
-        public void TrashAll(IEnumerable<CardBase> cards)
-        {
-            foreach (var c in cards) Trash(c);
-        }
-
-        /// View the full trash pile (for Trash Panda selection).
-        public IReadOnlyList<CardBase> PeekTrash() => _trashPile;
-
-        /// Retrieve a specific card from the trash pile (Trash Panda action).
-        /// Returns true if found and removed.
-        public bool RetrieveFromTrash(CardBase card)
-        {
-            return _trashPile.Remove(card);
-        }
-
-        // ---- Utilities ----
 
         private void Shuffle(List<CardBase> list)
         {

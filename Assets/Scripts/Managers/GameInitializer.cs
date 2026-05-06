@@ -13,8 +13,6 @@ namespace TacoVsBurrito {
         [SerializeField] GameObject opponentPlayerPrefab;
         [SerializeField] List<Transform> playerPositions;
 
-        GameState gameState = GameState.None;
-
         void Start()
         {
             SetupPlayers();
@@ -38,16 +36,6 @@ namespace TacoVsBurrito {
                 GameManager.Instance.AddPlayerBeforeGameStarts(player);
             }
         }
-    }
-
-    public enum GameState
-    {
-        None,
-        Init,
-        CardDistribution,
-        Running,
-        Completed
-
     }
     public enum GameMode
     {

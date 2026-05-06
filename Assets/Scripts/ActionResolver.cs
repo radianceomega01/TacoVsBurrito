@@ -60,16 +60,17 @@ namespace TacoVsBurrito
 {
     public class ActionResolver
     {
-        private readonly DeckManager                 _deck;
+        private DrawPile drawPile;
+        private TrashPile trashPile;
         private readonly Func<IReadOnlyList<PlayerBase>> _getPlayerBases;
 
         // Tracks total Trash Pandas retrieved across the game (FAQ: max 2)
         // Keyed by PlayerBase index
         private Dictionary<int, int> _trashPandaRetrieved = new Dictionary<int, int>();
 
-        public ActionResolver(DeckManager deck, Func<IReadOnlyList<PlayerBase>> getPlayerBases)
+        public ActionResolver(DrawPile deck, TrashPile trashPile, Func<IReadOnlyList<PlayerBase>> getPlayerBases)
         {
-            _deck       = deck;
+            drawPile = deck;
             _getPlayerBases = getPlayerBases;
         }
 
@@ -82,11 +83,11 @@ namespace TacoVsBurrito
         public string TriggerHealthInspector(PlayerBase victim, HealthInspectorCard healthInspectorCard)
         {
             // Trash the Health Inspector card itself
-            _deck.Trash(healthInspectorCard);
+            trashPile.Trash(healthInspectorCard);
 
             // Trash entire meal
             var mealContents = victim.Meal.TakeAll();
-            _deck.TrashAll(mealContents);
+            trashPile.TrashAll(mealContents);
 
             GameEvents.OnMealCleared?.Invoke(victim);
 
@@ -113,8 +114,8 @@ namespace TacoVsBurrito
         /// noBueno goes to Trash. targetCard goes to Trash. Returns log.
         public string ResolveNoBueno(PlayerBase blocker, NoBuenoCard noBuenoCard, CardBase targetCard)
         {
-            _deck.Trash(noBuenoCard);
-            _deck.Trash(targetCard);
+            trashPile.Trash(noBuenoCard);
+            trashPile.Trash(targetCard);
             GameEvents.OnNoBuenoPlayed?.Invoke(blocker, targetCard);
             return $"🚫 No Bueno! {blocker.Name} blocked '{targetCard.Name}'! Both go to Trash.";
         }
@@ -131,7 +132,7 @@ namespace TacoVsBurrito
                 return $"⚠ Crafty Crow: '{stealTarget.Name}' not found in {victim.Name}'s meal.";
 
             caster.Meal.AddCard(stealTarget);
-            _deck.Trash(craftyCrow);
+            trashPile.Trash(craftyCrow);
 
             GameEvents.OnCardStolenFromMeal?.Invoke(caster, victim, stealTarget);
             return $"🐦 Crafty Crow! {caster.Name} stole '{stealTarget.Name}' " +
@@ -155,22 +156,22 @@ namespace TacoVsBurrito
                 _trashPandaRetrieved.TryGetValue(caster.Index, out int count);
                 if (count >= 2)
                 {
-                    _deck.Trash(trashPandaCard);
+                    trashPile.Trash(trashPandaCard);
                     return ($"🦝 Trash Panda failed: {caster.Name} has already retrieved " +
                             $"2 Trash Pandas this game (limit reached).", false);
                 }
                 _trashPandaRetrieved[caster.Index] = count + 1;
             }
 
-            bool removed = _deck.RetrieveFromTrash(chosenCard);
+            bool removed = trashPile.RetrieveFromTrash(chosenCard);
             if (!removed)
             {
-                _deck.Trash(trashPandaCard);
+                trashPile.Trash(trashPandaCard);
                 return ($"⚠ Trash Panda: '{chosenCard.Name}' not found in Trash.", false);
             }
 
             // Trash the Trash Panda itself
-            _deck.Trash(trashPandaCard);
+            trashPile.Trash(trashPandaCard);
 
             //bool healthInspTriggered = false;
 
@@ -199,13 +200,13 @@ namespace TacoVsBurrito
         public string ResolveFoodFight(PlayerBase caster, FoodFightCard foodFightCard,
                                         List<PlayerBase> clockwisePlayerBases)
         {
-            _deck.Trash(foodFightCard);
+            trashPile.Trash(foodFightCard);
 
             // Each PlayerBase flips one card from draw pile
             var flipped = new Dictionary<PlayerBase, CardBase>();
             foreach (var p in clockwisePlayerBases)
             {
-                CardBase f = _deck.FlipTop();
+                CardBase f = drawPile.FlipTop();
                 if (f != null)
                     flipped[p] = f;
             }
@@ -244,7 +245,7 @@ namespace TacoVsBurrito
             // Shuffle remaining cards back into draw pile
             if (toShuffle.Count > 0)
             {
-                _deck.ShuffleBackIn(toShuffle);
+                drawPile.ShuffleBackIn(toShuffle);
                 sb.AppendLine($"  {toShuffle.Count} card(s) shuffled back into draw pile.");
             }
 
@@ -263,7 +264,7 @@ namespace TacoVsBurrito
         public string ResolveOrderEnvy(PlayerBase caster, OrderEnvyCard orderEnvyCard, PlayerBase target)
         {
             caster.SwapMeal(target);
-            _deck.Trash(orderEnvyCard);
+            trashPile.Trash(orderEnvyCard);
 
             GameEvents.OnOrderEnvySwap?.Invoke(caster, target);
             return $"😤 Order Envy! {caster.Name} swapped their hand and meal with {target.Name}!";

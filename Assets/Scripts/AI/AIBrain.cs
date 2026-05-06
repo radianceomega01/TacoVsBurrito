@@ -26,12 +26,12 @@ namespace TacoVsBurrito
     public class AIBrain: MonoBehaviour
     {
         public AIDecision Decide(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers,
-                                         DeckManager deck, AIDifficulty difficulty = AIDifficulty.Normal)
+                                         TrashPile trashPile, AIDifficulty difficulty = AIDifficulty.Normal)
         {
             return difficulty switch
             {
                 AIDifficulty.Easy  => DecideEasy(ai, allPlayers),
-                AIDifficulty.Hard  => DecideHard(ai, allPlayers, deck),
+                AIDifficulty.Hard  => DecideHard(ai, allPlayers, trashPile),
                 _                  => DecideNormal(ai, allPlayers)
             };
         }
@@ -95,7 +95,7 @@ namespace TacoVsBurrito
         //  HARD  –  look-ahead strategic
         // ===========================================================
         private AIDecision DecideHard(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers,
-                                              DeckManager deck)
+                                              TrashPile trashPile)
         {
             //1. If we have Hot Sauce Boss AND at least 3 ingredients in meal → play it
             int hsb = FindFirstInHand<HotSauceBossCard>(ai);
@@ -136,7 +136,7 @@ namespace TacoVsBurrito
 
             // 7. Trash Panda
             int tp = FindFirstAction(ai, typeof(TrashPandaCard));
-            if (tp >= 0 && deck.TrashCount > 0)
+            if (tp >= 0 && trashPile.TrashCount > 0)
                 return new AIDecision { cardIndex = tp, destPlayerIndex = -1 };
 
             // 8. Food Fight

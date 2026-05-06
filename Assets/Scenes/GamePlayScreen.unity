@@ -963,6 +963,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564792818}
   m_CullTransparentMesh: 1
+--- !u!1 &603628537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 603628539}
+  - component: {fileID: 603628538}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &603628538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603628537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 787e80ae5cb0f4c4b9f536108693f01a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GameManager
+  drawPile: {fileID: 824009247}
+  trashPile: {fileID: 622180951}
+--- !u!4 &603628539
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603628537}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &622180949
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,6 +1018,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 622180950}
+  - component: {fileID: 622180951}
   m_Layer: 5
   m_Name: Trash Pile
   m_TagString: Untagged
@@ -998,6 +1045,18 @@ RectTransform:
   m_AnchoredPosition: {x: 200, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &622180951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622180949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1239d44e96f1a574fb1277e95b8e4a9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.TrashPile
 --- !u!1001 &788908544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1169,6 +1228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 824009246}
+  - component: {fileID: 824009247}
   m_Layer: 5
   m_Name: Draw Pile
   m_TagString: Untagged
@@ -1204,6 +1264,18 @@ RectTransform:
   m_AnchoredPosition: {x: -200, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &824009247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824009245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ddf4802ce650ea469ab921f476455ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.DrawPile
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2295,3 +2367,4 @@ SceneRoots:
   - {fileID: 349547513}
   - {fileID: 113293471}
   - {fileID: 302642481}
+  - {fileID: 603628539}

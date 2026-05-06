@@ -42,7 +42,8 @@ namespace TacoVsBurrito
 {
     public class GameManager : MonoBehaviour
     {
-
+        [SerializeField] DrawPile drawPile;
+        [SerializeField] TrashPile trashPile;
         private const int STARTING_HAND_SIZE = 5;
 
         // -------------------------------------------------------
@@ -53,30 +54,29 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  Runtime state
         // -------------------------------------------------------
-        private List<PlayerBase>   _players        = new List<PlayerBase>();
-        private DeckManager    _deck           = new DeckManager();
+        private List<PlayerBase> _players = new List<PlayerBase>();
         private ActionResolver _resolver;
 
-        private int  _currentIndex  = 0;
-        private bool _gameRunning   = false;
-        private bool _isDrawPileGone  = false;        // once empty, skip draw step
+        private int _currentIndex = 0;
+        private GameState gameState = GameState.None;
+        private bool _gameRunning;
+        private bool _isDrawPileGone = false;        // once empty, skip draw step
 
         // Human-turn gate
         private bool _humanPlayedCard = false;
 
         // No Bueno interrupt gate
-        private bool _noBuenoWindowOpen   = false;
-        private bool _noBuenoWasPlayed    = false;
-        private PlayerBase _noBuenoBlocker    = null;
-        private NoBuenoCard   _noBuenoCard       = null;
+        private bool _noBuenoWindowOpen = false;
+        private bool _noBuenoWasPlayed = false;
+        private PlayerBase _noBuenoBlocker = null;
+        private NoBuenoCard _noBuenoCard = null;
 
         // -------------------------------------------------------
         //  Public accessors
         // -------------------------------------------------------
-        public IReadOnlyList<PlayerBase> Players     => _players;
-        public PlayerBase CurrentPlayer              => _players[_currentIndex];
-        public bool   IsDrawPileEmpty              => _isDrawPileGone;
-        public DeckManager Deck => _deck;
+        public IReadOnlyList<PlayerBase> Players => _players;
+        public PlayerBase CurrentPlayer => _players[_currentIndex];
+        public bool IsDrawPileEmpty => _isDrawPileGone;
 
         // -------------------------------------------------------
 
@@ -86,7 +86,7 @@ namespace TacoVsBurrito
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            _resolver = new ActionResolver(_deck, () => _players);
+            _resolver = new ActionResolver(drawPile, trashPile, () => _players);
         }
 
         private void OnDestroy() => GameEvents.Clear();
@@ -106,16 +106,17 @@ namespace TacoVsBurrito
             // Deal starting hands (Health Inspectors filtered out)
             foreach (var p in _players)
             {
-                var hand = _deck.DealStartingHand(STARTING_HAND_SIZE);
+                var hand = drawPile.DealStartingHand(STARTING_HAND_SIZE);
                 foreach (var c in hand) p.Hand.AddCard(c);
                 GameEvents.OnHandChanged?.Invoke(p);
             }
 
-            _currentIndex  = 0;
-            _gameRunning   = true;
-            _isDrawPileGone  = false;
+            _currentIndex = 0;
+            _gameRunning = true;
+            _isDrawPileGone = false;
 
             GameEvents.OnGameStarted?.Invoke(_players);
+            GameEvents.OnGameStateChanged?.Invoke(GameState.Init);
             GameEvents.OnLogMessage?.Invoke(
                 $"🎮 Game started! {_players.Count} players. Youngest goes first. Play clockwise.");
 
@@ -136,7 +137,7 @@ namespace TacoVsBurrito
                 // ---- 1. DRAW PHASE ----
                 if (!_isDrawPileGone)
                 {
-                    CardBase drawn = _deck.Draw();
+                    CardBase drawn = drawPile.Draw();
 
                     if (drawn == null)
                     {
@@ -157,7 +158,7 @@ namespace TacoVsBurrito
                             GameEvents.OnLogMessage?.Invoke(hiLog);
                             GameEvents.OnHealthInspector?.Invoke(current);
                             GameEvents.OnTurnEnded?.Invoke(current);
-                            AdvanceToNextPlayerBase();
+                            AdvanceToNextPlayer();
                             yield return new WaitForSeconds(1.5f);
                             continue;                // skip play phase – turn is over
                         }
@@ -181,7 +182,7 @@ namespace TacoVsBurrito
                     // Should not normally happen mid-loop but guard it
                     GameEvents.OnLogMessage?.Invoke($"  {current.Name} has no cards – skipping play.");
                     GameEvents.OnTurnEnded?.Invoke(current);
-                    AdvanceToNextPlayerBase();
+                    AdvanceToNextPlayer();
                     yield return new WaitForSeconds(0.3f);
                     continue;
                 }
@@ -200,7 +201,7 @@ namespace TacoVsBurrito
                 if (!_gameRunning) yield break;
 
                 GameEvents.OnTurnEnded?.Invoke(current);
-                AdvanceToNextPlayerBase();
+                AdvanceToNextPlayer();
                 yield return new WaitForSeconds(0.25f);
             }
         }
@@ -215,7 +216,7 @@ namespace TacoVsBurrito
         {
             if (!IsHumanTurn()) return;
             var current = CurrentPlayer;
-            var card    = current.Hand.GetAt(handIndex);
+            var card = current.Hand.GetAt(handIndex);
             if (card == null || !card.IsPlaceableInMeal) return;
 
             var dest = destPlayerBaseIndex < 0 ? current : GetPlayerBase(destPlayerBaseIndex);
@@ -234,7 +235,7 @@ namespace TacoVsBurrito
                 GameEvents.OnScoreChanged?.Invoke(dest, dest.Score);
 
                 if (isLastCard) TriggerGameEnd();
-                else            _humanPlayedCard = true;
+                else _humanPlayedCard = true;
             }));
         }
 
@@ -244,7 +245,7 @@ namespace TacoVsBurrito
         {
             if (!IsHumanTurn()) return;
             var current = CurrentPlayer;
-            var card    = current.Hand.GetAt(handIndex);
+            var card = current.Hand.GetAt(handIndex);
             if (card == null) return;
 
             // Health Inspector can't be played from hand (only triggered on draw)
@@ -269,17 +270,17 @@ namespace TacoVsBurrito
         {
             if (!IsHumanTurn()) return;
             var current = CurrentPlayer;
-            var card    = current.Hand.GetAt(handIndex);
+            var card = current.Hand.GetAt(handIndex);
             if (card == null) return;
 
             bool isLastCard = current.Hand.Count == 1;
             current.Hand.RemoveCard(card);
-            _deck.Trash(card);
+            trashPile.Trash(card);
             GameEvents.OnHandChanged?.Invoke(current);
             GameEvents.OnLogMessage?.Invoke($"  {current.Name} discarded '{card.Name}'.");
 
             if (isLastCard) TriggerGameEnd();
-            else            _humanPlayedCard = true;
+            else _humanPlayedCard = true;
         }
 
         /// Human plays No Bueno to block a card mid-interrupt window.
@@ -296,8 +297,8 @@ namespace TacoVsBurrito
                     var nb = p.Hand.GetAt(handIndex);
                     if (nb != null && nb is NoBuenoCard)
                     {
-                        _noBuenoBlocker  = p;
-                        _noBuenoCard     = (NoBuenoCard)nb;
+                        _noBuenoBlocker = p;
+                        _noBuenoCard = (NoBuenoCard)nb;
                         _noBuenoWasPlayed = true;
                         _noBuenoWindowOpen = false;
                         return;
@@ -312,9 +313,9 @@ namespace TacoVsBurrito
         private IEnumerator NoBuenoInterruptWindow(PlayerBase active, CardBase card,
                                                     bool isLastCard, System.Action onProceed)
         {
-            _noBuenoWasPlayed  = false;
-            _noBuenoBlocker    = null;
-            _noBuenoCard       = null;
+            _noBuenoWasPlayed = false;
+            _noBuenoBlocker = null;
+            _noBuenoCard = null;
 
             // Health Inspector and last-card plays skip the window entirely
             if (card is HealthInspectorCard || isLastCard)
@@ -326,16 +327,17 @@ namespace TacoVsBurrito
             // Notify UI that a card is about to be played
             _noBuenoWindowOpen = true;
             GameEvents.OnCardAboutToBePlayed?.Invoke(active, card, isLastCard,
-                (blocker, noBueno) => {
-                    _noBuenoBlocker   = blocker;
-                    _noBuenoCard      = (NoBuenoCard)noBueno;
+                (blocker, noBueno) =>
+                {
+                    _noBuenoBlocker = blocker;
+                    _noBuenoCard = (NoBuenoCard)noBueno;
                     _noBuenoWasPlayed = true;
                     _noBuenoWindowOpen = false;
                 });
 
             // Wait a short window for human/AI No Bueno reactions
             float elapsed = 0f;
-            float window  = 1.5f;   // seconds to react
+            float window = 1.5f;   // seconds to react
             while (_noBuenoWindowOpen && elapsed < window)
             {
                 elapsed += Time.deltaTime;
@@ -380,17 +382,18 @@ namespace TacoVsBurrito
                 case CraftyCrowCard c:
                     yield return StartCoroutine(ResolveWithPlayerBaseThenMealCard(
                         caster, card, "Choose a playerBasePlayerBase to steal from:", wasLastCard,
-                        (victim, stolen) => {
+                        (victim, stolen) =>
+                        {
                             log = _resolver.ResolveCraftyCrow(caster, c, victim, stolen);
                         }));
                     break;
 
                 // ---- Trash Panda: pick a card from Trash pile ----
                 case TrashPandaCard c:
-                    var trash = _deck.PeekTrash().ToList();
+                    var trash = trashPile.PeekTrash().ToList();
                     if (trash.Count == 0)
                     {
-                        _deck.Trash(card);
+                        trashPile.Trash(card);
                         log = $"🦝 Trash Panda: Trash pile is empty!";
                     }
                     else
@@ -398,9 +401,10 @@ namespace TacoVsBurrito
                         bool done = false;
                         GameEvents.OnNeedCardFromTrash?.Invoke(
                             "Choose a card to retrieve from the Trash pile:", trash,
-                            chosen => {
+                            chosen =>
+                            {
                                 var (tpLog, _) = _resolver.ResolveTrashPanda(caster, c, chosen);
-                                log  = tpLog;
+                                log = tpLog;
                                 done = true;
                             });
                         if (caster is AIPlayer)
@@ -424,13 +428,14 @@ namespace TacoVsBurrito
                 case OrderEnvyCard c:
                     yield return StartCoroutine(ResolveWithPlayerBaseTarget(
                         caster, c, "Choose a playerBasePlayerBase to swap with:", wasLastCard,
-                        target => {
+                        target =>
+                        {
                             log = _resolver.ResolveOrderEnvy(caster, c, target);
                         }));
                     break;
 
                 default:
-                    _deck.Trash(card);
+                    trashPile.Trash(card);
                     log = $"⚠ Unknown action on card '{card.Name}'.";
                     break;
             }
@@ -443,7 +448,7 @@ namespace TacoVsBurrito
             }
 
             if (wasLastCard) TriggerGameEnd();
-            else             _humanPlayedCard = true;
+            else _humanPlayedCard = true;
         }
 
         // ---- Helper: resolve after picking a target playerBasePlayerBase ----
@@ -451,7 +456,7 @@ namespace TacoVsBurrito
                                                      bool wasLastCard, System.Action<PlayerBase> onTarget)
         {
             var targets = _players.Where(p => p != caster).ToList();
-            bool done   = false;
+            bool done = false;
 
             if (caster is AIPlayer)
             {
@@ -460,7 +465,8 @@ namespace TacoVsBurrito
             }
             else
             {
-                GameEvents.OnNeedPlayerBaseTarget?.Invoke(prompt, targets, target => {
+                GameEvents.OnNeedPlayerBaseTarget?.Invoke(prompt, targets, target =>
+                {
                     onTarget(target);
                     done = true;
                 });
@@ -473,23 +479,24 @@ namespace TacoVsBurrito
                                                            bool wasLastCard,
                                                            System.Action<PlayerBase, CardBase> onResult)
         {
-            bool done   = false;
+            bool done = false;
 
             if (caster is AIPlayer)
             {
-                var victim  = AIPickTarget(caster);
-                var stolen  = AIPickCardFromMeal(victim);
+                var victim = AIPickTarget(caster);
+                var stolen = AIPickCardFromMeal(victim);
                 if (stolen != null) onResult(victim, stolen);
                 done = true;
             }
             else
             {
                 var targets = _players.Where(p => p != caster && p.Meal.CardCount > 0).ToList();
-                if (targets.Count == 0) { _deck.Trash(card); done = true; }
+                if (targets.Count == 0) { trashPile.Trash(card); done = true; }
                 else
                 {
                     GameEvents.OnNeedPlayerBaseAndMealCard?.Invoke(prompt, targets,
-                        (victim, stolen) => {
+                        (victim, stolen) =>
+                        {
                             onResult(victim, stolen);
                             done = true;
                         });
@@ -505,7 +512,7 @@ namespace TacoVsBurrito
         {
             yield return new WaitForSeconds(0.8f); // thinking delay
 
-            var decision = ai.GetBrain().Decide(ai, _players, _deck);
+            var decision = ai.GetBrain().Decide(ai, _players, trashPile);
 
             if (decision.cardIndex < 0 || decision.cardIndex >= ai.Hand.Count)
             {
@@ -523,7 +530,7 @@ namespace TacoVsBurrito
 
                 // No Bueno interrupt (other AI/human playerBasePlayerBases)
                 //bool blocked = false;
-                yield return StartCoroutine(NoBuenoInterruptWindow(ai, card, isLastCard, () => {}));
+                yield return StartCoroutine(NoBuenoInterruptWindow(ai, card, isLastCard, () => { }));
                 if (_noBuenoWasPlayed) { _humanPlayedCard = true; yield break; }
 
                 string log = _resolver.PlaceCardInMeal(ai, card, _players[destIdx]);
@@ -534,11 +541,11 @@ namespace TacoVsBurrito
                 GameEvents.OnHandChanged?.Invoke(ai);
 
                 if (isLastCard) TriggerGameEnd();
-                else            _humanPlayedCard = true;
+                else _humanPlayedCard = true;
             }
             else if (card is ActionCardBase)
             {
-                yield return StartCoroutine(NoBuenoInterruptWindow(ai, card, isLastCard, () => {}));
+                yield return StartCoroutine(NoBuenoInterruptWindow(ai, card, isLastCard, () => { }));
                 if (_noBuenoWasPlayed) { _humanPlayedCard = true; yield break; }
 
                 ai.Hand.RemoveCard(card);
@@ -549,11 +556,11 @@ namespace TacoVsBurrito
             {
                 // Discard
                 ai.Hand.RemoveCard(card);
-                _deck.Trash(card);
+                trashPile.Trash(card);
                 GameEvents.OnHandChanged?.Invoke(ai);
                 GameEvents.OnLogMessage?.Invoke($"  {ai.Name} discarded '{card.Name}'.");
                 if (isLastCard) TriggerGameEnd();
-                else            _humanPlayedCard = true;
+                else _humanPlayedCard = true;
             }
         }
 
@@ -569,8 +576,8 @@ namespace TacoVsBurrito
                         _resolver.CanPlayNoBueno((NoBuenoCard)c, cardBeingPlayed, false))
                     {
                         aiPlayer.Hand.RemoveCard(c);
-                        _noBuenoBlocker   = aiPlayer;
-                        _noBuenoCard      = (NoBuenoCard)c;
+                        _noBuenoBlocker = aiPlayer;
+                        _noBuenoCard = (NoBuenoCard)c;
                         _noBuenoWasPlayed = true;
                         _noBuenoWindowOpen = false;
                         GameEvents.OnLogMessage?.Invoke($"  {aiPlayer.Name} plays No Bueno!");
@@ -586,7 +593,7 @@ namespace TacoVsBurrito
         private void TriggerGameEnd()
         {
             _gameRunning = false;
-            GameEvents.OnLogMessage?.Invoke("\n🎴 A playerBasePlayerBase played their last card — GAME OVER!");
+            GameEvents.OnLogMessage?.Invoke("\n🎴 A player played their last card — GAME OVER!");
             StartCoroutine(FinalScoring());
         }
 
@@ -602,7 +609,7 @@ namespace TacoVsBurrito
                 GameEvents.OnLogMessage?.Invoke($"  {p.Name}: {p.Score} pts");
 
             // Check for tie among the top scorers
-            int topScore   = ranked[0].Score;
+            int topScore = ranked[0].Score;
             var tiedWinners = ranked.Where(p => p.Score == topScore).ToList();
 
             if (tiedWinners.Count == 1)
@@ -627,7 +634,7 @@ namespace TacoVsBurrito
             var flips = new Dictionary<PlayerBase, CardBase>();
             foreach (var p in tiedPlayerBases)
             {
-                var flipped = _deck.FlipTop();
+                var flipped = drawPile.FlipTop();
                 if (flipped != null)
                 {
                     flips[p] = flipped;
@@ -640,10 +647,10 @@ namespace TacoVsBurrito
 
             int best = flips.Values.Max(c => c is IngredientCardBase @base ? @base.CardValue : 0);
             var winner = flips.FirstOrDefault(kv =>
-                (kv.Value is IngredientCardBase @base? @base.CardValue : 0) == best).Key;
+                (kv.Value is IngredientCardBase @base ? @base.CardValue : 0) == best).Key;
 
             // Shuffle flipped cards back
-            _deck.ShuffleBackIn(flips.Values.ToList());
+            drawPile.ShuffleBackIn(flips.Values.ToList());
 
             GameEvents.OnLogMessage?.Invoke($"\n🎉 TIEBREAKER WINNER: {winner?.Name ?? tiedPlayerBases[0].Name}!");
             GameEvents.OnGameOver?.Invoke(winner ?? tiedPlayerBases[0]);
@@ -652,7 +659,7 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  Helpers
         // -------------------------------------------------------
-        private void AdvanceToNextPlayerBase()
+        private void AdvanceToNextPlayer()
         {
             _currentIndex = (_currentIndex + 1) % _players.Count;
         }
@@ -688,19 +695,18 @@ namespace TacoVsBurrito
         {
             return trash.OrderByDescending(c =>
                 c is IngredientCardBase @base ? @base.CardValue + 10 :
-                c is HotSauceBossCard? 50:
-                c is ActionCardBase? 5: 0
+                c is HotSauceBossCard ? 50 :
+                c is ActionCardBase ? 5 : 0
             ).FirstOrDefault();
         }
     }
-
-    // -------------------------------------------------------
-    //  PlayerBase setup data (passed from setup UI to StartGame)
-    // -------------------------------------------------------
-    [System.Serializable]
-    public struct PlayerSetupData
+    public enum GameState
     {
-        public string playerName;
-        public MealType mealType;
+        None,
+        Init,
+        CardDistribution,
+        Running,
+        Completed
+
     }
 }

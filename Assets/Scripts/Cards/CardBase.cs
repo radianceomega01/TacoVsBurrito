@@ -28,5 +28,14 @@ namespace TacoVsBurrito
             nameTxtField.text = cardName;
             DescriptionTxtField.text = DescriptionText;
         }
+
+        public void ChangePosition(Vector3 newPos)
+        {
+            transform.position = newPos;
+        }
+        public void ChangeParent(Transform newParent)
+        {
+            transform.SetParent(newParent);
+        }
     }
 }
