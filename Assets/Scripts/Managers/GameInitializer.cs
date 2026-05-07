@@ -44,7 +44,7 @@ namespace TacoVsBurrito {
         async void InitCardShuffle()
         {
             await Task.Delay(1500);
-            GameEvents.OnCardShuffled?.Invoke();
+            GameEvents.OnShuffleCards?.Invoke();
         }
     }
     public enum GameMode

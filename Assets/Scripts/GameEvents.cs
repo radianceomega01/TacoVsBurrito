@@ -13,16 +13,16 @@ namespace TacoVsBurrito
     {
         // ---- Lifecycle ----
         public static Action                            OnGameInit;     
-        public static Action                            OnCardShuffled;     
-        public static Action                            OnCardDistributed;     
+        public static Action                            OnShuffleCards;     
+        public static Action                            OnDistributeCards;     
         public static Action<List<PlayerBase>>          OnGameStarted;     
         public static Action<PlayerBase>                OnTurnStarted;
         public static Action<PlayerBase>                OnTurnEnded;
         public static Action<PlayerBase>                OnGameOver;         // winner
 
         // ---- Draw pile ----
-        public static Action<PlayerBase, CardBase>          OnCardDrawn;        // (drawer, card drawn)
-        public static Action                        OnDrawPileEmpty;    // draw pile exhausted
+        public static Action<PlayerBase, CardBase>       OnCardDrawn;        // (drawer, card drawn)
+        public static Action                             OnDrawPileEmpty;    // draw pile exhausted
 
         // ---- Hand changes ----
         public static Action<PlayerBase, CardBase>          OnCardAddedToHand;

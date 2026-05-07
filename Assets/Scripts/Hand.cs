@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEditor.Experimental.GraphView;
 
 namespace TacoVsBurrito
 {
@@ -11,7 +12,7 @@ namespace TacoVsBurrito
     {
         private readonly List<CardBase> _cards = new List<CardBase>();
 
-        private const float CARD_SPACING = 12f;
+        private const float CARD_SPACING = 4f;
 
         public IReadOnlyList<CardBase> Cards => _cards;
         public int Count => _cards.Count;

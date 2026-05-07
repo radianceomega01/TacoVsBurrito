@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +8,14 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Meal  (the face-up cards in front of a player)
     // ----------------------------------------------------------
-    public class Meal: MonoBehaviour
+    public class Meal: MonoBehaviour, ICardDropTarget
     {
+        [SerializeField] Transform cardsTransform;
+
+        private const float CARD_SPACING = 4f;
+
         public MealType Type { get; }
-        private List<CardBase> _cards = new List<CardBase>();
+        private List<CardBase> _cards;
 
         public IReadOnlyList<CardBase> Cards => _cards;
 
@@ -18,7 +23,10 @@ namespace TacoVsBurrito
         public int HotSauceBossCardCount { get; private set; }
         public int IngredientCardCount { get; private set; }
 
-
+        void Awake()
+        {
+            _cards = new();
+        }
         // ---- Mutations ----
 
         /// Add a card (Ingredient, TummyAche, or HotSauceBoss) to this meal.
@@ -30,8 +38,10 @@ namespace TacoVsBurrito
                 return;
 
             _cards.Add(card);
-            if (card is not HotSauceBossCard) HotSauceBossCardCount++;
-            if (card is not IngredientCardBase) IngredientCardCount++;
+            ArrangeCardsAnimated();
+
+            if (card is HotSauceBossCard) HotSauceBossCardCount++;
+            if (card is IngredientCardBase) IngredientCardCount++;
         }
 
         /// Remove a specific card (used by Crafty Crow).
@@ -79,6 +89,40 @@ namespace TacoVsBurrito
             sb.AppendLine($"  [{Type} Meal | Score: {CalculateScore()}]");
             foreach (var c in _cards) sb.AppendLine($"    {c}");
             return sb.ToString();
+        }
+
+        public bool CanDrop(CardBase card)
+        {
+            if (card is ActionCardBase)
+            {
+                if (card is HotSauceBossCard || card is TummyAcheCard)
+                    return true;
+                else
+                    return false;
+            }
+            return true;
+        }
+        public void DropCardAfterDrag(CardBase card)
+        {
+            AddCard(card);
+        }
+
+        void ArrangeCardsAnimated()
+        {
+            int count = _cards.Count;
+            if (count == 0) return;
+
+            float totalWidth = (count - 1) * CARD_SPACING;
+            float startOffset = -totalWidth / 2f;
+
+            for (int i = 0; i < count; i++)
+            {
+                float offset = startOffset + i * CARD_SPACING;
+                Vector3 targetPos = cardsTransform.position + cardsTransform.right * offset;
+
+                _cards[i].ChangePosition(targetPos);
+                _cards[i].ChangeParent(cardsTransform);
+            }
         }
     }
     public enum MealType

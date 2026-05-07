@@ -3,16 +3,9 @@ namespace TacoVsBurrito
 {
     public class SelfPlayer : HumanPlayer
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        protected override void Awake()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            base.Awake();
         }
     }
 }

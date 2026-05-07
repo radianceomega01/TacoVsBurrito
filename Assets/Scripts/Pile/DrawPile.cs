@@ -1,24 +1,33 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 namespace TacoVsBurrito
 {
     public class DrawPile : MonoBehaviour
     {
+        [SerializeField] Transform cardsParent;
+        [SerializeField] Button drawBtn;
         private List<CardBase> _drawPile = new();
         private const int STARTING_HAND_SIZE = 5;
 
-        public int DrawCount  => _drawPile.Count;
+        public int DrawCount => _drawPile.Count;
         public bool IsDrawPileEmpty => _drawPile.Count == 0;
+
+        bool isCardAlreadyDrawn;
 
         void Awake()
         {
-            GameEvents.OnCardShuffled += ManageCardShuffle;
+            GameEvents.OnShuffleCards += ManageCardShuffle;
+            GameEvents.OnTurnStarted += ManageTurnStarted;
+            GameEvents.OnTurnEnded += ManageTurnEnded;
         }
 
         void OnDestroy()
         {
-            GameEvents.OnCardShuffled -= ManageCardShuffle;
+            GameEvents.OnShuffleCards -= ManageCardShuffle;
+            GameEvents.OnTurnStarted -= ManageTurnStarted;
+            GameEvents.OnTurnEnded -= ManageTurnEnded;
         }
 
         void Start()
@@ -28,28 +37,25 @@ namespace TacoVsBurrito
 
         void InitDrawPile()
         {
-            for (int i = 0; i < transform.childCount; i++)
+            for (int i = 0; i < cardsParent.childCount; i++)
             {
-                if (!transform.GetChild(i).TryGetComponent<CardBase>(out var card))
+                if (!cardsParent.GetChild(i).TryGetComponent<CardBase>(out var card))
                     continue;
                 _drawPile.Add(card);
             }
-            Debug.Log(_drawPile.Count);
         }
-        
+
         public void ManageCardShuffle()
         {
             Shuffle(_drawPile);
-            Debug.Log($"[DeckManager] Built deck: {_drawPile.Count} cards.");
             InitiateCardDistribution();
-            
         }
 
         public CardBase Draw()
         {
             if (_drawPile.Count == 0) return null;
-            var c = _drawPile[0];
-            _drawPile.RemoveAt(0);
+            var c = _drawPile[^1];
+            _drawPile.RemoveAt(_drawPile.Count - 1);
             return c;
         }
         public List<CardBase> DrawMany(int count)
@@ -67,19 +73,17 @@ namespace TacoVsBurrito
         {
             int cardsDistributed = 0;
             int playerIndex = 0;
-            while (cardsDistributed <= players.Count* STARTING_HAND_SIZE)
+            while (cardsDistributed <= players.Count * STARTING_HAND_SIZE)
             {
                 var card = Draw();
 
                 if (card is HealthInspectorCard)
                 {
-                    // Shuffle back
-                    int insertAt = Random.Range(0, _drawPile.Count + 1);
-                    _drawPile.Insert(insertAt, card);
-                    Debug.Log("[DeckManager] Health Inspector removed from starting hand and reshuffled.");
+                    // Move to bottom of deck
+                    _drawPile.Insert(0, card);
+                    card.ChangeSiblingIndex(0);
                     continue;                               // draw again
                 }
-
                 players[playerIndex % players.Count].Hand.AddCard(card);
                 cardsDistributed++;
                 playerIndex++;
@@ -97,14 +101,51 @@ namespace TacoVsBurrito
             // Sync hierarchy order with list order
             for (int i = 0; i < list.Count; i++)
             {
-                list[i].transform.SetSiblingIndex(i);
+                list[i].ChangeSiblingIndex(i);
             }
+        }
+
+        public void OnDrawBtnClicked()
+        {
+            if (GameManager.Instance.CurrentPlayer is not SelfPlayer || isCardAlreadyDrawn)
+                return;
+
+            if (!IsDrawPileEmpty)
+            {
+                CardBase drawnCard = Draw();
+
+                if (IsDrawPileEmpty)
+                {
+                    // Draw pile just became empty
+                    GameEvents.OnDrawPileEmpty?.Invoke();
+                    GameEvents.OnLogMessage?.Invoke(
+                        "📭 Draw pile is empty! PlayerBases now skip the draw step.");
+                }
+                GameManager.Instance.CardDrawnFromPile(drawnCard);
+                isCardAlreadyDrawn = true;
+            }
+            else
+            {
+                GameEvents.OnDrawPhaseSkipped?.Invoke(true);
+                GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
+            }
+        }
+
+        void TogglePile(bool value) => drawBtn.interactable = value;
+
+        void ManageTurnStarted(PlayerBase player)
+        {
+            isCardAlreadyDrawn = false;
+        }
+        void ManageTurnEnded(PlayerBase player)
+        {
+            isCardAlreadyDrawn = false;
         }
 
         async void InitiateCardDistribution()
         {
             await Task.Delay(1500);
-            GameEvents.OnCardDistributed?.Invoke();
+            GameEvents.OnDistributeCards?.Invoke();
         }
 
         /// Flip the top card from the draw pile (Food Fight).

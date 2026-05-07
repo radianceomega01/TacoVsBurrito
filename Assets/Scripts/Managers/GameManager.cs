@@ -59,7 +59,6 @@ namespace TacoVsBurrito
         private int _currentIndex = 0;
         private GameState gameState = GameState.None;
         private bool _gameRunning;
-        private bool _isDrawPileGone = false;        // once empty, skip draw step
 
         // Human-turn gate
         private bool _humanPlayedCard = false;
@@ -75,7 +74,6 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         public IReadOnlyList<PlayerBase> Players => _players;
         public PlayerBase CurrentPlayer => _players[_currentIndex];
-        public bool IsDrawPileEmpty => _isDrawPileGone;
 
         // -------------------------------------------------------
 
@@ -84,15 +82,16 @@ namespace TacoVsBurrito
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             _resolver = new ActionResolver(drawPile, trashPile, () => _players);
 
-            GameEvents.OnCardDistributed += StartGame;
+            GameEvents.OnDistributeCards += StartGame;
         }
 
         private void OnDestroy()
         {
-            GameEvents.OnCardDistributed -= StartGame;
+            GameEvents.OnDistributeCards -= StartGame;
+            ResetData();
         }
 
         // -------------------------------------------------------
@@ -112,13 +111,13 @@ namespace TacoVsBurrito
 
             _currentIndex = 0;
             _gameRunning = true;
-            _isDrawPileGone = false;
 
             GameEvents.OnGameStarted?.Invoke(_players);
             GameEvents.OnLogMessage?.Invoke(
                 $"🎮 Game started! {_players.Count} players. Youngest goes first. Play clockwise.");
 
-            //StartCoroutine(GameLoop());
+            GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
+            GameEvents.OnLogMessage?.Invoke($"\n--- {CurrentPlayer.Name}'s turn ---");
         }
 
         // -------------------------------------------------------
@@ -133,39 +132,39 @@ namespace TacoVsBurrito
                 GameEvents.OnLogMessage?.Invoke($"\n--- {current.Name}'s turn ---");
 
                 // ---- 1. DRAW PHASE ----
-                if (!_isDrawPileGone)
+                if (!current)
                 {
-                    CardBase drawn = drawPile.Draw();
+                    // CardBase drawn = drawPile.Draw();
 
-                    if (drawn == null)
-                    {
-                        // Draw pile just became empty
-                        _isDrawPileGone = true;
-                        GameEvents.OnDrawPileEmpty?.Invoke();
-                        GameEvents.OnLogMessage?.Invoke(
-                            "📭 Draw pile is empty! PlayerBases now skip the draw step.");
-                    }
-                    else
-                    {
-                        GameEvents.OnLogMessage?.Invoke($"  {current.Name} draws a card.");
+                    // if (drawn == null)
+                    // {
+                    //     // Draw pile just became empty
+                    //     _isDrawPileGone = true;
+                    //     GameEvents.OnDrawPileEmpty?.Invoke();
+                    //     GameEvents.OnLogMessage?.Invoke(
+                    //         "📭 Draw pile is empty! PlayerBases now skip the draw step.");
+                    // }
+                    // else
+                    // {
+                    //     GameEvents.OnLogMessage?.Invoke($"  {current.Name} draws a card.");
 
-                        // Health Inspector triggers IMMEDIATELY on draw – unblockable
-                        if (drawn is HealthInspectorCard @base)
-                        {
-                            string hiLog = _resolver.TriggerHealthInspector(current, @base);
-                            GameEvents.OnLogMessage?.Invoke(hiLog);
-                            GameEvents.OnHealthInspector?.Invoke(current);
-                            GameEvents.OnTurnEnded?.Invoke(current);
-                            AdvanceToNextPlayer();
-                            yield return new WaitForSeconds(1.5f);
-                            continue;                // skip play phase – turn is over
-                        }
+                    //     // Health Inspector triggers IMMEDIATELY on draw – unblockable
+                    //     if (drawn is HealthInspectorCard @base)
+                    //     {
+                    //         string hiLog = _resolver.TriggerHealthInspector(current, @base);
+                    //         GameEvents.OnLogMessage?.Invoke(hiLog);
+                    //         GameEvents.OnHealthInspector?.Invoke(current);
+                    //         GameEvents.OnTurnEnded?.Invoke(current);
+                    //         AdvanceToNextPlayer();
+                    //         yield return new WaitForSeconds(1.5f);
+                    //         continue;                // skip play phase – turn is over
+                    //     }
 
-                        // Normal card: add to hand
-                        current.Hand.AddCard(drawn);
-                        GameEvents.OnCardDrawn?.Invoke(current, drawn);
-                        GameEvents.OnHandChanged?.Invoke(current);
-                    }
+                    //     // Normal card: add to hand
+                    //     current.Hand.AddCard(drawn);
+                    //     GameEvents.OnCardDrawn?.Invoke(current, drawn);
+                    //     GameEvents.OnHandChanged?.Invoke(current);
+                    // }
                 }
                 else
                 {
@@ -200,8 +199,28 @@ namespace TacoVsBurrito
 
                 GameEvents.OnTurnEnded?.Invoke(current);
                 AdvanceToNextPlayer();
-                yield return new WaitForSeconds(0.25f);
+                yield return new WaitForSeconds(15f);
             }
+        }
+
+        public void CardDrawnFromPile(CardBase card)
+        {
+            GameEvents.OnLogMessage?.Invoke($"  {CurrentPlayer.Name} draws a card.");
+            Debug.Log(CurrentPlayer.GetType());
+            // Health Inspector triggers IMMEDIATELY on draw – unblockable
+            if (card is HealthInspectorCard @base)
+            {
+                string log = _resolver.TriggerHealthInspector(CurrentPlayer, @base);
+                GameEvents.OnLogMessage?.Invoke(log);
+                GameEvents.OnHealthInspector?.Invoke(CurrentPlayer);
+                GameEvents.OnTurnEnded?.Invoke(CurrentPlayer);
+                AdvanceToNextPlayer();              // skip play phase – turn is over
+            }
+
+            // Normal card: add to hand
+            CurrentPlayer.Hand.AddCard(card);
+            GameEvents.OnCardDrawn?.Invoke(CurrentPlayer, card);
+            GameEvents.OnHandChanged?.Invoke(CurrentPlayer);
         }
 
         // -------------------------------------------------------
@@ -659,6 +678,7 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         private void AdvanceToNextPlayer()
         {
+            Debug.Log("Advance to next player");
             _currentIndex = (_currentIndex + 1) % _players.Count;
         }
 
@@ -696,6 +716,12 @@ namespace TacoVsBurrito
                 c is HotSauceBossCard ? 50 :
                 c is ActionCardBase ? 5 : 0
             ).FirstOrDefault();
+        }
+
+        void ResetData()
+        {
+            _currentIndex = 0;
+            _players.Clear();
         }
     }
     public enum GameState

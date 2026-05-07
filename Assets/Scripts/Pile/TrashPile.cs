@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class TrashPile : MonoBehaviour
+    public class TrashPile : MonoBehaviour, ICardDropTarget
     {
+        [SerializeField] Transform cardsTransform;
         public int TrashCount => _trashPile.Count;
         
         private List<CardBase> _trashPile = new();
@@ -12,6 +13,8 @@ namespace TacoVsBurrito
         public void Trash(CardBase card)
         {
             if (card != null) _trashPile.Add(card);
+            card.ChangePosition(cardsTransform.position);
+            card.ChangeParent(cardsTransform);
         }
 
         public void TrashAll(IEnumerable<CardBase> cards)
@@ -27,6 +30,15 @@ namespace TacoVsBurrito
         public bool RetrieveFromTrash(CardBase card)
         {
             return _trashPile.Remove(card);
+        }
+
+        public bool CanDrop(CardBase card)
+        {
+            return true;
+        }
+        public void DropCardAfterDrag(CardBase card)
+        {
+            Trash(card);
         }
     }
 }

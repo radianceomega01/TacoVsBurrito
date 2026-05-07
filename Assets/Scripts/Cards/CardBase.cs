@@ -1,10 +1,11 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace TacoVsBurrito
 {
-    public abstract class CardBase: MonoBehaviour
+    public abstract class CardBase: MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Identity")]
         [SerializeField] string cardName = "Unnamed Card";
@@ -16,6 +17,19 @@ namespace TacoVsBurrito
         [SerializeField] protected TextMeshProUGUI nameTxtField;
         [SerializeField] protected TextMeshProUGUI DescriptionTxtField;
 
+
+        [Header("Drag Settings")]
+        [SerializeField] private float dragScale = 1.2f;
+
+        private RectTransform _rectTransform;
+        private Canvas canvas;
+        private CanvasGroup _canvasGroup;
+
+        private Transform _originalParent;
+        private int _originalSiblingIndex;
+
+        private Vector2 _originalAnchoredPosition;
+        private Vector3 _originalScale;
         public string Name { get { return cardName; } }
 
         // Common helpers
@@ -23,6 +37,13 @@ namespace TacoVsBurrito
         public virtual bool IsBlockable => isBlockable;
 
         public virtual int GetModifiedMealScore(int currentScore) { return currentScore; }
+
+        private void Awake()
+        {
+            _rectTransform = GetComponent<RectTransform>();
+            _canvasGroup = GetComponent<CanvasGroup>();
+            canvas = GetComponentInParent<Canvas>();
+        }
 
         protected virtual void Start()
         {
@@ -37,6 +58,81 @@ namespace TacoVsBurrito
         public void ChangeParent(Transform newParent)
         {
             transform.SetParent(newParent);
+        }
+        public void ChangeSiblingIndex(int newIndex)
+        {
+            transform.SetSiblingIndex(newIndex);
+        }
+
+                // =========================================================
+        // BEGIN DRAG
+        // =========================================================
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            _originalParent = transform.parent;
+            _originalSiblingIndex = transform.GetSiblingIndex();
+
+            _originalAnchoredPosition = _rectTransform.anchoredPosition;
+            _originalScale = transform.localScale;
+
+            // Move outside layout group while dragging
+            transform.SetParent(canvas.transform);
+
+            // Bring on top
+            transform.SetAsLastSibling();
+
+            // Allow raycasts to pass through while dragging
+            _canvasGroup.blocksRaycasts = false;
+
+            // Optional visual feedback
+            transform.localScale = Vector3.one * dragScale;
+        }
+
+        // =========================================================
+        // DRAG
+        // =========================================================
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            _rectTransform.anchoredPosition +=
+                eventData.delta / canvas.scaleFactor;
+        }
+
+        // =========================================================
+        // END DRAG
+        // =========================================================
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            _canvasGroup.blocksRaycasts = true;
+
+            transform.localScale = _originalScale;
+
+            GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
+            if (targetObject != null)
+            {
+                ICardDropTarget dropTarget = targetObject.GetComponent<ICardDropTarget>();
+                if (dropTarget != null && dropTarget.CanDrop(this))
+                {
+                    dropTarget.DropCardAfterDrag(this);
+                    return;
+                }
+            }
+            ReturnToHand();
+        }
+
+        // =========================================================
+        // RETURN TO ORIGINAL POSITION
+        // =========================================================
+
+        public void ReturnToHand()
+        {
+            transform.SetParent(_originalParent);
+            transform.SetSiblingIndex(_originalSiblingIndex);
+
+            _rectTransform.anchoredPosition =
+                _originalAnchoredPosition;
         }
     }
 }
