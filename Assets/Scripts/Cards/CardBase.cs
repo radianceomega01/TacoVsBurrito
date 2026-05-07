@@ -30,6 +30,7 @@ namespace TacoVsBurrito
 
         private Vector2 _originalAnchoredPosition;
         private Vector3 _originalScale;
+
         public string Name { get { return cardName; } }
 
         // Common helpers
@@ -43,6 +44,15 @@ namespace TacoVsBurrito
             _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
             canvas = GetComponentInParent<Canvas>();
+
+            GameEvents.OnCardDragBegin += DisableInteraction;
+            GameEvents.OnCardDragEnd += EnableInteraction;
+        }
+
+        void OnDestroy()
+        {
+            GameEvents.OnCardDragBegin -= DisableInteraction;
+            GameEvents.OnCardDragEnd -= EnableInteraction;
         }
 
         protected virtual void Start()
@@ -87,6 +97,16 @@ namespace TacoVsBurrito
 
             // Optional visual feedback
             transform.localScale = Vector3.one * dragScale;
+
+            GameEvents.OnCardDragBegin(this);
+            GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
+            if (targetObject != null)
+            {
+                ICardPickupTarget pickupTarget = targetObject.GetComponent<ICardPickupTarget>();
+                Debug.Log("pickup");
+                pickupTarget?.PickCardBeforeDrag(this);
+            }
+
         }
 
         // =========================================================
@@ -120,6 +140,7 @@ namespace TacoVsBurrito
                 }
             }
             ReturnToHand();
+            GameEvents.OnCardDragEnd(this);
         }
 
         // =========================================================
@@ -133,6 +154,16 @@ namespace TacoVsBurrito
 
             _rectTransform.anchoredPosition =
                 _originalAnchoredPosition;
+        }
+
+        void DisableInteraction(CardBase card)
+        {
+            if (card != this)
+                _canvasGroup.blocksRaycasts = false;
+        }
+        void EnableInteraction(CardBase card)
+        {
+            _canvasGroup.blocksRaycasts = true;
         }
     }
 }

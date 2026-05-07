@@ -25,15 +25,19 @@ namespace TacoVsBurrito
         public static Action                             OnDrawPileEmpty;    // draw pile exhausted
 
         // ---- Hand changes ----
-        public static Action<PlayerBase, CardBase>          OnCardAddedToHand;
+        public static Action<PlayerBase, CardBase>      OnCardAddedToHand;
         public static Action<PlayerBase>                OnHandChanged;      // general refresh
 
         // ---- Meal changes ----
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCardPlacedInMeal; // (placer, destPlayer, card)
-        public static Action<PlayerBase>                OnMealCleared;      // Health Inspector wipe
+        public static Action<PlayerBase>                        OnMealCleared;      // Health Inspector wipe
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCardStolenFromMeal; // (thief, victim, card)
-        public static Action<PlayerBase, PlayerBase>        OnOrderEnvySwap;    // (swapper, swapTarget)
-        public static Action<PlayerBase>                OnMealScoreChanged; // any meal update
+        public static Action<PlayerBase, PlayerBase>            OnOrderEnvySwap;    // (swapper, swapTarget)
+        public static Action<PlayerBase>                        OnMealScoreChanged; // any meal update
+        
+        // ---- Card Drag ----
+        public static Action<CardBase>          OnCardDragBegin;
+        public static Action<CardBase>          OnCardDragEnd;
 
         // ---- Action cards ----
         public static Action<PlayerBase, CardBase>          OnNoBuenoPlayed;    // (blocker, blocked card)

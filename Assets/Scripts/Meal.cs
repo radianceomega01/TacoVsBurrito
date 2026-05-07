@@ -8,7 +8,7 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Meal  (the face-up cards in front of a player)
     // ----------------------------------------------------------
-    public class Meal: MonoBehaviour, ICardDropTarget
+    public class Meal: MonoBehaviour, ICardDropTarget, ICardPickupTarget
     {
         [SerializeField] Transform cardsTransform;
 
@@ -32,11 +32,10 @@ namespace TacoVsBurrito
         /// Add a card (Ingredient, TummyAche, or HotSauceBoss) to this meal.
         public void AddCard(CardBase card)
         {
-            if (card is not HotSauceBossCard ||
-                card is not IngredientCardBase ||
+            if (card is not HotSauceBossCard &&
+                card is not IngredientCardBase &&
                 card is not TummyAcheCard)
                 return;
-
             _cards.Add(card);
             ArrangeCardsAnimated();
 
@@ -106,6 +105,11 @@ namespace TacoVsBurrito
         {
             AddCard(card);
         }
+        public void PickCardBeforeDrag(CardBase card)
+        {
+            Debug.Log("pickup remove called");
+            RemoveCard(card);
+        }
 
         void ArrangeCardsAnimated()
         {
@@ -114,7 +118,7 @@ namespace TacoVsBurrito
 
             float totalWidth = (count - 1) * CARD_SPACING;
             float startOffset = -totalWidth / 2f;
-
+            Debug.Log(count);
             for (int i = 0; i < count; i++)
             {
                 float offset = startOffset + i * CARD_SPACING;
@@ -122,6 +126,7 @@ namespace TacoVsBurrito
 
                 _cards[i].ChangePosition(targetPos);
                 _cards[i].ChangeParent(cardsTransform);
+
             }
         }
     }
