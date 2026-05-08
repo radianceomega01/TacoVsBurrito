@@ -151,8 +151,8 @@ MonoBehaviour:
   numberOfPlayers: 2
   gameMode: 1
   playersParent: {fileID: 1877611474}
-  SelfPlayer: {fileID: 5302173911118616309}
-  opponentPlayerPrefab: {fileID: 7887847195910679844, guid: 5ed970160621c164e8b72114edd05fdc, type: 3}
+  SelfPlayer: {fileID: 9073108915648592007, guid: 33b50f7de6226436fa13491c0eb8f8bb, type: 3}
+  opponentPlayerPrefab: {fileID: 5741775513630525397, guid: 6b50c9a8f09514da4a9b29b15c3e03cf, type: 3}
   playerPositions:
   - {fileID: 184422209}
   - {fileID: 564792819}
@@ -1383,17 +1383,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
---- !u!114 &5302173911118616309 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6205741691116051476, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
-  m_PrefabInstance: {fileID: 5302173911118616308}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1766ccdf46d112d4f8d947cc008b4477, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.SelfPlayer
 --- !u!1001 &5492057037369122356
 PrefabInstance:
   m_ObjectHideFlags: 0
