@@ -223,6 +223,7 @@ namespace TacoVsBurrito
             CurrentPlayer.Hand.AddCard(card);
             GameEvents.OnCardDrawn?.Invoke(CurrentPlayer, card);
             GameEvents.OnHandChanged?.Invoke(CurrentPlayer);
+            _turnHandler.GoToNextState();
         }
 
         // -------------------------------------------------------

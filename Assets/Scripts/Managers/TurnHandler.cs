@@ -1,4 +1,4 @@
-
+using UnityEngine;
 namespace TacoVsBurrito
 {
     public class TurnHandler
@@ -17,21 +17,21 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded -= ManageTurnEnded;
         }
 
-        public void SwitchState()
+        public void GoToNextState()
         {
             if(turnState == TurnState.None || turnState == TurnState.Proceed)
             {
-                turnState = TurnState.Draw;
+                SwitchState(TurnState.Draw);
             }
             else if(turnState == TurnState.Draw)
             {
-                turnState = TurnState.Proceed;
+                SwitchState(TurnState.Proceed);
             }
-            GameEvents.OnTurnStateChanged?.Invoke(turnState, currentPlayer);
         }
         public void SwitchState(TurnState turnState)
         {
             this.turnState = turnState;
+            Debug.Log("State changed to"+ turnState.ToString());
             GameEvents.OnTurnStateChanged?.Invoke(turnState, currentPlayer);
         }
 

@@ -113,6 +113,7 @@ namespace TacoVsBurrito
             if (targetObject != null)
             {
                 ICardPickupTarget pickupTarget = targetObject.GetComponent<ICardPickupTarget>();
+                Debug.Log(pickupTarget == null);
                 pickupTarget?.PickCardBeforeDrag(this);
             }
         }

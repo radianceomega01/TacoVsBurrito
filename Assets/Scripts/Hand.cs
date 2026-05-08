@@ -99,7 +99,8 @@ namespace TacoVsBurrito
         }
 
         public void PickCardBeforeDrag(CardBase card)
-        { 
+        {
+            Debug.Log("Card picked"); 
             RemoveCard(card);
         }
     }
