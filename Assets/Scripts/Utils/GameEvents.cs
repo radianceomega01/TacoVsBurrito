@@ -17,6 +17,7 @@ namespace TacoVsBurrito
         public static Action                            OnDistributeCards;     
         public static Action<List<PlayerBase>>          OnGameStarted;     
         public static Action<PlayerBase>                OnTurnStarted;
+        public static Action<TurnState, PlayerBase>                OnTurnStateChanged;
         public static Action<PlayerBase>                OnTurnEnded;
         public static Action<PlayerBase>                OnGameOver;         // winner
 
@@ -36,8 +37,8 @@ namespace TacoVsBurrito
         public static Action<PlayerBase>                        OnMealScoreChanged; // any meal update
         
         // ---- Card Drag ----
-        public static Action<CardBase>          OnCardDragBegin;
-        public static Action<CardBase>          OnCardDragEnd;
+        public static Action          OnCardDragBegin;
+        public static Action          OnCardDragEnd;
 
         // ---- Action cards ----
         public static Action<PlayerBase, CardBase>          OnNoBuenoPlayed;    // (blocker, blocked card)

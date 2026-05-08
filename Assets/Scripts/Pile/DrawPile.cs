@@ -14,20 +14,17 @@ namespace TacoVsBurrito
         public int DrawCount => _drawPile.Count;
         public bool IsDrawPileEmpty => _drawPile.Count == 0;
 
-        bool isCardAlreadyDrawn;
 
         void Awake()
         {
             GameEvents.OnShuffleCards += ManageCardShuffle;
-            GameEvents.OnTurnStarted += ManageTurnStarted;
-            GameEvents.OnTurnEnded += ManageTurnEnded;
+            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
         void OnDestroy()
         {
             GameEvents.OnShuffleCards -= ManageCardShuffle;
-            GameEvents.OnTurnStarted -= ManageTurnStarted;
-            GameEvents.OnTurnEnded -= ManageTurnEnded;
+            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 
         void Start()
@@ -107,7 +104,7 @@ namespace TacoVsBurrito
 
         public void OnDrawBtnClicked()
         {
-            if (GameManager.Instance.CurrentPlayer is not SelfPlayer || isCardAlreadyDrawn)
+            if (GameManager.Instance.CurrentPlayer is not SelfPlayer)
                 return;
 
             if (!IsDrawPileEmpty)
@@ -122,7 +119,6 @@ namespace TacoVsBurrito
                         "📭 Draw pile is empty! PlayerBases now skip the draw step.");
                 }
                 GameManager.Instance.CardDrawnFromPile(drawnCard);
-                isCardAlreadyDrawn = true;
             }
             else
             {
@@ -131,15 +127,16 @@ namespace TacoVsBurrito
             }
         }
 
-        void TogglePile(bool value) => drawBtn.interactable = value;
+        void TogglePileInteraction(bool value) => drawBtn.interactable = value;
 
-        void ManageTurnStarted(PlayerBase player)
+        void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            isCardAlreadyDrawn = false;
-        }
-        void ManageTurnEnded(PlayerBase player)
-        {
-            isCardAlreadyDrawn = false;
+            if(turnState == TurnState.Draw && player is SelfPlayer)
+            {
+                TogglePileInteraction(true);
+            }
+            else
+                TogglePileInteraction(false);
         }
 
         async void InitiateCardDistribution()

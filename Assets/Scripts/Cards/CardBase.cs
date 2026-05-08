@@ -1,3 +1,5 @@
+
+using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -80,6 +82,8 @@ namespace TacoVsBurrito
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            GameEvents.OnCardDragBegin();
+
             _originalParent = transform.parent;
             _originalSiblingIndex = transform.GetSiblingIndex();
 
@@ -98,17 +102,20 @@ namespace TacoVsBurrito
             // Optional visual feedback
             transform.localScale = Vector3.one * dragScale;
 
-            GameEvents.OnCardDragBegin(this);
+            StartCoroutine(PickCardBeforeDrag(eventData));
+
+        }
+
+        IEnumerator PickCardBeforeDrag(PointerEventData eventData)
+        {
+            yield return null;
             GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
             if (targetObject != null)
             {
                 ICardPickupTarget pickupTarget = targetObject.GetComponent<ICardPickupTarget>();
-                Debug.Log("pickup");
                 pickupTarget?.PickCardBeforeDrag(this);
             }
-
         }
-
         // =========================================================
         // DRAG
         // =========================================================
@@ -125,6 +132,7 @@ namespace TacoVsBurrito
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            GameEvents.OnCardDragEnd();
             _canvasGroup.blocksRaycasts = true;
 
             transform.localScale = _originalScale;
@@ -140,7 +148,6 @@ namespace TacoVsBurrito
                 }
             }
             ReturnToHand();
-            GameEvents.OnCardDragEnd(this);
         }
 
         // =========================================================
@@ -156,12 +163,11 @@ namespace TacoVsBurrito
                 _originalAnchoredPosition;
         }
 
-        void DisableInteraction(CardBase card)
+        public void DisableInteraction()
         {
-            if (card != this)
-                _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.blocksRaycasts = false;
         }
-        void EnableInteraction(CardBase card)
+        public void EnableInteraction()
         {
             _canvasGroup.blocksRaycasts = true;
         }

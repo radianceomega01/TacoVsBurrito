@@ -129,9 +129,6 @@ namespace TacoVsBurrito
         public string ResolveCraftyCrow(PlayerBase caster, CraftyCrowCard craftyCrow,
                                          PlayerBase victim, CardBase stealTarget)
         {
-            if (!victim.Meal.RemoveCard(stealTarget))
-                return $"⚠ Crafty Crow: '{stealTarget.Name}' not found in {victim.Name}'s meal.";
-
             caster.Meal.AddCard(stealTarget);
             _trashPile.Trash(craftyCrow);
 

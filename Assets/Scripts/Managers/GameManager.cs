@@ -55,6 +55,7 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         private List<PlayerBase> _players = new List<PlayerBase>();
         private ActionResolver _resolver;
+        private TurnHandler _turnHandler;
 
         private int _currentIndex = 0;
         private GameState gameState = GameState.None;
@@ -84,6 +85,7 @@ namespace TacoVsBurrito
             Instance = this;
             //DontDestroyOnLoad(gameObject);
             _resolver = new ActionResolver(drawPile, trashPile, () => _players);
+            _turnHandler = new TurnHandler();
 
             GameEvents.OnDistributeCards += StartGame;
         }

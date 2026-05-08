@@ -13,6 +13,7 @@ namespace TacoVsBurrito
         [SerializeField] Transform cardsTransform;
 
         private const float CARD_SPACING = 4f;
+        private PlayerBase parentPlayer;
 
         public MealType Type { get; }
         private List<CardBase> _cards;
@@ -26,6 +27,16 @@ namespace TacoVsBurrito
         void Awake()
         {
             _cards = new();
+            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
+        }
+        void OnDestroy()
+        {
+            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
+        }
+
+        void Start()
+        {
+            parentPlayer = GetComponentInParent<PlayerBase>();
         }
         // ---- Mutations ----
 
@@ -37,6 +48,7 @@ namespace TacoVsBurrito
                 card is not TummyAcheCard)
                 return;
             _cards.Add(card);
+            card.DisableInteraction();
             ArrangeCardsAnimated();
 
             if (card is HotSauceBossCard) HotSauceBossCardCount++;
@@ -44,7 +56,11 @@ namespace TacoVsBurrito
         }
 
         /// Remove a specific card (used by Crafty Crow).
-        public bool RemoveCard(CardBase card) => _cards.Remove(card);
+        public void RemoveCard(CardBase card)
+        {
+            _cards.Remove(card);
+            ArrangeCardsAnimated();
+        }
 
         /// Remove and return all cards (Health Inspector / Order Envy).
         public List<CardBase> TakeAll()
@@ -106,8 +122,7 @@ namespace TacoVsBurrito
             AddCard(card);
         }
         public void PickCardBeforeDrag(CardBase card)
-        {
-            Debug.Log("pickup remove called");
+        { 
             RemoveCard(card);
         }
 
@@ -128,6 +143,11 @@ namespace TacoVsBurrito
                 _cards[i].ChangeParent(cardsTransform);
 
             }
+        }
+
+        void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
+        {
+            
         }
     }
     public enum MealType
