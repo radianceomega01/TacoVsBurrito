@@ -12,10 +12,10 @@ namespace TacoVsBurrito
     public static class GameEvents
     {
         // ---- Lifecycle ----
-        public static Action                            OnGameInit;     
+        public static Action<List<PlayerBase>>          OnGameInit;     
         public static Action                            OnShuffleCards;     
-        public static Action                            OnDistributeCards;     
-        public static Action<List<PlayerBase>>          OnGameStarted;     
+        public static Action<List<PlayerBase>>          OnDistributeCards;     
+        public static Action                            OnGameStarted;     
         public static Action<PlayerBase>                OnTurnStarted;
         public static Action<TurnState, PlayerBase>     OnTurnStateChanged;
         public static Action<PlayerBase>                OnTurnEnded;
@@ -24,6 +24,7 @@ namespace TacoVsBurrito
         // ---- Draw pile ----
         public static Action<PlayerBase, CardBase>       OnCardDrawn;        // (drawer, card drawn)
         public static Action                             OnDrawPileEmpty;    // draw pile exhausted
+        public static Action                             OnAdvanceToNextPlayer;
 
         // ---- Hand changes ----
         public static Action<PlayerBase, CardBase>      OnCardAddedToHand;

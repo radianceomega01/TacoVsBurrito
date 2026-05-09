@@ -86,14 +86,11 @@ namespace TacoVsBurrito
             //DontDestroyOnLoad(gameObject);
             _resolver = new ActionResolver(drawPile, trashPile, () => _players);
             _turnHandler = new TurnHandler();
-
-            GameEvents.OnDistributeCards += StartGame;
         }
 
         private void OnDestroy()
         {
-            GameEvents.OnDistributeCards -= StartGame;
-            ResetData();
+            
         }
 
         // -------------------------------------------------------
@@ -103,23 +100,6 @@ namespace TacoVsBurrito
         public void AddPlayerBeforeGameStarts(PlayerBase player)
         {
             _players.Add(player);
-        }
-
-        void StartGame()
-        {
-
-            // Deal starting hands (Health Inspectors filtered out)
-            drawPile.DealStartingHand(_players);
-
-            _currentIndex = 0;
-            _gameRunning = true;
-
-            GameEvents.OnGameStarted?.Invoke(_players);
-            GameEvents.OnLogMessage?.Invoke(
-                $"🎮 Game started! {_players.Count} players. Youngest goes first. Play clockwise.");
-
-            GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
-            GameEvents.OnLogMessage?.Invoke($"\n--- {CurrentPlayer.Name}'s turn ---");
         }
 
         // -------------------------------------------------------
@@ -685,12 +665,6 @@ namespace TacoVsBurrito
                 c is HotSauceBossCard ? 50 :
                 c is ActionCardBase ? 5 : 0
             ).FirstOrDefault();
-        }
-
-        void ResetData()
-        {
-            _currentIndex = 0;
-            _players.Clear();
         }
     }
     public enum GameState

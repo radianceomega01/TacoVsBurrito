@@ -1,48 +1,71 @@
 using UnityEngine;
+using System.Collections.Generic;
 namespace TacoVsBurrito
 {
     public class TurnHandler
     {
         TurnState turnState = TurnState.None;
-        PlayerBase currentPlayer;
+        PlayerBase CurrentPlayer => activePlayers[currentPlayerIndex];
+        List<PlayerBase> activePlayers;
+
+        int currentPlayerIndex = 0;
 
         public TurnHandler()
         {
-            GameEvents.OnTurnStarted += ManageTurnStarted;
-            GameEvents.OnTurnEnded += ManageTurnEnded;
+            activePlayers = new();
+            GameEvents.OnGameInit += DecidePlayers;
+            GameEvents.OnGameStarted += StartGame;
         }
         ~TurnHandler()
         {
-            GameEvents.OnTurnStarted -= ManageTurnStarted;
-            GameEvents.OnTurnEnded -= ManageTurnEnded;
+            GameEvents.OnGameInit -= DecidePlayers;
+            GameEvents.OnGameStarted -= StartGame;
+        }
+
+        void DecidePlayers(List<PlayerBase> players)
+        {
+            activePlayers = players;
+            currentPlayerIndex = 0; // youngest player starts (index 0)
+        }
+
+        void StartGame()
+        {
+            GameEvents.OnLogMessage?.Invoke(
+                $"🎮 Game started! {activePlayers.Count} players. Youngest goes first. Play clockwise.");
+            GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
+            GoToNextState();
+            GameEvents.OnLogMessage?.Invoke($"\n--- {CurrentPlayer.Name}'s turn ---");
         }
 
         public void GoToNextState()
         {
-            if(turnState == TurnState.None || turnState == TurnState.Proceed)
+            switch(turnState)
             {
-                SwitchState(TurnState.Draw);
-            }
-            else if(turnState == TurnState.Draw)
-            {
-                SwitchState(TurnState.Proceed);
+                case TurnState.None:
+                    SwitchState(TurnState.Draw);
+                    break;
+                case TurnState.Draw:
+                    SwitchState(TurnState.Proceed);
+                    break;    
+                case TurnState.Proceed:
+                    SwitchState(TurnState.None);
+                    ManageTurnEnded();
+                    break;
             }
         }
-        public void SwitchState(TurnState turnState)
+        void SwitchState(TurnState turnState)
         {
             this.turnState = turnState;
             Debug.Log("State changed to"+ turnState.ToString());
-            GameEvents.OnTurnStateChanged?.Invoke(turnState, currentPlayer);
+            GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
         }
 
-        void ManageTurnStarted(PlayerBase player)
+        void ManageTurnEnded()
         {
-            currentPlayer = player;
-            SwitchState(TurnState.Draw);
-        }
-        void ManageTurnEnded(PlayerBase player)
-        {
-            SwitchState(TurnState.None);
+            GameEvents.OnTurnEnded?.Invoke(CurrentPlayer);
+            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
+            GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
+            GoToNextState();
         }
     }
 

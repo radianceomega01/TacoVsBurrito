@@ -18,12 +18,14 @@ namespace TacoVsBurrito
         void Awake()
         {
             GameEvents.OnShuffleCards += ManageCardShuffle;
+            GameEvents.OnDistributeCards += DealStartingHand;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
         void OnDestroy()
         {
             GameEvents.OnShuffleCards -= ManageCardShuffle;
+            GameEvents.OnDistributeCards -= DealStartingHand;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 
@@ -42,10 +44,9 @@ namespace TacoVsBurrito
             }
         }
 
-        public void ManageCardShuffle()
+        void ManageCardShuffle()
         {
             Shuffle(_drawPile);
-            InitiateCardDistribution();
         }
 
         public CardBase Draw()
@@ -67,7 +68,7 @@ namespace TacoVsBurrito
             return result;
         }
 
-        public void DealStartingHand(List<PlayerBase> players)
+        void DealStartingHand(List<PlayerBase> players)
         {
             int cardsDistributed = 0;
             int playerIndex = 0;
@@ -138,12 +139,6 @@ namespace TacoVsBurrito
             }
             else
                 TogglePileInteraction(false);
-        }
-
-        async void InitiateCardDistribution()
-        {
-            await Task.Delay(1500);
-            GameEvents.OnDistributeCards?.Invoke();
         }
 
         /// Flip the top card from the draw pile (Food Fight).

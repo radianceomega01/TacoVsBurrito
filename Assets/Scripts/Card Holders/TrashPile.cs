@@ -15,6 +15,7 @@ namespace TacoVsBurrito
             if (card != null) _trashPile.Add(card);
             card.ChangePosition(cardsTransform.position);
             card.ChangeParent(cardsTransform);
+            card.DisableInteraction();
         }
 
         public void TrashAll(IEnumerable<CardBase> cards)

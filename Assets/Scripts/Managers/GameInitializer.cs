@@ -15,15 +15,25 @@ namespace TacoVsBurrito {
         [SerializeField] GameObject opponentPlayerPrefab;
         [SerializeField] List<Transform> playerPositions;
 
+        List<PlayerBase> activePlayers = new();
+
         void Start()
         {
-            GameEvents.OnGameInit?.Invoke();
             SetupPlayers();
-            InitCardShuffle();
+            BeginGame();
+        }
+
+        async void BeginGame()
+        {
+            GameEvents.OnGameInit?.Invoke(activePlayers);
+            await InitCardShuffle();
+            await InitDistributeInitialHands();
+            GameEvents.OnGameStarted?.Invoke();
         }
 
         void SetupPlayers()
         {
+            activePlayers.Add(SelfPlayer);
             GameManager.Instance.AddPlayerBeforeGameStarts(SelfPlayer);
             for (int i = 0; i < numberOfPlayers - 1; i++)
             {
@@ -37,14 +47,21 @@ namespace TacoVsBurrito {
                     playerObj.AddComponent<HumanPlayer>();
                 }
                 PlayerBase player = playerObj.GetComponent<PlayerBase>();
+                activePlayers.Add(player);
                 GameManager.Instance.AddPlayerBeforeGameStarts(player);
             }
         }
 
-        async void InitCardShuffle()
+        async Task InitCardShuffle()
         {
             await Task.Delay(1500);
             GameEvents.OnShuffleCards?.Invoke();
+        }
+
+        async Task InitDistributeInitialHands()
+        {
+            await Task.Delay(1500);
+            GameEvents.OnDistributeCards?.Invoke(activePlayers);
         }
     }
     public enum GameMode
