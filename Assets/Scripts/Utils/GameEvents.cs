@@ -66,7 +66,7 @@ namespace TacoVsBurrito
         public static Action<string>                OnLogMessage;
 
         // ---- Turn indicator ----
-        public static Action<bool>                  OnDrawPhaseSkipped; // draw pile empty
+        public static Action                                OnDrawPhaseSkipped; // draw pile empty
 
         // ---- Food Fight specific ----
         public static Action<PlayerBase, CardBase>          OnFoodFightFlip;    // (player, flipped card)

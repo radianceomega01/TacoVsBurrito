@@ -50,7 +50,8 @@ namespace TacoVsBurrito
 
         public CardBase Draw()
         {
-            if (_drawPile.Count == 0) return null;
+            if (_drawPile.Count == 0)
+                return null;
             var c = _drawPile[^1];
             _drawPile.RemoveAt(_drawPile.Count - 1);
             return c;
@@ -122,7 +123,7 @@ namespace TacoVsBurrito
             }
             else
             {
-                GameEvents.OnDrawPhaseSkipped?.Invoke(true);
+                GameEvents.OnDrawPhaseSkipped?.Invoke();
                 GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
             }
         }

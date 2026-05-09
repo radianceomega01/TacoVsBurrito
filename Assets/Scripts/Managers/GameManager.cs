@@ -134,45 +134,6 @@ namespace TacoVsBurrito
                 GameEvents.OnLogMessage?.Invoke($"\n--- {current.Name}'s turn ---");
 
                 // ---- 1. DRAW PHASE ----
-                if (!current)
-                {
-                    // CardBase drawn = drawPile.Draw();
-
-                    // if (drawn == null)
-                    // {
-                    //     // Draw pile just became empty
-                    //     _isDrawPileGone = true;
-                    //     GameEvents.OnDrawPileEmpty?.Invoke();
-                    //     GameEvents.OnLogMessage?.Invoke(
-                    //         "📭 Draw pile is empty! PlayerBases now skip the draw step.");
-                    // }
-                    // else
-                    // {
-                    //     GameEvents.OnLogMessage?.Invoke($"  {current.Name} draws a card.");
-
-                    //     // Health Inspector triggers IMMEDIATELY on draw – unblockable
-                    //     if (drawn is HealthInspectorCard @base)
-                    //     {
-                    //         string hiLog = _resolver.TriggerHealthInspector(current, @base);
-                    //         GameEvents.OnLogMessage?.Invoke(hiLog);
-                    //         GameEvents.OnHealthInspector?.Invoke(current);
-                    //         GameEvents.OnTurnEnded?.Invoke(current);
-                    //         AdvanceToNextPlayer();
-                    //         yield return new WaitForSeconds(1.5f);
-                    //         continue;                // skip play phase – turn is over
-                    //     }
-
-                    //     // Normal card: add to hand
-                    //     current.Hand.AddCard(drawn);
-                    //     GameEvents.OnCardDrawn?.Invoke(current, drawn);
-                    //     GameEvents.OnHandChanged?.Invoke(current);
-                    // }
-                }
-                else
-                {
-                    GameEvents.OnDrawPhaseSkipped?.Invoke(true);
-                    GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
-                }
 
                 // ---- 2. PLAY PHASE ----
                 // Check if this player is out of cards (game ends if so)

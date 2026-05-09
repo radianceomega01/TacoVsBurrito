@@ -121,6 +121,7 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             AddCard(card);
+            GameManager.Instance.OnCardPlacedAfterDrawn();
         }
 
         void ArrangeCardsAnimated()
