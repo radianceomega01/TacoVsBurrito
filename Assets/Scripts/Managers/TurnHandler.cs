@@ -42,7 +42,7 @@ namespace TacoVsBurrito
         }
         void ManageTurnEnded(PlayerBase player)
         {
-            SwitchState(TurnState.Proceed);
+            SwitchState(TurnState.None);
         }
     }
 

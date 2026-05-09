@@ -70,7 +70,7 @@ namespace TacoVsBurrito
         {
             int cardsDistributed = 0;
             int playerIndex = 0;
-            while (cardsDistributed <= players.Count * STARTING_HAND_SIZE)
+            while (cardsDistributed < players.Count * STARTING_HAND_SIZE)
             {
                 var card = Draw();
 

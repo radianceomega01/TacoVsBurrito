@@ -226,6 +226,11 @@ namespace TacoVsBurrito
             _turnHandler.GoToNextState();
         }
 
+        public void OnCardPlacedAfterDrawn()
+        {
+            GameEvents.OnTurnEnded?.Invoke(CurrentPlayer);
+        }
+
         // -------------------------------------------------------
         //  Human API  (called by UI)
         // -------------------------------------------------------

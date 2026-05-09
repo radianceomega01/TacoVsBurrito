@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEditor.Experimental.GraphView;
 using System.Runtime.InteropServices;
+using System.Net.Http.Headers;
 
 namespace TacoVsBurrito
 {
@@ -11,6 +12,7 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     public class Hand: MonoBehaviour, ICardPickupTarget
     {
+        private RectTransform _rectTransform;
         private readonly List<CardBase> _cards = new List<CardBase>();
         private PlayerBase parentPlayer;
 
@@ -18,9 +20,11 @@ namespace TacoVsBurrito
 
         public IReadOnlyList<CardBase> Cards => _cards;
         public int Count => _cards.Count;
+        public PlayerBase ParentPlayer => parentPlayer;
 
         void Awake()
         {
+            _rectTransform = GetComponent<RectTransform>();
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
         void OnDestroy()
@@ -51,6 +55,8 @@ namespace TacoVsBurrito
         public void AddCard(CardBase c)
         {
             _cards.Add(c);
+            if(parentPlayer is not SelfPlayer )
+                c.DisableInteraction();
             ArrangeCardsAnimated();
         }
 
@@ -58,6 +64,9 @@ namespace TacoVsBurrito
         /// Replace entire hand with a new set of cards (used by Order Envy).
         public void ReplaceWith(List<CardBase> newCards)
         {
+            _cards.Clear();
+            _cards.AddRange(newCards);
+            ArrangeCardsAnimated();
         }
 
         public List<CardBase> GetAll() => new List<CardBase>(_cards);
@@ -86,6 +95,18 @@ namespace TacoVsBurrito
                 _cards[i].ChangePosition(targetPos);
                 _cards[i].ChangeParent(transform);
             }
+            ModifyWidthOfRect();
+        }
+
+        void ModifyWidthOfRect()
+        {
+            int count = _cards.Count;
+            if (count == 0) return;
+
+            float totalSpacing = (count - 1) * CARD_SPACING;
+            float newWidth = count * Cards[0].GetWidth() - totalSpacing;
+
+            _rectTransform.sizeDelta = new Vector2(newWidth, _rectTransform.sizeDelta.y); // Base width plus spacing
         }
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
@@ -99,9 +120,13 @@ namespace TacoVsBurrito
         }
 
         public void PickCardBeforeDrag(CardBase card)
-        {
-            Debug.Log("Card picked"); 
+        { 
             RemoveCard(card);
+        }
+        public void ReturnCardOnNoTarget(CardBase card)
+        {
+            card.transform.SetSiblingIndex(transform.childCount -1);
+            AddCard(card);
         }
     }
 }

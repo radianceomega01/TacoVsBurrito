@@ -39,6 +39,7 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             Trash(card);
+            GameManager.Instance.OnCardPlacedAfterDrawn();
         }
     }
 }

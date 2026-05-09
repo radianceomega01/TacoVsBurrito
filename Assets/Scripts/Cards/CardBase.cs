@@ -7,12 +7,12 @@ using UnityEngine.EventSystems;
 
 namespace TacoVsBurrito
 {
-    public abstract class CardBase: MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public abstract class CardBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Identity")]
         [SerializeField] string cardName = "Unnamed Card";
-        [SerializeField]  string DescriptionText = "";
-        [SerializeField]  bool isPlaceableInMeal = false;
+        [SerializeField] string DescriptionText = "";
+        [SerializeField] bool isPlaceableInMeal = false;
         [SerializeField] bool isBlockable = false;
 
         [Header("Fields")]
@@ -33,6 +33,9 @@ namespace TacoVsBurrito
         private Vector2 _originalAnchoredPosition;
         private Vector3 _originalScale;
 
+        private ICardPickupTarget tempPickupTarget;
+        private bool wasInteractionEnabledBeforeDrag;
+
         public string Name { get { return cardName; } }
 
         // Common helpers
@@ -48,13 +51,13 @@ namespace TacoVsBurrito
             canvas = GetComponentInParent<Canvas>();
 
             GameEvents.OnCardDragBegin += DisableInteraction;
-            GameEvents.OnCardDragEnd += EnableInteraction;
+            GameEvents.OnCardDragEnd += ResumeInteraction;;
         }
 
         void OnDestroy()
         {
             GameEvents.OnCardDragBegin -= DisableInteraction;
-            GameEvents.OnCardDragEnd -= EnableInteraction;
+            GameEvents.OnCardDragEnd -= ResumeInteraction;
         }
 
         protected virtual void Start()
@@ -76,25 +79,15 @@ namespace TacoVsBurrito
             transform.SetSiblingIndex(newIndex);
         }
 
-                // =========================================================
-        // BEGIN DRAG
         // =========================================================
+        // BEGIN DRAG
+        // =========================================================ßß
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            GameEvents.OnCardDragBegin();
+            GameEvents.OnCardDragBegin?.Invoke();
 
-            _originalParent = transform.parent;
-            _originalSiblingIndex = transform.GetSiblingIndex();
-
-            _originalAnchoredPosition = _rectTransform.anchoredPosition;
             _originalScale = transform.localScale;
-
-            // Move outside layout group while dragging
-            transform.SetParent(canvas.transform);
-
-            // Bring on top
-            transform.SetAsLastSibling();
 
             // Allow raycasts to pass through while dragging
             _canvasGroup.blocksRaycasts = false;
@@ -112,9 +105,12 @@ namespace TacoVsBurrito
             GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
             if (targetObject != null)
             {
-                ICardPickupTarget pickupTarget = targetObject.GetComponent<ICardPickupTarget>();
-                Debug.Log(pickupTarget == null);
-                pickupTarget?.PickCardBeforeDrag(this);
+                tempPickupTarget = targetObject.GetComponent<ICardPickupTarget>();
+                tempPickupTarget?.PickCardBeforeDrag(this);
+            }
+            else
+            {
+                Debug.Log("No pickup target found under pointer.");
             }
         }
         // =========================================================
@@ -133,7 +129,7 @@ namespace TacoVsBurrito
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            GameEvents.OnCardDragEnd();
+            GameEvents.OnCardDragEnd?.Invoke();
             _canvasGroup.blocksRaycasts = true;
 
             transform.localScale = _originalScale;
@@ -141,36 +137,53 @@ namespace TacoVsBurrito
             GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
             if (targetObject != null)
             {
+                // ICardHolder cardHolder = targetObject.GetComponent<ICardHolder>();
+                // if (cardHolder != null)
+                // {
+                //     currentCardHolder = cardHolder;
+                // }
+                Debug.Log("" + targetObject);
                 ICardDropTarget dropTarget = targetObject.GetComponent<ICardDropTarget>();
                 if (dropTarget != null && dropTarget.CanDrop(this))
                 {
                     dropTarget.DropCardAfterDrag(this);
+                    Debug.Log("" + dropTarget);
                     return;
                 }
             }
-            ReturnToHand();
+
+            tempPickupTarget?.ReturnCardOnNoTarget(this);
+            tempPickupTarget = null;
         }
 
         // =========================================================
         // RETURN TO ORIGINAL POSITION
         // =========================================================
 
-        public void ReturnToHand()
-        {
-            transform.SetParent(_originalParent);
-            transform.SetSiblingIndex(_originalSiblingIndex);
+        // public void ReturnToHand()
+        // {
+        //     transform.SetParent(_originalParent);
+        //     transform.SetSiblingIndex(_originalParent.childCount - 1);
 
-            _rectTransform.anchoredPosition =
-                _originalAnchoredPosition;
-        }
+        //     _rectTransform.anchoredPosition =
+        //         _originalAnchoredPosition;
+        // }
 
         public void DisableInteraction()
         {
+            wasInteractionEnabledBeforeDrag = _canvasGroup.blocksRaycasts;
             _canvasGroup.blocksRaycasts = false;
+        }
+        void ResumeInteraction()
+        {
+            _canvasGroup.blocksRaycasts = wasInteractionEnabledBeforeDrag;
         }
         public void EnableInteraction()
         {
             _canvasGroup.blocksRaycasts = true;
         }
+
+        public float GetWidth() => _rectTransform.sizeDelta.x;
+
     }
 }

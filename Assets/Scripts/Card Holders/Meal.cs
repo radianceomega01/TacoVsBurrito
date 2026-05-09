@@ -8,7 +8,7 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Meal  (the face-up cards in front of a player)
     // ----------------------------------------------------------
-    public class Meal: MonoBehaviour, ICardDropTarget, ICardPickupTarget
+    public class Meal: MonoBehaviour, ICardDropTarget
     {
         [SerializeField] Transform cardsTransform;
 
@@ -19,6 +19,7 @@ namespace TacoVsBurrito
         private List<CardBase> _cards;
 
         public IReadOnlyList<CardBase> Cards => _cards;
+        public PlayerBase ParentPlayer => parentPlayer;
 
         public Meal(MealType type) { Type = type; }
         public int HotSauceBossCardCount { get; private set; }
@@ -121,10 +122,6 @@ namespace TacoVsBurrito
         {
             AddCard(card);
         }
-        public void PickCardBeforeDrag(CardBase card)
-        { 
-            RemoveCard(card);
-        }
 
         void ArrangeCardsAnimated()
         {
@@ -133,7 +130,6 @@ namespace TacoVsBurrito
 
             float totalWidth = (count - 1) * CARD_SPACING;
             float startOffset = -totalWidth / 2f;
-            Debug.Log(count);
             for (int i = 0; i < count; i++)
             {
                 float offset = startOffset + i * CARD_SPACING;
