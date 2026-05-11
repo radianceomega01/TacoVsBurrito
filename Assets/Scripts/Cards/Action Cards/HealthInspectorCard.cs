@@ -7,7 +7,7 @@ namespace TacoVsBurrito
     {
         public override void ExecuteAction()
         {
-            throw new System.NotImplementedException();
+            resolver.ResolveHealthInspector(GameManager.Instance.CurrentPlayer);
         }
     }
 }

@@ -111,7 +111,7 @@ namespace TacoVsBurrito
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            if(parentPlayer is SelfPlayer && turnState == TurnState.Proceed)
+            if(parentPlayer is SelfPlayer && turnState == TurnState.PlayPhase)
             {
                 _cards.ForEach(card => card.EnableInteraction());
             }

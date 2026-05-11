@@ -5,8 +5,8 @@ namespace TacoVsBurrito
     public class TurnHandler
     {
         TurnState turnState = TurnState.None;
-        PlayerBase CurrentPlayer => activePlayers[currentPlayerIndex];
         List<PlayerBase> activePlayers;
+        public PlayerBase CurrentPlayer => activePlayers[currentPlayerIndex];
 
         int currentPlayerIndex = 0;
 
@@ -15,11 +15,17 @@ namespace TacoVsBurrito
             activePlayers = new();
             GameEvents.OnGameInit += DecidePlayers;
             GameEvents.OnGameStarted += StartGame;
+            GameEvents.OnTurnEnded += ManageTurnEnded;
+            GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
+            GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
         }
         ~TurnHandler()
         {
             GameEvents.OnGameInit -= DecidePlayers;
             GameEvents.OnGameStarted -= StartGame;
+            GameEvents.OnTurnEnded -= ManageTurnEnded;
+            GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
+            GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
         }
 
         void DecidePlayers(List<PlayerBase> players)
@@ -42,29 +48,33 @@ namespace TacoVsBurrito
             switch(turnState)
             {
                 case TurnState.None:
-                    SwitchState(TurnState.Draw);
+                    SwitchState(TurnState.DrawPhase);
                     break;
-                case TurnState.Draw:
-                    SwitchState(TurnState.Proceed);
-                    break;    
-                case TurnState.Proceed:
-                    SwitchState(TurnState.None);
-                    ManageTurnEnded();
+                case TurnState.DrawPhase:
+                    SwitchState(TurnState.PlayPhase);
                     break;
             }
         }
         void SwitchState(TurnState turnState)
         {
             this.turnState = turnState;
-            Debug.Log("State changed to"+ turnState.ToString());
+            Debug.Log($"State changed for player {CurrentPlayer.GetType()} to {turnState.ToString()}");
             GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
         }
 
-        void ManageTurnEnded()
+        void ManageActionCardTrashed(CardBase card)
         {
-            GameEvents.OnTurnEnded?.Invoke(CurrentPlayer);
-            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
+            SwitchState(TurnState.ActionResolvePhase);
+        }
+
+        void ManageTurnEnded(PlayerBase oldPlayer)
+        {
+            //currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
+            SwitchState(TurnState.DrawPhase);
+        }
+        void ManageDrawPhaseSkipped()
+        {
             GoToNextState();
         }
     }
@@ -72,7 +82,8 @@ namespace TacoVsBurrito
     public enum TurnState
     {
         None,
-        Draw,
-        Proceed
+        DrawPhase,
+        PlayPhase,
+        ActionResolvePhase
     }
 }

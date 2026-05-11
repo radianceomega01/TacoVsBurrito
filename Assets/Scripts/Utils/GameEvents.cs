@@ -12,7 +12,8 @@ namespace TacoVsBurrito
     public static class GameEvents
     {
         // ---- Lifecycle ----
-        public static Action<List<PlayerBase>>          OnGameInit;     
+        public static Action<List<PlayerBase>>          OnGameInit;    
+        public static Action<ActionResolver>            OnActionResolverSet;     
         public static Action                            OnShuffleCards;     
         public static Action<List<PlayerBase>>          OnDistributeCards;     
         public static Action                            OnGameStarted;     
@@ -42,8 +43,9 @@ namespace TacoVsBurrito
         public static Action          OnCardDragEnd;
 
         // ---- Action cards ----
+        public static Action<CardBase>                      OnActionCardTrashed;   // (card trashed)
         public static Action<PlayerBase, CardBase>          OnNoBuenoPlayed;    // (blocker, blocked card)
-        public static Action<PlayerBase>                OnHealthInspector;  // (victim)
+        public static Action                                OnHealthInspector;  // (victim)
 
         // ---- No Bueno interrupt window ----
         // Fired when a card is ABOUT to be played; any player can respond with No Bueno

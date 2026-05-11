@@ -56,8 +56,6 @@ namespace TacoVsBurrito
         private List<PlayerBase> _players = new List<PlayerBase>();
         private ActionResolver _resolver;
         private TurnHandler _turnHandler;
-
-        private int _currentIndex = 0;
         private GameState gameState = GameState.None;
         private bool _gameRunning;
 
@@ -74,7 +72,7 @@ namespace TacoVsBurrito
         //  Public accessors
         // -------------------------------------------------------
         public IReadOnlyList<PlayerBase> Players => _players;
-        public PlayerBase CurrentPlayer => _players[_currentIndex];
+        public PlayerBase CurrentPlayer => _turnHandler.CurrentPlayer;
 
         // -------------------------------------------------------
 
@@ -84,7 +82,7 @@ namespace TacoVsBurrito
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             //DontDestroyOnLoad(gameObject);
-            _resolver = new ActionResolver(drawPile, trashPile, () => _players);
+            _resolver = new ActionResolver(drawPile, trashPile, _players);
             _turnHandler = new TurnHandler();
         }
 
@@ -100,64 +98,61 @@ namespace TacoVsBurrito
         public void AddPlayerBeforeGameStarts(PlayerBase player)
         {
             _players.Add(player);
+            GameEvents.OnActionResolverSet?.Invoke(_resolver);
         }
 
         // -------------------------------------------------------
         //  Main game loop
         // -------------------------------------------------------
-        private IEnumerator GameLoop()
-        {
-            while (_gameRunning)
-            {
-                var current = CurrentPlayer;
-                GameEvents.OnTurnStarted?.Invoke(current);
-                GameEvents.OnLogMessage?.Invoke($"\n--- {current.Name}'s turn ---");
+        // private IEnumerator GameLoop()
+        // {
+        //     while (_gameRunning)
+        //     {
+        //         var current = CurrentPlayer;
+        //         GameEvents.OnTurnStarted?.Invoke(current);
+        //         GameEvents.OnLogMessage?.Invoke($"\n--- {current.Name}'s turn ---");
 
-                // ---- 1. DRAW PHASE ----
+        //         // ---- 1. DRAW PHASE ----
 
-                // ---- 2. PLAY PHASE ----
-                // Check if this player is out of cards (game ends if so)
-                if (current.Hand.Count == 0)
-                {
-                    // Should not normally happen mid-loop but guard it
-                    GameEvents.OnLogMessage?.Invoke($"  {current.Name} has no cards – skipping play.");
-                    GameEvents.OnTurnEnded?.Invoke(current);
-                    AdvanceToNextPlayer();
-                    yield return new WaitForSeconds(0.3f);
-                    continue;
-                }
+        //         // ---- 2. PLAY PHASE ----
+        //         // Check if this player is out of cards (game ends if so)
+        //         if (current.Hand.Count == 0)
+        //         {
+        //             // Should not normally happen mid-loop but guard it
+        //             GameEvents.OnLogMessage?.Invoke($"  {current.Name} has no cards – skipping play.");
+        //             GameEvents.OnTurnEnded?.Invoke(current);
+        //             AdvanceToNextPlayer();
+        //             yield return new WaitForSeconds(0.3f);
+        //             continue;
+        //         }
 
-                if (current is AIPlayer @player)
-                {
-                    yield return StartCoroutine(ExecuteAITurn(@player));
-                }
-                else
-                {
-                    // Human: wait until PlayCard() or DiscardCard() is called
-                    _humanPlayedCard = false;
-                    yield return new WaitUntil(() => _humanPlayedCard || !_gameRunning);
-                }
+        //         if (current is AIPlayer @player)
+        //         {
+        //             yield return StartCoroutine(ExecuteAITurn(@player));
+        //         }
+        //         else
+        //         {
+        //             // Human: wait until PlayCard() or DiscardCard() is called
+        //             _humanPlayedCard = false;
+        //             yield return new WaitUntil(() => _humanPlayedCard || !_gameRunning);
+        //         }
 
-                if (!_gameRunning) yield break;
+        //         if (!_gameRunning) yield break;
 
-                GameEvents.OnTurnEnded?.Invoke(current);
-                AdvanceToNextPlayer();
-                yield return new WaitForSeconds(15f);
-            }
-        }
+        //         GameEvents.OnTurnEnded?.Invoke(current);
+        //         AdvanceToNextPlayer();
+        //         yield return new WaitForSeconds(15f);
+        //     }
+        // }
 
         public void CardDrawnFromPile(CardBase card)
         {
             GameEvents.OnLogMessage?.Invoke($"  {CurrentPlayer.Name} draws a card.");
-            Debug.Log(CurrentPlayer.GetType());
             // Health Inspector triggers IMMEDIATELY on draw – unblockable
-            if (card is HealthInspectorCard @base)
+            if (card is HealthInspectorCard)
             {
-                string log = _resolver.TriggerHealthInspector(CurrentPlayer, @base);
-                GameEvents.OnLogMessage?.Invoke(log);
-                GameEvents.OnHealthInspector?.Invoke(CurrentPlayer);
-                GameEvents.OnTurnEnded?.Invoke(CurrentPlayer);
-                AdvanceToNextPlayer();              // skip play phase – turn is over
+                trashPile.Trash(card);
+                return;
             }
 
             // Normal card: add to hand
@@ -369,15 +364,15 @@ namespace TacoVsBurrito
                             "Choose a card to retrieve from the Trash pile:", trash,
                             chosen =>
                             {
-                                var (tpLog, _) = _resolver.ResolveTrashPanda(caster, c, chosen);
-                                log = tpLog;
+                                _resolver.ResolveTrashPanda(caster, c, chosen);
                                 done = true;
                             });
                         if (caster is AIPlayer)
                         {
                             var best = AIPickBestFromTrash(caster, trash);
-                            var (tpLog, _) = _resolver.ResolveTrashPanda(caster, c, best);
-                            log = tpLog; done = true;
+                            _resolver.ResolveTrashPanda(caster, c, best);
+                            log = $"🦝 Trash Panda! {caster.Name} retrieved '{best.Name}' from the Trash pile.";
+                            done = true;
                         }
                         yield return new WaitUntil(() => done);
                     }
@@ -620,15 +615,6 @@ namespace TacoVsBurrito
 
             GameEvents.OnLogMessage?.Invoke($"\n🎉 TIEBREAKER WINNER: {winner?.Name ?? tiedPlayerBases[0].Name}!");
             GameEvents.OnGameOver?.Invoke(winner ?? tiedPlayerBases[0]);
-        }
-
-        // -------------------------------------------------------
-        //  Helpers
-        // -------------------------------------------------------
-        private void AdvanceToNextPlayer()
-        {
-            Debug.Log("Advance to next player");
-            _currentIndex = (_currentIndex + 1) % _players.Count;
         }
 
         private List<PlayerBase> GetClockwiseOrderFrom(PlayerBase start)

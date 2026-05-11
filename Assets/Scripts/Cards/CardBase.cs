@@ -44,7 +44,7 @@ namespace TacoVsBurrito
 
         public virtual int GetModifiedMealScore(int currentScore) { return currentScore; }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
@@ -54,7 +54,7 @@ namespace TacoVsBurrito
             GameEvents.OnCardDragEnd += ResumeInteraction;;
         }
 
-        void OnDestroy()
+        protected virtual void OnDestroy()
         {
             GameEvents.OnCardDragBegin -= DisableInteraction;
             GameEvents.OnCardDragEnd -= ResumeInteraction;
@@ -94,6 +94,7 @@ namespace TacoVsBurrito
 
             // Optional visual feedback
             transform.localScale = Vector3.one * dragScale;
+            transform.SetParent(canvas.transform); // Move to top-level canvas to avoid clipping
 
             StartCoroutine(PickCardBeforeDrag(eventData));
 
@@ -107,10 +108,6 @@ namespace TacoVsBurrito
             {
                 tempPickupTarget = targetObject.GetComponent<ICardPickupTarget>();
                 tempPickupTarget?.PickCardBeforeDrag(this);
-            }
-            else
-            {
-                Debug.Log("No pickup target found under pointer.");
             }
         }
         // =========================================================
@@ -142,12 +139,10 @@ namespace TacoVsBurrito
                 // {
                 //     currentCardHolder = cardHolder;
                 // }
-                Debug.Log("" + targetObject);
                 ICardDropTarget dropTarget = targetObject.GetComponent<ICardDropTarget>();
                 if (dropTarget != null && dropTarget.CanDrop(this))
                 {
                     dropTarget.DropCardAfterDrag(this);
-                    Debug.Log("" + dropTarget);
                     return;
                 }
             }

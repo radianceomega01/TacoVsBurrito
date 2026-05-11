@@ -62,17 +62,17 @@ namespace TacoVsBurrito
     {
         private DrawPile _drawPile;
         private TrashPile _trashPile;
-        private readonly Func<IReadOnlyList<PlayerBase>> _getPlayers;
+        private readonly IReadOnlyList<PlayerBase> _activePLayers;
 
         // Tracks total Trash Pandas retrieved across the game (FAQ: max 2)
         // Keyed by PlayerBase index
         private Dictionary<int, int> _trashPandaRetrieved = new Dictionary<int, int>();
 
-        public ActionResolver(DrawPile deck, TrashPile trashPile, Func<IReadOnlyList<PlayerBase>> getPlayers)
+        public ActionResolver(DrawPile deck, TrashPile trashPile, IReadOnlyList<PlayerBase> activePlayers)
         {
             _drawPile = deck;
             _trashPile = trashPile;
-            _getPlayers = getPlayers;
+            _activePLayers = activePlayers;
         }
 
         // ==========================================================
@@ -81,19 +81,19 @@ namespace TacoVsBurrito
 
         /// Call this when a PlayerBase draws a Health Inspector.
         /// Returns a log string. All meal cards are trashed.
-        public string TriggerHealthInspector(PlayerBase victim, HealthInspectorCard healthInspectorCard)
+        public void ResolveHealthInspector(PlayerBase victim)
         {
-            // Trash the Health Inspector card itself
-            _trashPile.Trash(healthInspectorCard);
 
             // Trash entire meal
             var mealContents = victim.Meal.TakeAll();
             _trashPile.TrashAll(mealContents);
 
             GameEvents.OnMealCleared?.Invoke(victim);
+            GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.Name}'s entire meal is trashed! " +
+                   $"({mealContents.Count} card(s) discarded) Turn ends immediately.");
 
-            return $"🚨 HEALTH INSPECTOR! {victim.Name}'s entire meal is trashed! " +
-                   $"({mealContents.Count} card(s) discarded) Turn ends immediately.";
+            GameEvents.OnHealthInspector?.Invoke();
+            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer); // skip play phase       
         }
 
         // ==========================================================
@@ -106,7 +106,6 @@ namespace TacoVsBurrito
         /// isLastCard = is targetCard the very last card in the target's hand?
         public bool CanPlayNoBueno(NoBuenoCard noBuenoCard, CardBase targetCard, bool isLastCard)
         {
-            if (targetCard is HealthInspectorCard) return false;  // unblockable
             if (isLastCard)                   return false;  // last card unblockable
             return true;
         }
@@ -145,47 +144,35 @@ namespace TacoVsBurrito
         /// Applies Trash Panda retrieval limit (max 2 Trash Pandas per game).
         /// If chosenCard is a Health Inspector, trigger it immediately.
         /// Returns (logMessage, healthInspectorTriggered).
-        public (string log, bool healthInspectorTriggered) ResolveTrashPanda(
+        public void ResolveTrashPanda(
             PlayerBase caster, TrashPandaCard trashPandaCard, CardBase chosenCard)
         {
             // Enforce max 2 Trash Panda retrievals per game (official FAQ)
-            if (chosenCard is TrashPandaCard)
-            {
-                _trashPandaRetrieved.TryGetValue(caster.Index, out int count);
-                if (count >= 2)
-                {
-                    _trashPile.Trash(trashPandaCard);
-                    return ($"🦝 Trash Panda failed: {caster.Name} has already retrieved " +
-                            $"2 Trash Pandas this game (limit reached).", false);
-                }
-                _trashPandaRetrieved[caster.Index] = count + 1;
-            }
+            // if (chosenCard is TrashPandaCard)
+            // {
+            //     _trashPandaRetrieved.TryGetValue(caster.Index, out int count);
+            //     if (count >= 2)
+            //     {
+            //         _trashPile.Trash(trashPandaCard);
+            //         return ($"🦝 Trash Panda failed: {caster.Name} has already retrieved " +
+            //                 $"2 Trash Pandas this game (limit reached).", false);
+            //     }
+            //     _trashPandaRetrieved[caster.Index] = count + 1;
+            // }
 
             bool removed = _trashPile.RetrieveFromTrash(chosenCard);
-            if (!removed)
-            {
-                _trashPile.Trash(trashPandaCard);
-                return ($"⚠ Trash Panda: '{chosenCard.Name}' not found in Trash.", false);
-            }
 
-            // Trash the Trash Panda itself
-            _trashPile.Trash(trashPandaCard);
-
-            //bool healthInspTriggered = false;
-
-            if (chosenCard is HealthInspectorCard)
+            if (chosenCard is HealthInspectorCard card)
             {
                 // Health Inspector triggers IMMEDIATELY when taken from trash
-                string hiLog = TriggerHealthInspector(caster, (HealthInspectorCard)chosenCard);
-                GameEvents.OnLogMessage?.Invoke(hiLog);
-                //healthInspTriggered = true;
-                return ($"🦝 Trash Panda! {caster.Name} retrieved a Health Inspector — " +
-                        $"it triggers immediately!\n{hiLog}", true);
+                ResolveHealthInspector(caster);
+                GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved a Health Inspector from the Trash pile! " +
+                        $"It triggers immediately!");
             }
 
             caster.Hand.AddCard(chosenCard);
             GameEvents.OnCardAddedToHand?.Invoke(caster, chosenCard);
-            return ($"🦝 Trash Panda! {caster.Name} retrieved '{chosenCard.Name}' from the Trash pile.", false);
+            GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved '{chosenCard.Name}' from the Trash pile.");
         }
 
         // ==========================================================

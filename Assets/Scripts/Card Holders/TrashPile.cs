@@ -9,6 +9,12 @@ namespace TacoVsBurrito
         public int TrashCount => _trashPile.Count;
         
         private List<CardBase> _trashPile = new();
+
+        bool WasActionCardTrashed(CardBase card)
+        {
+            if(card is ActionCardBase) return true;
+            return false;
+        }
         
         public void Trash(CardBase card)
         {
@@ -16,6 +22,12 @@ namespace TacoVsBurrito
             card.ChangePosition(cardsTransform.position);
             card.ChangeParent(cardsTransform);
             card.DisableInteraction();
+
+            if(card is ActionCardBase @base)
+            {
+                GameEvents.OnActionCardTrashed?.Invoke(card);
+                @base.ExecuteAction();
+            }
         }
 
         public void TrashAll(IEnumerable<CardBase> cards)

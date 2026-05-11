@@ -109,31 +109,30 @@ namespace TacoVsBurrito
             if (GameManager.Instance.CurrentPlayer is not SelfPlayer)
                 return;
 
-            if (!IsDrawPileEmpty)
-            {
-                CardBase drawnCard = Draw();
+            CardBase drawnCard = Draw();
 
-                if (IsDrawPileEmpty)
-                {
-                    // Draw pile just became empty
-                    GameEvents.OnDrawPileEmpty?.Invoke();
-                    GameEvents.OnLogMessage?.Invoke(
-                        "📭 Draw pile is empty! PlayerBases now skip the draw step.");
-                }
-                GameManager.Instance.CardDrawnFromPile(drawnCard);
-            }
-            else
+            if (IsDrawPileEmpty)
             {
-                GameEvents.OnDrawPhaseSkipped?.Invoke();
-                GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
+                // Draw pile just became empty
+                GameEvents.OnDrawPileEmpty?.Invoke();
+                GameEvents.OnLogMessage?.Invoke(
+                    "📭 Draw pile is empty! PlayerBases now skip the draw step.");
             }
+            GameManager.Instance.CardDrawnFromPile(drawnCard);
         }
 
         void TogglePileInteraction(bool value) => drawBtn.interactable = value;
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            if(turnState == TurnState.Draw && player is SelfPlayer)
+            if (turnState == TurnState.DrawPhase && IsDrawPileEmpty)
+            {
+                GameEvents.OnDrawPhaseSkipped?.Invoke();
+                GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
+                return;
+            }
+            
+            if (turnState == TurnState.DrawPhase && player is SelfPlayer)
             {
                 TogglePileInteraction(true);
             }
