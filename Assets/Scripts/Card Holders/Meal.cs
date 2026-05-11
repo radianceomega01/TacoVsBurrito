@@ -29,10 +29,12 @@ namespace TacoVsBurrito
         {
             _cards = new();
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
+            GameEvents.OnCraftyCrowActionByPlayer += ManageCraftyCrowAction;
         }
         void OnDestroy()
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
+            GameEvents.OnCraftyCrowActionByPlayer -= ManageCraftyCrowAction;
         }
 
         void Start()
@@ -142,10 +144,19 @@ namespace TacoVsBurrito
             }
         }
 
-        void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
+        void ManageTurnStateChanged(TurnState turnState, PlayerBase player){}
+        void ManageCraftyCrowAction(PlayerBase player)
         {
-            
+            if(player != parentPlayer)
+            {
+                _cards.ForEach(card =>
+                {
+                    card.EnableInteraction();
+                    card.ToggleInteractionType();
+                });
+            }
         }
+        
     }
     public enum MealType
     {

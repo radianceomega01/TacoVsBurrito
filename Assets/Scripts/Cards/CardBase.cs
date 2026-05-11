@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 namespace TacoVsBurrito
 {
-    public abstract class CardBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public abstract class CardBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler
     {
         [Header("Identity")]
         [SerializeField] string cardName = "Unnamed Card";
@@ -35,6 +35,8 @@ namespace TacoVsBurrito
 
         private ICardPickupTarget tempPickupTarget;
         private bool wasInteractionEnabledBeforeDrag;
+        private InteractionType interactionType = InteractionType.Drag;
+
 
         public string Name { get { return cardName; } }
 
@@ -51,7 +53,7 @@ namespace TacoVsBurrito
             canvas = GetComponentInParent<Canvas>();
 
             GameEvents.OnCardDragBegin += DisableInteraction;
-            GameEvents.OnCardDragEnd += ResumeInteraction;;
+            GameEvents.OnCardDragEnd += ResumeInteraction; ;
         }
 
         protected virtual void OnDestroy()
@@ -80,11 +82,20 @@ namespace TacoVsBurrito
         }
 
         // =========================================================
+        // Click 
+        // =========================================================
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if(interactionType == InteractionType.Drag) return;
+        }
+        // =========================================================
         // BEGIN DRAG
-        // =========================================================ßß
+        // =========================================================
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if(interactionType == InteractionType.Click) return;
+
             GameEvents.OnCardDragBegin?.Invoke();
 
             _originalScale = transform.localScale;
@@ -116,6 +127,8 @@ namespace TacoVsBurrito
 
         public void OnDrag(PointerEventData eventData)
         {
+            if(interactionType == InteractionType.Click) return;
+
             _rectTransform.anchoredPosition +=
                 eventData.delta / canvas.scaleFactor;
         }
@@ -126,6 +139,8 @@ namespace TacoVsBurrito
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if(interactionType == InteractionType.Click) return;
+
             GameEvents.OnCardDragEnd?.Invoke();
             _canvasGroup.blocksRaycasts = true;
 
@@ -177,8 +192,17 @@ namespace TacoVsBurrito
         {
             _canvasGroup.blocksRaycasts = true;
         }
+        public void ToggleInteractionType()
+        {
+            interactionType = (interactionType == InteractionType.Drag) ? InteractionType.Click : InteractionType.Drag;
+        }
 
         public float GetWidth() => _rectTransform.sizeDelta.x;
 
+    }
+    public enum InteractionType
+    {
+        Drag,
+        Click
     }
 }

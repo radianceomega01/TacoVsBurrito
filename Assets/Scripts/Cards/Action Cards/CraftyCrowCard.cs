@@ -7,7 +7,9 @@ namespace TacoVsBurrito
     {
         public override void ExecuteAction()
         {
-            throw new System.NotImplementedException();
+            GameEvents.OnCraftyCrowActionByPlayer?.Invoke(GameManager.Instance.CurrentPlayer);
+
+            //resolver.ResolveCraftyCrow(GameManager.Instance.CurrentPlayer);
         }
     }
 }

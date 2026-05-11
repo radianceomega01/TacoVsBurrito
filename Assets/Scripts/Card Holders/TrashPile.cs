@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TacoVsBurrito
 {
@@ -18,7 +19,7 @@ namespace TacoVsBurrito
         
         public void Trash(CardBase card)
         {
-            if (card != null) _trashPile.Add(card);
+            _trashPile.Add(card);
             card.ChangePosition(cardsTransform.position);
             card.ChangeParent(cardsTransform);
             card.DisableInteraction();
@@ -44,6 +45,13 @@ namespace TacoVsBurrito
         {
             return _trashPile.Remove(card);
         }
+        public  CardBase RetrieveFromTrash()
+        {            
+            if (_trashPile.Count <= 1) return null;
+            CardBase card = _trashPile[0];
+            _trashPile.Remove(card);
+            return card;
+        }
 
         public bool CanDrop(CardBase card)
         {
@@ -52,7 +60,10 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             Trash(card);
-            GameManager.Instance.OnCardPlacedAfterDrawn();
+            if(card is not ActionCardBase @base)
+            {
+                GameManager.Instance.OnCardPlacedAfterDrawn();
+            }
         }
     }
 }

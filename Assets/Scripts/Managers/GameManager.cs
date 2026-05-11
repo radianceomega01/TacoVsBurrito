@@ -303,7 +303,7 @@ namespace TacoVsBurrito
             {
                 elapsed += Time.deltaTime;
 
-                // AI playerBasePlayerBases auto-decide No Bueno during the window
+                // AI player auto-decide No Bueno during the window
                 foreach (var p in _players)
                 {
                     if (p is AIPlayer @player && p != active)
@@ -364,13 +364,13 @@ namespace TacoVsBurrito
                             "Choose a card to retrieve from the Trash pile:", trash,
                             chosen =>
                             {
-                                _resolver.ResolveTrashPanda(caster, c, chosen);
+                                _resolver.ResolveTrashPanda(caster, chosen);
                                 done = true;
                             });
                         if (caster is AIPlayer)
                         {
                             var best = AIPickBestFromTrash(caster, trash);
-                            _resolver.ResolveTrashPanda(caster, c, best);
+                            _resolver.ResolveTrashPanda(caster, best);
                             log = $"🦝 Trash Panda! {caster.Name} retrieved '{best.Name}' from the Trash pile.";
                             done = true;
                         }
@@ -652,6 +652,7 @@ namespace TacoVsBurrito
                 c is ActionCardBase ? 5 : 0
             ).FirstOrDefault();
         }
+        public TrashPile GetTrashPile() => trashPile;
     }
     public enum GameState
     {

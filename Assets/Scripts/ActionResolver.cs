@@ -129,7 +129,6 @@ namespace TacoVsBurrito
                                          PlayerBase victim, CardBase stealTarget)
         {
             caster.Meal.AddCard(stealTarget);
-            _trashPile.Trash(craftyCrow);
 
             GameEvents.OnCardStolenFromMeal?.Invoke(caster, victim, stealTarget);
             return $"🐦 Crafty Crow! {caster.Name} stole '{stealTarget.Name}' " +
@@ -145,7 +144,7 @@ namespace TacoVsBurrito
         /// If chosenCard is a Health Inspector, trigger it immediately.
         /// Returns (logMessage, healthInspectorTriggered).
         public void ResolveTrashPanda(
-            PlayerBase caster, TrashPandaCard trashPandaCard, CardBase chosenCard)
+            PlayerBase caster, CardBase chosenCard)
         {
             // Enforce max 2 Trash Panda retrievals per game (official FAQ)
             // if (chosenCard is TrashPandaCard)
@@ -160,8 +159,6 @@ namespace TacoVsBurrito
             //     _trashPandaRetrieved[caster.Index] = count + 1;
             // }
 
-            bool removed = _trashPile.RetrieveFromTrash(chosenCard);
-
             if (chosenCard is HealthInspectorCard card)
             {
                 // Health Inspector triggers IMMEDIATELY when taken from trash
@@ -173,6 +170,7 @@ namespace TacoVsBurrito
             caster.Hand.AddCard(chosenCard);
             GameEvents.OnCardAddedToHand?.Invoke(caster, chosenCard);
             GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved '{chosenCard.Name}' from the Trash pile.");
+            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }
 
         // ==========================================================
