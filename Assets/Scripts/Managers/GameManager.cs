@@ -391,7 +391,7 @@ namespace TacoVsBurrito
                         caster, c, "Choose a playerBasePlayerBase to swap with:", wasLastCard,
                         target =>
                         {
-                            log = _resolver.ResolveOrderEnvy(caster, c, target);
+                            //log = _resolver.ResolveOrderEnvy(caster, c, target);
                         }));
                     break;
 

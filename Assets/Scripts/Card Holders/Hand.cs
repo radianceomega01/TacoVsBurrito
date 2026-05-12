@@ -22,6 +22,7 @@ namespace TacoVsBurrito
         public IReadOnlyList<CardBase> Cards => _cards;
         public int Count => _cards.Count;
         public PlayerBase ParentPlayer => parentPlayer;
+        public Transform ParentTransform => transform.parent;
 
         void Awake()
         {
@@ -52,6 +53,13 @@ namespace TacoVsBurrito
             var all = new List<CardBase>(_cards);
             _cards.Clear();
             return all;
+        }
+
+        public void ChangeParentAndPosition(Transform parentTransform, Vector3 position)
+        {
+            transform.DOMove(position, 0.5f);
+            transform.SetParent(parentTransform);
+            transform.DORotate(Vector3.zero, 0.5f);
         }
 
         public void AddCard(CardBase c)

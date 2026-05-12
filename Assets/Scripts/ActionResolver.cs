@@ -248,13 +248,12 @@ namespace TacoVsBurrito
 
         /// Swap caster's hand + meal with target's hand + meal.
         /// After swap, cannot be blocked.
-        public string ResolveOrderEnvy(PlayerBase caster, OrderEnvyCard orderEnvyCard, PlayerBase target)
+        public void ResolveOrderEnvy(PlayerBase caster, PlayerBase target)
         {
             caster.SwapMeal(target);
-            _trashPile.Trash(orderEnvyCard);
 
-            GameEvents.OnOrderEnvySwap?.Invoke(caster, target);
-            return $"😤 Order Envy! {caster.Name} swapped their hand and meal with {target.Name}!";
+            GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.Name} swapped their hand and meal with {target.Name}!");
+            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }
 
         // ==========================================================

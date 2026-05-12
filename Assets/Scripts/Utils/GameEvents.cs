@@ -38,7 +38,8 @@ namespace TacoVsBurrito
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCraftyCrowActionTargeted;   // (caster, victim, card being targeted for steal)
         public static Action<PlayerBase>                        OnCraftyCrowActionResolved;      
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCardStolenFromMeal; // (thief, victim, card)
-        public static Action<PlayerBase, PlayerBase>            OnOrderEnvySwap;    // (swapper, swapTarget)
+        public static Action<PlayerBase>                        OnOrderEnvyAction;  // (player)
+        public static Action<PlayerBase, PlayerBase>            OnOrderEnvyActionTargeted;    // (swapper, swapTarget)
         public static Action<PlayerBase>                        OnMealScoreChanged; // any meal update
         
         // ---- Card Drag ----
@@ -92,7 +93,8 @@ namespace TacoVsBurrito
             OnCardPlacedInMeal      = null;
             OnMealCleared           = null;
             OnCardStolenFromMeal    = null;
-            OnOrderEnvySwap         = null;
+            OnOrderEnvyAction         = null;
+            OnOrderEnvyActionTargeted = null;
             OnMealScoreChanged      = null;
             OnNoBuenoPlayed         = null;
             OnHealthInspector       = null;

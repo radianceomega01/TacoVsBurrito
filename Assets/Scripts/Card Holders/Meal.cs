@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 namespace TacoVsBurrito
@@ -24,6 +25,7 @@ namespace TacoVsBurrito
         public Meal(MealType type) { Type = type; }
         public int HotSauceBossCardCount { get; private set; }
         public int IngredientCardCount { get; private set; }
+        public Transform ParentTransform => transform.parent;
 
         void Awake()
         {
@@ -75,6 +77,13 @@ namespace TacoVsBurrito
             var all = new List<CardBase>(_cards);
             _cards.Clear();
             return all;
+        }
+
+        public void ChangeParentAndPosition(Transform parentTransform, Vector3 position)
+        {
+            transform.DOMove(position, 0.5f);
+            transform.SetParent(parentTransform);
+            transform.DORotate(Vector3.zero, 0.5f);
         }
 
         // ---- Scoring ----
