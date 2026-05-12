@@ -125,14 +125,18 @@ namespace TacoVsBurrito
         // ==========================================================
 
         /// Steal stealTarget card from victim's meal into caster's meal.
-        public string ResolveCraftyCrow(PlayerBase caster, CraftyCrowCard craftyCrow,
+        public void ResolveCraftyCrow(PlayerBase caster,
                                          PlayerBase victim, CardBase stealTarget)
         {
-            caster.Meal.AddCard(stealTarget);
+            GameManager.Instance.CurrentPlayer.Meal.AddCard(stealTarget);
+            UnityEngine.Debug.Log(caster.GetType());
 
             GameEvents.OnCardStolenFromMeal?.Invoke(caster, victim, stealTarget);
-            return $"🐦 Crafty Crow! {caster.Name} stole '{stealTarget.Name}' " +
-                   $"from {victim.Name}'s meal!";
+            GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! {caster.Name} stole '{stealTarget.Name}' " +
+                   $"from {victim.Name}'s meal into their own meal!");
+
+            GameEvents.OnCraftyCrowActionResolved?.Invoke(caster);
+            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);       
         }
 
         // ==========================================================

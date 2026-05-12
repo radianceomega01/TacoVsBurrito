@@ -87,6 +87,8 @@ namespace TacoVsBurrito
         public void OnPointerDown(PointerEventData eventData)
         {
             if(interactionType == InteractionType.Drag) return;
+
+            GameEvents.OnCardClickedForCraftCrow?.Invoke(this);
         }
         // =========================================================
         // BEGIN DRAG

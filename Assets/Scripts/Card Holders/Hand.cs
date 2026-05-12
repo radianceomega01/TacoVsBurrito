@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEditor.Experimental.GraphView;
 using System.Runtime.InteropServices;
 using System.Net.Http.Headers;
+using System;
 
 namespace TacoVsBurrito
 {
@@ -27,6 +28,7 @@ namespace TacoVsBurrito
             _rectTransform = GetComponent<RectTransform>();
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
+
         void OnDestroy()
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;

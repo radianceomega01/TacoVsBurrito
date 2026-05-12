@@ -345,7 +345,7 @@ namespace TacoVsBurrito
                         caster, card, "Choose a playerBasePlayerBase to steal from:", wasLastCard,
                         (victim, stolen) =>
                         {
-                            log = _resolver.ResolveCraftyCrow(caster, c, victim, stolen);
+                            //log = _resolver.ResolveCraftyCrow(caster, c, victim, stolen);
                         }));
                     break;
 
