@@ -55,13 +55,6 @@ namespace TacoVsBurrito
             return all;
         }
 
-        public void ChangeParentAndPosition(Transform parentTransform, Vector3 position)
-        {
-            transform.DOMove(position, 0.5f);
-            transform.SetParent(parentTransform);
-            transform.DORotate(Vector3.zero, 0.5f);
-        }
-
         public void AddCard(CardBase c)
         {
             _cards.Add(c);

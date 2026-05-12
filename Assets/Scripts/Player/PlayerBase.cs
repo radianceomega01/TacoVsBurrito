@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TacoVsBurrito
@@ -34,31 +35,15 @@ namespace TacoVsBurrito
 
         public void SwapMeal(PlayerBase other)
         {
-            // Cache original meal parents
-            Transform myMealParent = meal.ParentTransform;
-            Transform otherMealParent = other.meal.ParentTransform;
+            List<CardBase> currentPlayerCards = hand.TakeAll();
+            List<CardBase> otherPlayerCards = other.hand.TakeAll();
+            currentPlayerCards.ForEach(c => other.hand.AddCard(c));
+            otherPlayerCards.ForEach(c => hand.AddCard(c));
 
-            // Swap meal visuals/parents
-            meal.ChangeParentAndPosition(otherMealParent, other.meal.transform.position);
-            other.meal.ChangeParentAndPosition(myMealParent, meal.transform.position);
-
-            // Swap references
-            Meal tempMeal = meal;
-            meal = other.meal;
-            other.meal = tempMeal;
-
-            // Cache original hand parents
-            Transform myHandParent = hand.ParentTransform;
-            Transform otherHandParent = other.hand.ParentTransform;
-
-            // Swap hand visuals/parents
-            hand.ChangeParentAndPosition(otherHandParent, other.hand.transform.position);
-            other.hand.ChangeParentAndPosition(myHandParent, hand.transform.position);
-
-            // Swap references
-            Hand tempHand = hand;
-            hand = other.hand;
-            other.hand = tempHand;
+            List<CardBase> currentMealCards = meal.TakeAll();
+            List<CardBase> otherMealCards = other.meal.TakeAll();
+            currentMealCards.ForEach(c => other.meal.AddCard(c));
+            otherMealCards.ForEach(c => meal.AddCard(c));
         }
 
         public override string ToString() =>
