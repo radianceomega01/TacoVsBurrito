@@ -116,7 +116,7 @@ namespace TacoVsBurrito
         {
             _trashPile.Trash(noBuenoCard);
             _trashPile.Trash(targetCard);
-            GameEvents.OnNoBuenoPlayed?.Invoke(blocker, targetCard);
+            GameEvents.OnNoBuenoPlayed?.Invoke();
             return $"🚫 No Bueno! {blocker.Name} blocked '{targetCard.Name}'! Both go to Trash.";
         }
 

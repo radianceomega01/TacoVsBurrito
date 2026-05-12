@@ -4,6 +4,7 @@ namespace TacoVsBurrito
     public abstract class ActionCardBase : CardBase
     {
         protected ActionResolver resolver;
+        protected int noBuenoCounter = 0; 
 
         protected override void Awake() {
             base.Awake();
@@ -19,6 +20,9 @@ namespace TacoVsBurrito
             this.resolver = resolver;
         }
         
-        public abstract void ExecuteAction();
+        public virtual void ExecuteAction()
+        {
+            
+        }
     }
 }

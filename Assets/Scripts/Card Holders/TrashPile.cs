@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,11 +11,16 @@ namespace TacoVsBurrito
         public int TrashCount => _trashPile.Count;
         
         private List<CardBase> _trashPile = new();
+        private TurnState currentTurnState;
 
-        bool WasActionCardTrashed(CardBase card)
+        void Awake()
         {
-            if(card is ActionCardBase) return true;
-            return false;
+            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
+        }
+
+        void OnDestroy()
+        {
+            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
         
         public void Trash(CardBase card)
@@ -55,6 +61,9 @@ namespace TacoVsBurrito
 
         public bool CanDrop(CardBase card)
         {
+            if(currentTurnState == TurnState.NoBuenoWindowPhase && card is not NoBuenoCard)
+                return false;
+
             return true;
         }
         public void DropCardAfterDrag(CardBase card)
@@ -64,6 +73,11 @@ namespace TacoVsBurrito
             {
                 GameManager.Instance.OnCardPlacedAfterDrawn();
             }
+        }
+
+        void ManageTurnStateChanged(TurnState state, PlayerBase player)
+        {
+            currentTurnState = state;
         }
     }
 }

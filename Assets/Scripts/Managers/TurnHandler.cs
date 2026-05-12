@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System;
 namespace TacoVsBurrito
 {
     public class TurnHandler
@@ -9,6 +12,7 @@ namespace TacoVsBurrito
         public PlayerBase CurrentPlayer => activePlayers[currentPlayerIndex];
 
         int currentPlayerIndex = 0;
+        CancellationTokenSource noBuenoTimerCts;
 
         public TurnHandler()
         {
@@ -18,7 +22,9 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded += ManageTurnEnded;
             GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
+            GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
         }
+
         ~TurnHandler()
         {
             GameEvents.OnGameInit -= DecidePlayers;
@@ -26,6 +32,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded -= ManageTurnEnded;
             GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
+            GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
         }
 
         void DecidePlayers(List<PlayerBase> players)
@@ -60,11 +67,18 @@ namespace TacoVsBurrito
             this.turnState = turnState;
             Debug.Log($"State changed for player {CurrentPlayer.GetType()} to {turnState.ToString()}");
             GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
+            if (turnState == TurnState.NoBuenoWindowPhase)
+            {
+                StartNoBuenoTimer();
+            }
         }
 
         void ManageActionCardTrashed(CardBase card)
         {
-            SwitchState(TurnState.ActionResolvePhase);
+            if(card is HealthInspectorCard)
+                SwitchState(TurnState.ActionResolvePhase);
+            else
+                SwitchState(TurnState.NoBuenoWindowPhase);    
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)
@@ -77,6 +91,28 @@ namespace TacoVsBurrito
         {
             GoToNextState();
         }
+        async void StartNoBuenoTimer()
+        {
+            noBuenoTimerCts?.Cancel();
+
+            noBuenoTimerCts = new CancellationTokenSource();
+
+            try
+            {
+                await Task.Delay(5000, noBuenoTimerCts.Token);
+
+                Debug.Log("No Bueno window expired");
+                SwitchState(TurnState.ActionResolvePhase);
+            }
+            catch (TaskCanceledException)
+            {
+                Debug.Log("No Bueno timer cancelled");
+            }
+        }
+        void ManageNoBuenoPlayed()
+        {
+            SwitchState(TurnState.NoBuenoWindowPhase);
+        }
     }
 
     public enum TurnState
@@ -84,6 +120,7 @@ namespace TacoVsBurrito
         None,
         DrawPhase,
         PlayPhase,
+        NoBuenoWindowPhase,
         ActionResolvePhase
     }
 }

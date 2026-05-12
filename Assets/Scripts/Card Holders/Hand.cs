@@ -114,12 +114,15 @@ namespace TacoVsBurrito
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            if(parentPlayer is SelfPlayer && turnState == TurnState.PlayPhase)
+            if(parentPlayer is SelfPlayer)
             {
-                _cards.ForEach(card => card.EnableInteraction());
+                if(turnState == TurnState.PlayPhase || turnState == TurnState.NoBuenoWindowPhase)
+                {
+                    _cards.ForEach(card => card.EnableInteraction());
+                    return;
+                }
             }
-            else
-                _cards.ForEach(card => card.DisableInteraction());
+            _cards.ForEach(card => card.DisableInteraction());
         }
 
         public void PickCardBeforeDrag(CardBase card)

@@ -36,7 +36,7 @@ namespace TacoVsBurrito
             GameEvents.OnCardDrawn          += (_, __) => Play(sfxCardDraw);
             GameEvents.OnTurnStarted        += _        => Play(sfxTurnStart);
             GameEvents.OnHealthInspector    += ()        => Play(sfxHealthInspector);
-            GameEvents.OnNoBuenoPlayed      += (_, __)  => Play(sfxNoBueno);
+            GameEvents.OnNoBuenoPlayed      += ()        => Play(sfxNoBueno);
             GameEvents.OnCardStolenFromMeal += (_, __, ___) => Play(sfxCraftyCrow);
             GameEvents.OnOrderEnvyAction         += _        => Play(sfxOrderEnvy);
             GameEvents.OnGameOver           += _        => Play(sfxWin);
