@@ -110,16 +110,6 @@ namespace TacoVsBurrito
             return true;
         }
 
-        /// Execute a No Bueno block.
-        /// noBueno goes to Trash. targetCard goes to Trash. Returns log.
-        public string ResolveNoBueno(PlayerBase blocker, NoBuenoCard noBuenoCard, CardBase targetCard)
-        {
-            _trashPile.Trash(noBuenoCard);
-            _trashPile.Trash(targetCard);
-            GameEvents.OnNoBuenoPlayed?.Invoke();
-            return $"🚫 No Bueno! {blocker.Name} blocked '{targetCard.Name}'! Both go to Trash.";
-        }
-
         // ==========================================================
         //  CRAFTY CROW
         // ==========================================================

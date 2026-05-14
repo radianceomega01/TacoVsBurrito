@@ -13,6 +13,8 @@ namespace TacoVsBurrito
         private List<CardBase> _trashPile = new();
         private TurnState currentTurnState;
 
+        private CardBase currentTrashedCard;
+
         void Awake()
         {
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
@@ -29,11 +31,11 @@ namespace TacoVsBurrito
             card.ChangePosition(cardsTransform.position);
             card.ChangeParent(cardsTransform);
             card.DisableInteraction();
-
-            if(card is ActionCardBase @base)
+            currentTrashedCard = card;
+            
+            if(card is ActionCardBase)
             {
                 GameEvents.OnActionCardTrashed?.Invoke(card);
-                @base.ExecuteAction();
             }
         }
 
@@ -71,13 +73,25 @@ namespace TacoVsBurrito
             Trash(card);
             if(card is not ActionCardBase @base)
             {
-                GameManager.Instance.OnCardPlacedAfterDrawn();
+                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+            }
+        }
+
+        void CheckAndExecuteAction()
+        {
+            if(currentTrashedCard is ActionCardBase @base)
+            {
+                @base.ExecuteAction();
             }
         }
 
         void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {
             currentTurnState = state;
+            if(state == TurnState.ActionResolvePhase)
+            {
+                CheckAndExecuteAction();
+            }
         }
     }
 }

@@ -49,8 +49,11 @@ namespace TacoVsBurrito
 
         // ---- Action cards ----
         public static Action<CardBase>                      OnActionCardTrashed;   // (card trashed)
-        public static Action          OnNoBuenoPlayed;    // (blocker, blocked card)
+        public static Action                                OnNoBuenoPlayed;  
         public static Action                                OnHealthInspector;  // (victim)
+
+        // ---- Timer ----
+        public static Action<int>                            OnTimerEvent;
 
         // ---- No Bueno interrupt window ----
         // Fired when a card is ABOUT to be played; any player can respond with No Bueno

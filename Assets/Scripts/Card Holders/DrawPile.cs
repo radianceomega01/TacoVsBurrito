@@ -132,9 +132,10 @@ namespace TacoVsBurrito
                 return;
             }
             
-            if (turnState == TurnState.DrawPhase && player is SelfPlayer)
+            if (turnState == TurnState.DrawPhase && player is SelfPlayer && !IsDrawPileEmpty)
             {
                 TogglePileInteraction(true);
+                GameEvents.OnLogMessage?.Invoke("Draw a card!");
             }
             else
                 TogglePileInteraction(false);

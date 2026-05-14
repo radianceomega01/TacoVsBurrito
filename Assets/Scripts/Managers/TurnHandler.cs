@@ -13,6 +13,9 @@ namespace TacoVsBurrito
 
         int currentPlayerIndex = 0;
         CancellationTokenSource noBuenoTimerCts;
+        private int noBuenoCounter = 0;
+
+        const int NO_BUENO_WINDOW_DURATION_MS = 5000;
 
         public TurnHandler()
         {
@@ -47,7 +50,7 @@ namespace TacoVsBurrito
                 $"🎮 Game started! {activePlayers.Count} players. Youngest goes first. Play clockwise.");
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
             GoToNextState();
-            GameEvents.OnLogMessage?.Invoke($"\n--- {CurrentPlayer.Name}'s turn ---");
+            //GameEvents.OnLogMessage?.Invoke($"\n--- {CurrentPlayer.Name}'s turn ---");
         }
 
         public void GoToNextState()
@@ -75,10 +78,10 @@ namespace TacoVsBurrito
 
         void ManageActionCardTrashed(CardBase card)
         {
-            if(card is HealthInspectorCard)
-                SwitchState(TurnState.ActionResolvePhase);
-            else
+            if(card.IsBlockable)
                 SwitchState(TurnState.NoBuenoWindowPhase);    
+            else
+                SwitchState(TurnState.ActionResolvePhase);
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)
@@ -96,21 +99,29 @@ namespace TacoVsBurrito
             noBuenoTimerCts?.Cancel();
 
             noBuenoTimerCts = new CancellationTokenSource();
-
             try
             {
-                await Task.Delay(5000, noBuenoTimerCts.Token);
+                GameEvents.OnTimerEvent(NO_BUENO_WINDOW_DURATION_MS/1000);
+                GameEvents.OnLogMessage?.Invoke("⏰ No Bueno window!");
+                await Task.Delay(NO_BUENO_WINDOW_DURATION_MS, noBuenoTimerCts.Token);
 
                 Debug.Log("No Bueno window expired");
-                SwitchState(TurnState.ActionResolvePhase);
+                GameEvents.OnLogMessage?.Invoke("⏰ No Bueno window expired!");
+                if(noBuenoCounter%2 == 0)
+                    SwitchState(TurnState.ActionResolvePhase);
+                else
+                    ManageTurnEnded(GameManager.Instance.CurrentPlayer);
+                noBuenoCounter = 0;    
             }
             catch (TaskCanceledException)
             {
                 Debug.Log("No Bueno timer cancelled");
             }
         }
+
         void ManageNoBuenoPlayed()
         {
+            noBuenoCounter++;
             SwitchState(TurnState.NoBuenoWindowPhase);
         }
     }

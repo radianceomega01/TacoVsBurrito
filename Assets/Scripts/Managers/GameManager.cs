@@ -147,12 +147,19 @@ namespace TacoVsBurrito
 
         public void CardDrawnFromPile(CardBase card)
         {
-            GameEvents.OnLogMessage?.Invoke($"  {CurrentPlayer.Name} draws a card.");
+
             // Health Inspector triggers IMMEDIATELY on draw – unblockable
             if (card is HealthInspectorCard)
             {
                 trashPile.Trash(card);
                 return;
+            }
+            else
+            {
+                if(CurrentPlayer is SelfPlayer)
+                {
+                    GameEvents.OnLogMessage?.Invoke("Play a Card!");
+                }
             }
 
             // Normal card: add to hand
@@ -160,11 +167,6 @@ namespace TacoVsBurrito
             GameEvents.OnCardDrawn?.Invoke(CurrentPlayer, card);
             GameEvents.OnHandChanged?.Invoke(CurrentPlayer);
             _turnHandler.GoToNextState();
-        }
-
-        public void OnCardPlacedAfterDrawn()
-        {
-            GameEvents.OnTurnEnded?.Invoke(CurrentPlayer);
         }
 
         // -------------------------------------------------------
@@ -318,9 +320,9 @@ namespace TacoVsBurrito
             {
                 // Check if the No Bueno itself can be countered (another playerBasePlayerBase plays No Bueno)
                 // In base implementation we resolve one level of No Bueno chaining
-                string log = _resolver.ResolveNoBueno(_noBuenoBlocker, _noBuenoCard, card);
-                GameEvents.OnLogMessage?.Invoke(log);
-                GameEvents.OnHandChanged?.Invoke(_noBuenoBlocker);
+                //string log = _resolver.ResolveNoBueno(_noBuenoBlocker, _noBuenoCard, card);
+                //GameEvents.OnLogMessage?.Invoke(log);
+                //GameEvents.OnHandChanged?.Invoke(_noBuenoBlocker);
                 // card is now trashed; do NOT proceed with original effect
             }
             else

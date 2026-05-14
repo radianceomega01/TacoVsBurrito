@@ -264,9 +264,10 @@ MonoBehaviour:
   cardName: Unnamed Card
   DescriptionText: 
   isPlaceableInMeal: 1
-  isBlockable: 1
+  isBlockable: 0
   nameTxtField: {fileID: 4117807015978139650}
   DescriptionTxtField: {fileID: 9015011803136255482}
+  dragScale: 1.2
   cardValue: 1
   ValueTxtField: {fileID: 660552813068261590}
 --- !u!114 &4117807015978139650 stripped

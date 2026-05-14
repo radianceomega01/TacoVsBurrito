@@ -52,9 +52,7 @@ namespace TacoVsBurrito
         /// Add a card (Ingredient, TummyAche, or HotSauceBoss) to this meal.
         public void AddCard(CardBase card)
         {
-            if (card is not HotSauceBossCard &&
-                card is not IngredientCardBase &&
-                card is not TummyAcheCard)
+            if (!card.IsPlaceableInMeal)
                 return;
             _cards.Add(card);
             card.DisableInteraction();
@@ -124,19 +122,12 @@ namespace TacoVsBurrito
 
         public bool CanDrop(CardBase card)
         {
-            if (card is ActionCardBase)
-            {
-                if (card is HotSauceBossCard || card is TummyAcheCard)
-                    return true;
-                else
-                    return false;
-            }
-            return true;
+            return card.IsPlaceableInMeal;
         }
         public void DropCardAfterDrag(CardBase card)
         {
             AddCard(card);
-            GameManager.Instance.OnCardPlacedAfterDrawn();
+            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }
 
         void ArrangeCardsAnimated()

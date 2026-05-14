@@ -264,9 +264,10 @@ MonoBehaviour:
   cardName: Hot Sauce Boss
   DescriptionText: 
   isPlaceableInMeal: 1
-  isBlockable: 1
+  isBlockable: 0
   nameTxtField: {fileID: 3850182859594112881}
   DescriptionTxtField: {fileID: 8165090137445333641}
+  dragScale: 1.2
   ValueTxtField: {fileID: 7118050974198936771}
 --- !u!114 &3850182859594112881 stripped
 MonoBehaviour:

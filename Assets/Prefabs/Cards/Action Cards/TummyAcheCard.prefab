@@ -275,9 +275,10 @@ MonoBehaviour:
   cardName: Tummy Ache
   DescriptionText: 
   isPlaceableInMeal: 1
-  isBlockable: 1
+  isBlockable: 0
   nameTxtField: {fileID: 860446146930591245}
   DescriptionTxtField: {fileID: 5750615032483816437}
+  dragScale: 1.2
   cardValue: -1
   ValueTxtField: {fileID: 6408697752038776220}
 --- !u!114 &5750615032483816437 stripped
