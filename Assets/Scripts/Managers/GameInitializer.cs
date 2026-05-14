@@ -11,7 +11,7 @@ namespace TacoVsBurrito {
         [SerializeField] GameMode gameMode = GameMode.VsAI;
         
         [SerializeField] Transform playersParent;
-        [SerializeField] PlayerBase SelfPlayer;
+        [SerializeField] PlayerBase selfPlayer;
         [SerializeField] GameObject opponentPlayerPrefab;
         [SerializeField] List<Transform> playerPositions;
 
@@ -33,8 +33,9 @@ namespace TacoVsBurrito {
 
         void SetupPlayers()
         {
-            activePlayers.Add(SelfPlayer);
-            GameManager.Instance.AddPlayerBeforeGameStarts(SelfPlayer);
+            selfPlayer.InitIndex(0);
+            activePlayers.Add(selfPlayer);
+            GameManager.Instance.AddPlayerBeforeGameStarts(selfPlayer);
             for (int i = 0; i < numberOfPlayers - 1; i++)
             {
                 GameObject playerObj = Instantiate(opponentPlayerPrefab, playerPositions[0].position, Quaternion.identity, playersParent);
@@ -47,6 +48,7 @@ namespace TacoVsBurrito {
                     playerObj.AddComponent<HumanPlayer>();
                 }
                 PlayerBase player = playerObj.GetComponent<PlayerBase>();
+                player.InitIndex(i + 1);
                 activePlayers.Add(player);
                 GameManager.Instance.AddPlayerBeforeGameStarts(player);
             }

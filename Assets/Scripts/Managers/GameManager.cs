@@ -308,8 +308,8 @@ namespace TacoVsBurrito
                 // AI player auto-decide No Bueno during the window
                 foreach (var p in _players)
                 {
-                    if (p is AIPlayer @player && p != active)
-                        AIConsiderNoBueno(@player, card);
+                    // if (p is AIPlayer @player && p != active)
+                    //     AIConsiderNoBueno(@player, card);
                 }
 
                 yield return null;
@@ -469,88 +469,6 @@ namespace TacoVsBurrito
         }
 
         // -------------------------------------------------------
-        //  AI turn
-        // -------------------------------------------------------
-        private IEnumerator ExecuteAITurn(AIPlayer ai)
-        {
-            yield return new WaitForSeconds(0.8f); // thinking delay
-
-            var decision = ai.GetBrain().Decide(ai, _players, trashPile);
-
-            if (decision.cardIndex < 0 || decision.cardIndex >= ai.Hand.Count)
-            {
-                // Fallback: discard first card
-                HumanDiscardsCard(0); // re-use discard path
-                yield break;
-            }
-
-            var card = ai.Hand.GetAt(decision.cardIndex);
-            bool isLastCard = ai.Hand.Count == 1;
-
-            if (card.IsPlaceableInMeal)
-            {
-                int destIdx = decision.destPlayerIndex >= 0 ? decision.destPlayerIndex : ai.Index;
-
-                // No Bueno interrupt (other AI/human playerBasePlayerBases)
-                //bool blocked = false;
-                yield return StartCoroutine(NoBuenoInterruptWindow(ai, card, isLastCard, () => { }));
-                if (_noBuenoWasPlayed) { _humanPlayedCard = true; yield break; }
-
-                string log = _resolver.PlaceCardInMeal(ai, card, _players[destIdx]);
-                GameEvents.OnLogMessage?.Invoke(log);
-                var dest = _players[destIdx];
-                GameEvents.OnMealScoreChanged?.Invoke(dest);
-                GameEvents.OnScoreChanged?.Invoke(dest, dest.Score);
-                GameEvents.OnHandChanged?.Invoke(ai);
-
-                if (isLastCard) TriggerGameEnd();
-                else _humanPlayedCard = true;
-            }
-            else if (card is ActionCardBase)
-            {
-                yield return StartCoroutine(NoBuenoInterruptWindow(ai, card, isLastCard, () => { }));
-                if (_noBuenoWasPlayed) { _humanPlayedCard = true; yield break; }
-
-                ai.Hand.RemoveCard(card);
-                GameEvents.OnHandChanged?.Invoke(ai);
-                yield return StartCoroutine(ResolveActionCard(ai, card, decision.destPlayerIndex, isLastCard));
-            }
-            else
-            {
-                // Discard
-                ai.Hand.RemoveCard(card);
-                trashPile.Trash(card);
-                GameEvents.OnHandChanged?.Invoke(ai);
-                GameEvents.OnLogMessage?.Invoke($"  {ai.Name} discarded '{card.Name}'.");
-                if (isLastCard) TriggerGameEnd();
-                else _humanPlayedCard = true;
-            }
-        }
-
-        private void AIConsiderNoBueno(AIPlayer aiPlayer, CardBase cardBeingPlayed)
-        {
-            if (!_noBuenoWindowOpen) return;
-            if (aiPlayer.GetBrain().ShouldPlayNoBueno(aiPlayer, cardBeingPlayed, _players))
-            {
-                for (int i = 0; i < aiPlayer.Hand.Count; i++)
-                {
-                    var c = aiPlayer.Hand.GetAt(i);
-                    if (c is NoBuenoCard &&
-                        _resolver.CanPlayNoBueno((NoBuenoCard)c, cardBeingPlayed, false))
-                    {
-                        aiPlayer.Hand.RemoveCard(c);
-                        _noBuenoBlocker = aiPlayer;
-                        _noBuenoCard = (NoBuenoCard)c;
-                        _noBuenoWasPlayed = true;
-                        _noBuenoWindowOpen = false;
-                        GameEvents.OnLogMessage?.Invoke($"  {aiPlayer.Name} plays No Bueno!");
-                        return;
-                    }
-                }
-            }
-        }
-
-        // -------------------------------------------------------
         //  End of game
         // -------------------------------------------------------
         private void TriggerGameEnd()
@@ -655,6 +573,7 @@ namespace TacoVsBurrito
             ).FirstOrDefault();
         }
         public TrashPile GetTrashPile() => trashPile;
+        public DrawPile GetDrawPile() => drawPile;
     }
     public enum GameState
     {

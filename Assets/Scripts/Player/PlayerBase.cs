@@ -25,10 +25,9 @@ namespace TacoVsBurrito
             hand = GetComponentInChildren<Hand>();
             meal = GetComponentInChildren<Meal>();
         }
-        public void InitPlayer(int index, string name, MealType meal)
+        public void InitIndex(int index)
         {
             Index = index;
-            Name = name;
         }
 
         public int Score => Meal.CalculateScore();

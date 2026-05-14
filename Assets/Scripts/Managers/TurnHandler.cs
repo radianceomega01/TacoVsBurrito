@@ -86,7 +86,7 @@ namespace TacoVsBurrito
 
         void ManageTurnEnded(PlayerBase oldPlayer)
         {
-            //currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
+            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
             SwitchState(TurnState.DrawPhase);
         }

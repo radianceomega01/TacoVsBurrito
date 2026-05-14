@@ -15,18 +15,16 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public enum AIDifficulty { Easy, Normal, Hard }
-
-    public struct AIDecision
-    {
-        public int cardIndex;         // index in AI's hand
-        public int destPlayerIndex;   // -1 = self (for meal placements)
-    }
-
     public class AIBrain: MonoBehaviour
     {
+        AIDifficulty difficulty = AIDifficulty.Easy;
+
+        public void SetDifficulty(AIDifficulty difficulty)
+        {
+            this.difficulty = difficulty;
+        }
         public AIDecision Decide(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers,
-                                         TrashPile trashPile, AIDifficulty difficulty = AIDifficulty.Normal)
+                                         TrashPile trashPile)
         {
             return difficulty switch
             {
@@ -44,15 +42,19 @@ namespace TacoVsBurrito
             int idx = Random.Range(0, ai.Hand.Count);
             var card = ai.Hand.GetAt(idx);
 
-            int dest = -1; // default = own meal
-            if (card.IsPlaceableInMeal && Random.value < 0.25f)
+            if(card is NoBuenoCard)
+                DecideEasy(ai, allPlayers); // don't play No Bueno
+
+            int dest = -1; // default trash pile
+            if (card.IsPlaceableInMeal)
             {
-                // 25% chance to dump a Tummy Ache on a random opponent
                 if (card is TummyAcheCard)
                     dest = PickRandomOpponent(ai, allPlayers);
+                else
+                    dest = ai.Index;    
             }
 
-            return new AIDecision { cardIndex = idx, destPlayerIndex = dest };
+            return new AIDecision { cardIndex = idx, destIndex = dest };
         }
 
         // ===========================================================
@@ -64,18 +66,18 @@ namespace TacoVsBurrito
 
             // Priority 1: Play Hot Sauce Boss into own meal (huge value)
             int hsb = FindFirstInHand<HotSauceBossCard>(ai);
-            if (hsb >= 0) return new AIDecision { cardIndex = hsb, destPlayerIndex = ai.Index };
+            if (hsb >= 0) return new AIDecision { cardIndex = hsb, destIndex = ai.Index };
 
             // Priority 2: Play highest-value ingredient into own meal
             int bestIng = FindBestIngredient(ai);
-            if (bestIng >= 0) return new AIDecision { cardIndex = bestIng, destPlayerIndex = ai.Index };
+            if (bestIng >= 0) return new AIDecision { cardIndex = bestIng, destIndex = ai.Index };
 
             // Priority 3: Dump Tummy Ache on the leader
             int ta = FindFirstInHand<TummyAcheCard>(ai);
             if (ta >= 0)
             {
                 int leader = GetLeaderIndex(ai, allPlayers);
-                return new AIDecision { cardIndex = ta, destPlayerIndex = leader };
+                return new AIDecision { cardIndex = ta, destIndex = leader };
             }
 
             // Priority 4: Play any action card
@@ -85,10 +87,10 @@ namespace TacoVsBurrito
                                         typeof(OrderEnvyCard));                              
             if (act >= 0)
                 return new AIDecision { cardIndex = act,
-                    destPlayerIndex = GetLeaderIndex(ai, allPlayers) };
+                    destIndex = GetLeaderIndex(ai, allPlayers) };
 
             // // Fallback: discard first card
-             return new AIDecision { cardIndex = 0, destPlayerIndex = -1 };
+             return new AIDecision { cardIndex = 0, destIndex = -1 };
         }
 
         // ===========================================================
@@ -100,7 +102,7 @@ namespace TacoVsBurrito
             //1. If we have Hot Sauce Boss AND at least 3 ingredients in meal → play it
             int hsb = FindFirstInHand<HotSauceBossCard>(ai);
             if (hsb >= 0 && ai.Meal.IngredientCardCount >= 3)
-                return new AIDecision { cardIndex = hsb, destPlayerIndex = ai.Index };
+                return new AIDecision { cardIndex = hsb, destIndex = ai.Index };
 
             // 2. Use Crafty Crow to steal leader's Hot Sauce Boss
             int cc = FindFirstAction(ai, typeof(CraftyCrowCard));
@@ -108,7 +110,7 @@ namespace TacoVsBurrito
             {
                 var leader = GetLeader(ai, allPlayers);
                 if (leader != null && leader.Meal.HotSauceBossCardCount > 0)
-                    return new AIDecision { cardIndex = cc, destPlayerIndex = leader.Index };
+                    return new AIDecision { cardIndex = cc, destIndex = leader.Index };
             }
 
             // 3. Order Envy if leader has way more points
@@ -117,31 +119,31 @@ namespace TacoVsBurrito
             {
                 var leader = GetLeader(ai, allPlayers);
                 if (leader != null && leader.Score > ai.Score + 5)
-                    return new AIDecision { cardIndex = oe, destPlayerIndex = leader.Index };
+                    return new AIDecision { cardIndex = oe, destIndex = leader.Index };
             }
 
             // 4. Play HSB now if available
             if (hsb >= 0)
-                return new AIDecision { cardIndex = hsb, destPlayerIndex = ai.Index };
+                return new AIDecision { cardIndex = hsb, destIndex = ai.Index };
 
             // 5. Best ingredient into own meal
             int bestIng = FindBestIngredient(ai);
-            if (bestIng >= 0) return new AIDecision { cardIndex = bestIng, destPlayerIndex = ai.Index };
+            if (bestIng >= 0) return new AIDecision { cardIndex = bestIng, destIndex = ai.Index };
 
             // 6. Tummy ache to leader
             int ta = FindFirstInHand<TummyAcheCard>(ai);
             if (ta >= 0)
                 return new AIDecision { cardIndex = ta,
-                    destPlayerIndex = GetLeaderIndex(ai, allPlayers) };
+                    destIndex = GetLeaderIndex(ai, allPlayers) };
 
             // 7. Trash Panda
             int tp = FindFirstAction(ai, typeof(TrashPandaCard));
             if (tp >= 0 && trashPile.TrashCount > 0)
-                return new AIDecision { cardIndex = tp, destPlayerIndex = -1 };
+                return new AIDecision { cardIndex = tp, destIndex = -1 };
 
             // 8. Food Fight
             int ff = FindFirstAction(ai, typeof(FoodFightCard));
-            if (ff >= 0) return new AIDecision { cardIndex = ff, destPlayerIndex = -1 };
+            if (ff >= 0) return new AIDecision { cardIndex = ff, destIndex = -1 };
 
             // 9. Crafty Crow against anyone with a meal card
             if (cc >= 0)
@@ -149,18 +151,17 @@ namespace TacoVsBurrito
                 var victim = allPlayers.Where(p => p != ai && p.Meal.Cards.Count > 0)
                                        .OrderByDescending(p => p.Score).FirstOrDefault();
                 if (victim != null)
-                    return new AIDecision { cardIndex = cc, destPlayerIndex = victim.Index };
+                    return new AIDecision { cardIndex = cc, destIndex = victim.Index };
             }
 
-            return new AIDecision { cardIndex = 0, destPlayerIndex = -1 };
+            return new AIDecision { cardIndex = 0, destIndex = -1 };
         }
 
         // ===========================================================
         //  No Bueno reaction
         // ===========================================================
         /// Returns true if the AI should play No Bueno against this card.
-        public bool ShouldPlayNoBueno(AIPlayer ai, CardBase cardBeingPlayed,
-                                              IReadOnlyList<PlayerBase> allPlayers)
+        public bool ShouldPlayNoBueno(AIPlayer ai, CardBase cardBeingPlayed)
         {
             // Always block Order Envy targeting us
             if (cardBeingPlayed is OrderEnvyCard) return true;
@@ -173,14 +174,15 @@ namespace TacoVsBurrito
             if (cardBeingPlayed is TummyAcheCard &&
                 ai.Meal.HotSauceBossCardCount > 0) return true;
 
-            // Easy AI: rarely blocks
-            return Random.value < 0.1f;
+            if (cardBeingPlayed is NoBuenoCard) return true;    
+
+            return false;
         }
 
         // ===========================================================
         //  Helpers
         // ===========================================================
-        private int FindFirstInHand<T>(PlayerBase p) where T : CardBase
+        public int FindFirstInHand<T>(PlayerBase p) where T : CardBase
         {
             for (int i = 0; i < p.Hand.Count; i++)
             {
@@ -236,5 +238,13 @@ namespace TacoVsBurrito
             var others = all.Where(p => p != ai).ToList();
             return others.Count > 0 ? others[Random.Range(0, others.Count)].Index : -1;
         }
+
+    }
+    public enum AIDifficulty { Easy, Normal, Hard }
+
+    public struct AIDecision
+    {
+        public int cardIndex;         // index in AI's hand
+        public int destIndex;   // -1 for trash, otherwise player index to target
     }
 }
