@@ -106,9 +106,6 @@ namespace TacoVsBurrito
 
         public void OnDrawBtnClicked()
         {
-            if (GameManager.Instance.CurrentPlayer is not SelfPlayer)
-                return;
-
             CardBase drawnCard = Draw();
 
             if (IsDrawPileEmpty)

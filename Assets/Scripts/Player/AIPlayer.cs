@@ -13,7 +13,7 @@ namespace TacoVsBurrito
         private TrashPile trashPile;
         private IReadOnlyList<PlayerBase> _players => GameManager.Instance.Players;
 
-        const int CARD_DRAW_DELAY_IN_MS = 500;
+        const int CARD_DRAW_DELAY_IN_MS = 1000;
         const int THINKING_DELAY_IN_MS = 2000;
 
         bool isSelfTurnRunning = false;
@@ -68,11 +68,11 @@ namespace TacoVsBurrito
             Hand.RemoveCard(card);
             if(decision.destIndex == -1)
             {
-                trashPile.Trash(card);
+                trashPile.DropCardAfterDrag(card);
             }
             else
             {
-                _players[decision.destIndex].Meal.AddCard(card);
+                _players[decision.destIndex].Meal.DropCardAfterDrag(card);
             }
 
             if(isLastCard)
@@ -105,7 +105,7 @@ namespace TacoVsBurrito
                 else
                 {
                     Hand.RemoveCard(Hand.GetAt(index));
-                    trashPile.Trash(Hand.GetAt(index));
+                    trashPile.DropCardAfterDrag(Hand.GetAt(index));
                 }
             }
         }
