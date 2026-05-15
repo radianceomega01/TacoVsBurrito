@@ -83,8 +83,7 @@ namespace TacoVsBurrito
             // Priority 4: Play any action card
             int act = FindFirstAction(ai, typeof(CraftyCrowCard),
                                         typeof(TrashPandaCard),
-                                        typeof(FoodFightCard),
-                                        typeof(OrderEnvyCard));                              
+                                        typeof(FoodFightCard));                              
             if (act >= 0)
                 return new AIDecision { cardIndex = act,
                     destIndex = GetLeaderIndex(ai, allPlayers) };
@@ -114,13 +113,13 @@ namespace TacoVsBurrito
             }
 
             // 3. Order Envy if leader has way more points
-            int oe = FindFirstAction(ai, typeof(OrderEnvyCard));
-            if (oe >= 0)
-            {
-                var leader = GetLeader(ai, allPlayers);
-                if (leader != null && leader.Score > ai.Score + 5)
-                    return new AIDecision { cardIndex = oe, destIndex = leader.Index };
-            }
+            // int oe = FindFirstAction(ai, typeof(OrderEnvyCard));
+            // if (oe >= 0)
+            // {
+            //     var leader = GetLeader(ai, allPlayers);
+            //     if (leader != null && leader.Score > ai.Score + 5)
+            //         return new AIDecision { cardIndex = oe, destIndex = leader.Index };
+            // }
 
             // 4. Play HSB now if available
             if (hsb >= 0)

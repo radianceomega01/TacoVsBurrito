@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 namespace TacoVsBurrito
@@ -12,6 +13,7 @@ namespace TacoVsBurrito
     public class Meal: MonoBehaviour, ICardDropTarget
     {
         [SerializeField] Transform cardsTransform;
+        [SerializeField] TextMeshProUGUI scoreTxt;
 
         private const float CARD_SPACING = 4f;
         private PlayerBase parentPlayer;
@@ -46,6 +48,7 @@ namespace TacoVsBurrito
         void Start()
         {
             parentPlayer = GetComponentInParent<PlayerBase>();
+            scoreTxt.SetText($"Score: 0");
         }
         // ---- Mutations ----
 
@@ -61,6 +64,8 @@ namespace TacoVsBurrito
 
             if (card is HotSauceBossCard) HotSauceBossCardCount++;
             if (card is IngredientCardBase) IngredientCardCount++;
+
+            scoreTxt.SetText($"Score: {CalculateScore()}");
         }
 
         /// Remove a specific card (used by Crafty Crow).
@@ -99,16 +104,16 @@ namespace TacoVsBurrito
             {
                 if (card is IngredientCardBase || card is TummyAcheCard)
                 {
-                    card.GetModifiedMealScore(score);
+                    score = card.GetModifiedMealScore(score);
                 }
-                else if (card is HotSauceBossCard)
+                else if (card is HotSauceBossCard @hotSauceBossCard)
                 {
-                    hotSauceBossCards.Add((HotSauceBossCard)card);
+                    hotSauceBossCards.Add(@hotSauceBossCard);
                 }
             }
             foreach (var card in hotSauceBossCards)
             {
-                card.GetModifiedMealScore(score);
+                score = card.GetModifiedMealScore(score);
             }
             return score;
         }
