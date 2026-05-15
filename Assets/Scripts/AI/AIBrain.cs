@@ -192,6 +192,17 @@ namespace TacoVsBurrito
             return -1;
         }
 
+        public PlayerBase ChooseOrderEnvyVictim(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
+        {
+            var victim = GetLeader(ai, allPlayers);
+            return victim;
+        }
+        public void ChooseCraftyCrowVictim(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers, out PlayerBase victim, out CardBase cardToSteal)
+        {
+            victim = GetLeader(ai, allPlayers);
+            cardToSteal = PickBestCardFromOpponent(victim);
+        }
+
         private int FindBestIngredient(PlayerBase p)
         {
             int best = -1, bestVal = -1;
@@ -237,6 +248,10 @@ namespace TacoVsBurrito
         {
             var others = all.Where(p => p != ai).ToList();
             return others.Count > 0 ? others[Random.Range(0, others.Count)].Index : -1;
+        }
+        private CardBase PickBestCardFromOpponent(PlayerBase opponent)
+        {
+            return opponent.Meal.Cards.OrderByDescending(c => c is HotSauceBossCard ? 100 : (c is IngredientCardBase ib ? ib.CardValue : 0)).FirstOrDefault();
         }
 
     }

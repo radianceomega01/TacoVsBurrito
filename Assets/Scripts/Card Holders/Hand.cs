@@ -59,7 +59,14 @@ namespace TacoVsBurrito
         {
             _cards.Add(c);
             if(parentPlayer is not SelfPlayer )
+            {
                 c.DisableInteraction();
+                c.ToggleBackFace(true);
+            }
+            else
+            {
+                c.ToggleBackFace(false);
+            }
             ArrangeCardsAnimated();
         }
 

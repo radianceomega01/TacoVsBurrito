@@ -48,7 +48,7 @@ namespace TacoVsBurrito
         public static Action<CardBase> OnCardClickedForCraftCrow;
 
         // ---- Action cards ----
-        public static Action<CardBase>                      OnActionCardTrashed;   // (card trashed)
+        public static Action<ActionCardBase>                      OnActionCardTrashed;   // (card trashed)
         public static Action                                OnNoBuenoPlayed;  
         public static Action                                OnHealthInspector;  // (victim)
 

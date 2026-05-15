@@ -56,6 +56,7 @@ namespace TacoVsBurrito
                 return;
             _cards.Add(card);
             card.DisableInteraction();
+            card.ToggleBackFace(false);
             ArrangeCardsAnimated();
 
             if (card is HotSauceBossCard) HotSauceBossCardCount++;

@@ -267,7 +267,7 @@ MonoBehaviour:
   isBlockable: 0
   nameTxtField: {fileID: 4117807015978139650}
   DescriptionTxtField: {fileID: 9015011803136255482}
-  dragScale: 1.2
+  backFaceImage: {fileID: 4775050565133644700}
   cardValue: 1
   ValueTxtField: {fileID: 660552813068261590}
 --- !u!114 &4117807015978139650 stripped
@@ -281,6 +281,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &4775050565133644700 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 854983086661087704, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}
+  m_PrefabInstance: {fileID: 5303518143282872900}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5293600466274744921 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 67347514412693533, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}

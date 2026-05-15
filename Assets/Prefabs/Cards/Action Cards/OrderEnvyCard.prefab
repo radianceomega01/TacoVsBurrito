@@ -138,6 +138,8 @@ MonoBehaviour:
   isBlockable: 1
   nameTxtField: {fileID: 1737591910592304674}
   DescriptionTxtField: {fileID: 6639300305868338138}
+  backFaceImage: {fileID: 7168651141987624380}
+  requiresInputToResolve: 1
 --- !u!114 &6639300305868338138 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -149,3 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &7168651141987624380 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3406636661054117051, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5492957532989878535}
+  m_PrefabAsset: {fileID: 0}

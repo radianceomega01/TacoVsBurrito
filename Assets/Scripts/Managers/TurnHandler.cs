@@ -76,7 +76,7 @@ namespace TacoVsBurrito
             }
         }
 
-        void ManageActionCardTrashed(CardBase card)
+        void ManageActionCardTrashed(ActionCardBase card)
         {
             if(card.IsBlockable)
                 SwitchState(TurnState.NoBuenoWindowPhase);    

@@ -13,10 +13,12 @@ namespace TacoVsBurrito
         private TrashPile trashPile;
         private IReadOnlyList<PlayerBase> _players => GameManager.Instance.Players;
 
-        const int CARD_DRAW_DELAY_IN_MS = 1000;
-        const int THINKING_DELAY_IN_MS = 2000;
+        const int CARD_DRAW_DELAY_IN_MS = 1500;
+        const int THINKING_DELAY_IN_MS = 3000;
 
         bool isSelfTurnRunning = false;
+        ActionCardBase currentActionCardPlayed = null;
+        int noBuenoCounter = 0;
 
         protected override void Awake()
         {
@@ -26,6 +28,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStarted += ManageOnTurnStarted;
             GameEvents.OnTurnStateChanged += ManageOnTurnStateChanged;
             GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
+            GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
         }
 
         void OnDestroy()
@@ -33,20 +36,25 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStarted -= ManageOnTurnStarted;
             GameEvents.OnTurnStateChanged -= ManageOnTurnStateChanged;
             GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
+            GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
         }
-        
+
         void Start()
         {
             drawPile = GameManager.Instance.GetDrawPile();
             trashPile = GameManager.Instance.GetTrashPile();
+
+            aIBrain.SetDifficulty(AIDifficulty.Hard);
         }
 
         public AIBrain GetBrain() => aIBrain;
         async void ManageOnTurnStarted(PlayerBase player)
         {
-            if(player is not AIPlayer)
-                return;
-            DrawACard();
+            noBuenoCounter = 0;
+            currentActionCardPlayed = null;
+
+            if (player is AIPlayer && !drawPile.IsDrawPileEmpty)
+                DrawACard();
         }
 
         async void DrawACard()
@@ -63,10 +71,10 @@ namespace TacoVsBurrito
             var card = Hand.GetAt(decision.cardIndex);
             bool isLastCard = Hand.Count == 1;
 
-            if(card == null)
+            if (card == null)
                 return;
             Hand.RemoveCard(card);
-            if(decision.destIndex == -1)
+            if (decision.destIndex == -1)
             {
                 trashPile.DropCardAfterDrag(card);
             }
@@ -75,7 +83,7 @@ namespace TacoVsBurrito
                 _players[decision.destIndex].Meal.DropCardAfterDrag(card);
             }
 
-            if(isLastCard)
+            if (isLastCard)
             {
                 //Gameover
             }
@@ -85,28 +93,77 @@ namespace TacoVsBurrito
         {
             isSelfTurnRunning = player == this;
 
-            if(player is AIPlayer && state == TurnState.PlayPhase )
-                PlayACard();
+            if (player is AIPlayer && state == TurnState.PlayPhase)
+            {
+                if (state == TurnState.PlayPhase)
+                {
+                    PlayACard();
+                }
+                else if (state == TurnState.ActionResolvePhase)
+                {
+                    ResolveAction();
+                }
+            }
         }
 
-        private void ManageActionCardTrashed(CardBase card)
+        void ResolveAction()
         {
-            if(!isSelfTurnRunning)
-                AIConsiderNoBueno(card);
+            if(currentActionCardPlayed != null && currentActionCardPlayed.RequiresInputToResolve)
+            {
+                switch (currentActionCardPlayed)
+                {
+                    case CraftyCrowCard:
+                        aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
+                        if (victim != null)
+                            GameEvents.OnCraftyCrowActionTargeted?.Invoke(this, victim, cardToSteal);
+                        break;
+                    case OrderEnvyCard:
+                        var victim2 = aIBrain.ChooseOrderEnvyVictim(this, _players);
+                        if (victim2 != null)
+                            GameEvents.OnOrderEnvyActionTargeted?.Invoke(this, victim2);
+                        break;
+                }
+            }
         }
 
-        private void AIConsiderNoBueno(CardBase cardBeingPlayed)
+        void ManageActionCardTrashed(ActionCardBase card)
+        {
+            if (!isSelfTurnRunning)
+                AIConsiderNoBueno(card);
+            else
+            {
+                if (noBuenoCounter%2 == 1 && card is NoBuenoCard) //AI tries to cancel others nobueno for his action card
+                {
+                    PlayNoBueno();
+                }
+            }
+
+            if(card is not NoBuenoCard)
+            {
+                currentActionCardPlayed = card;
+            }
+        }
+        void ManageNoBuenoPlayed()
+        {
+            noBuenoCounter++;
+        }
+
+        void AIConsiderNoBueno(CardBase cardBeingPlayed)
         {
             if (aIBrain.ShouldPlayNoBueno(this, cardBeingPlayed))
             {
-                int index = aIBrain.FindFirstInHand<NoBuenoCard>(this);
-                if(index == -1)
-                    return;
-                else
-                {
-                    Hand.RemoveCard(Hand.GetAt(index));
-                    trashPile.DropCardAfterDrag(Hand.GetAt(index));
-                }
+                PlayNoBueno();
+            }
+        }
+        void PlayNoBueno()
+        {
+            int index = aIBrain.FindFirstInHand<NoBuenoCard>(this);
+            if (index == -1)
+                return;
+            else
+            {
+                Hand.RemoveCard(Hand.GetAt(index));
+                trashPile.Trash(Hand.GetAt(index));
             }
         }
     }

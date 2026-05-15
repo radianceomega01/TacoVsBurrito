@@ -1,6 +1,7 @@
 
 using System.Collections;
 using DG.Tweening;
+using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,10 +19,10 @@ namespace TacoVsBurrito
         [Header("Fields")]
         [SerializeField] protected TextMeshProUGUI nameTxtField;
         [SerializeField] protected TextMeshProUGUI DescriptionTxtField;
+        [SerializeField] protected GameObject backFaceImage;
 
 
-        [Header("Drag Settings")]
-        [SerializeField] private float dragScale = 1.2f;
+        private const float DRAG_SCALE = 1.2f;
 
         private RectTransform _rectTransform;
         private Canvas canvas;
@@ -106,7 +107,7 @@ namespace TacoVsBurrito
             _canvasGroup.blocksRaycasts = false;
 
             // Optional visual feedback
-            transform.localScale = Vector3.one * dragScale;
+            transform.localScale = Vector3.one * DRAG_SCALE;
             transform.SetParent(canvas.transform); // Move to top-level canvas to avoid clipping
 
             StartCoroutine(PickCardBeforeDrag(eventData));
@@ -197,6 +198,10 @@ namespace TacoVsBurrito
         public void ToggleInteractionType()
         {
             interactionType = (interactionType == InteractionType.Drag) ? InteractionType.Click : InteractionType.Drag;
+        }
+        public void ToggleBackFace(bool showBack)
+        {
+            backFaceImage.SetActive(showBack);
         }
 
         public float GetWidth() => _rectTransform.sizeDelta.x;

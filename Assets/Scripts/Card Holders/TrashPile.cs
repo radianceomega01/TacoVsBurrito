@@ -31,11 +31,16 @@ namespace TacoVsBurrito
             card.ChangePosition(cardsTransform.position);
             card.ChangeParent(cardsTransform);
             card.DisableInteraction();
+            card.ToggleBackFace(false);
             currentTrashedCard = card;
             
-            if(card is ActionCardBase)
+            if(card is ActionCardBase @actionCard)
             {
-                GameEvents.OnActionCardTrashed?.Invoke(card);
+                GameEvents.OnActionCardTrashed?.Invoke(@actionCard);
+            }
+            else
+            {
+               GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
             }
         }
 
@@ -71,17 +76,13 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             Trash(card);
-            if(card is not ActionCardBase @base)
-            {
-                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
-            }
         }
 
         void CheckAndExecuteAction()
         {
-            if(currentTrashedCard is ActionCardBase @base)
+            if(currentTrashedCard is ActionCardBase @card && currentTrashedCard is not NoBuenoCard) //No bueno is immediately executed
             {
-                @base.ExecuteAction();
+                @card.ExecuteAction();
             }
         }
 

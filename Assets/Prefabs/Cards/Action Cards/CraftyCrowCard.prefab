@@ -112,6 +112,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 584044444015055092}
   m_SourcePrefab: {fileID: 100100000, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!1 &1825894492159764534 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3406636661054117051, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 3895662759059291277}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2740795609969868368 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -146,6 +151,8 @@ MonoBehaviour:
   isBlockable: 1
   nameTxtField: {fileID: 7077373574271130536}
   DescriptionTxtField: {fileID: 2740795609969868368}
+  backFaceImage: {fileID: 1825894492159764534}
+  requiresInputToResolve: 1
 --- !u!114 &7077373574271130536 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6064041265733347109, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

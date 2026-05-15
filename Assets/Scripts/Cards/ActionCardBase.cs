@@ -7,6 +7,9 @@ namespace TacoVsBurrito
 {
     public abstract class ActionCardBase : CardBase
     {
+        [SerializeField] protected bool requiresInputToResolve = false;
+
+        public bool RequiresInputToResolve => requiresInputToResolve;
         protected ActionResolver resolver;
 
         protected override void Awake() {
