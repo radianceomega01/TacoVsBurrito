@@ -9,5 +9,6 @@ namespace TacoVsBurrito
         {
             //throw new System.NotImplementedException();
         }
+        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
     }
 }

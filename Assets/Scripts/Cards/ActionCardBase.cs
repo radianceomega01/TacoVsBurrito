@@ -7,10 +7,9 @@ namespace TacoVsBurrito
 {
     public abstract class ActionCardBase : CardBase
     {
-        [SerializeField] protected bool requiresInputToResolve = false;
-
-        public bool RequiresInputToResolve => requiresInputToResolve;
+        public bool IsTargetTypeAction => GetStateOnTrashed() == TurnState.ActionTargetedPhase;
         protected ActionResolver resolver;
+        protected bool isActiveOnTrashPile = false;
 
         protected override void Awake() {
             base.Awake();
@@ -27,5 +26,6 @@ namespace TacoVsBurrito
         }
         
         public abstract void ExecuteAction();
+        public virtual TurnState GetStateOnTrashed() => TurnState.ActionResolvePhase; 
     }
 }

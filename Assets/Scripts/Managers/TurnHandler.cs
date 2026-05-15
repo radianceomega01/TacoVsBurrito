@@ -25,6 +25,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded += ManageTurnEnded;
             GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
+            GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
         }
 
@@ -35,6 +36,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded -= ManageTurnEnded;
             GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
+            GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
         }
 
@@ -78,10 +80,7 @@ namespace TacoVsBurrito
 
         void ManageActionCardTrashed(ActionCardBase card)
         {
-            if(card.IsBlockable)
-                SwitchState(TurnState.NoBuenoWindowPhase);    
-            else
-                SwitchState(TurnState.ActionResolvePhase);
+            SwitchState(card.GetStateOnTrashed());    
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)
@@ -93,6 +92,10 @@ namespace TacoVsBurrito
         void ManageDrawPhaseSkipped()
         {
             GoToNextState();
+        }
+        void ManageStartNoBuenoInterruptWindow()
+        {
+            StartNoBuenoTimer();
         }
         async void StartNoBuenoTimer()
         {
@@ -131,6 +134,7 @@ namespace TacoVsBurrito
         None,
         DrawPhase,
         PlayPhase,
+        ActionTargetedPhase,
         NoBuenoWindowPhase,
         ActionResolvePhase
     }

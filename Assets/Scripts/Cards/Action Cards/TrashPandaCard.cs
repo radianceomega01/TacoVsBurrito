@@ -21,5 +21,6 @@ namespace TacoVsBurrito
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer); // skip play phase 
             }
         }
+        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetedPhase;
     }
 }

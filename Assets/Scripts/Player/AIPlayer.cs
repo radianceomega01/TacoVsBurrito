@@ -108,7 +108,7 @@ namespace TacoVsBurrito
 
         void ResolveAction()
         {
-            if(currentActionCardPlayed != null && currentActionCardPlayed.RequiresInputToResolve)
+            if(currentActionCardPlayed != null && currentActionCardPlayed.IsTargetTypeAction)
             {
                 switch (currentActionCardPlayed)
                 {

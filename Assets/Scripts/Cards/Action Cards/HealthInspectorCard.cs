@@ -11,5 +11,6 @@ namespace TacoVsBurrito
             await Task.Delay(700);
             resolver.ResolveHealthInspector(GameManager.Instance.CurrentPlayer);
         }
+        public override TurnState GetStateOnTrashed() => TurnState.ActionResolvePhase;
     }
 }

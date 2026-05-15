@@ -25,7 +25,6 @@ namespace TacoVsBurrito
         // ---- Draw pile ----
         public static Action<PlayerBase, CardBase>       OnCardDrawn;        // (drawer, card drawn)
         public static Action                             OnDrawPileEmpty;    // draw pile exhausted
-        public static Action                             OnAdvanceToNextPlayer;
 
         // ---- Hand changes ----
         public static Action<PlayerBase, CardBase>      OnCardAddedToHand;
@@ -49,6 +48,7 @@ namespace TacoVsBurrito
 
         // ---- Action cards ----
         public static Action<ActionCardBase>                      OnActionCardTrashed;   // (card trashed)
+        public static Action                                OnStartNoBuenoInterruptWindow;
         public static Action                                OnNoBuenoPlayed;  
         public static Action                                OnHealthInspector;  // (victim)
 

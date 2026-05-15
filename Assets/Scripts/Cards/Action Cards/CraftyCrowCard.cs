@@ -1,3 +1,4 @@
+using System;
 using TacoVsBurrito;
 using UnityEngine;
 
@@ -5,22 +6,42 @@ namespace TacoVsBurrito
 {
     public class CraftyCrowCard : ActionCardBase
     {
+        PlayerBase caster;
+        PlayerBase victim;
+        CardBase victimCard;
         protected override void Awake() {
             base.Awake();
-            GameEvents.OnCraftyCrowActionTargeted += manageActionTargeted;
+            GameEvents.OnCraftyCrowActionTargeted += ManageActionTargeted;
+            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
         protected override void OnDestroy() {
             base.OnDestroy();
-            GameEvents.OnCraftyCrowActionTargeted -= manageActionTargeted;
+            GameEvents.OnCraftyCrowActionTargeted -= ManageActionTargeted;
+            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
         public override void ExecuteAction()
         {
+            isActiveOnTrashPile = true;
             GameEvents.OnCraftyCrowActionByPlayer?.Invoke(GameManager.Instance.CurrentPlayer);
         }
-        void manageActionTargeted(PlayerBase caster, PlayerBase victim, CardBase card)
+        void ManageActionTargeted(PlayerBase caster, PlayerBase victim, CardBase card)
         {
-            resolver.ResolveCraftyCrow(caster, victim, card);
+            if(!isActiveOnTrashPile)
+                return;
+
+            this.caster = caster;
+            this.victim = victim;
+            this.victimCard = card;
+            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke();
         }
+        void ManageTurnStateChanged(TurnState state, PlayerBase @base)
+        {
+            if(state != TurnState.ActionResolvePhase || !isActiveOnTrashPile)
+                return;
+            resolver.ResolveCraftyCrow(caster, victim, victimCard);
+            isActiveOnTrashPile = false;    
+        }
+        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetedPhase;
     }
 }
