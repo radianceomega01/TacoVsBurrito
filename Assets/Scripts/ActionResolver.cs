@@ -161,6 +161,7 @@ namespace TacoVsBurrito
             }
 
             caster.Hand.AddCard(chosenCard);
+            _trashPile.RemoveCard(chosenCard);
             GameEvents.OnCardAddedToHand?.Invoke(caster, chosenCard);
             GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved '{chosenCard.Name}' from the Trash pile.");
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);

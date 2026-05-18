@@ -7,7 +7,7 @@ namespace TacoVsBurrito
 {
     public abstract class ActionCardBase : CardBase
     {
-        public bool IsTargetTypeAction => GetStateOnTrashed() == TurnState.ActionTargetedPhase;
+        public bool IsTargetTypeAction => GetStateOnTrashed() == TurnState.ActionTargetPhase;
         protected ActionResolver resolver;
         protected bool isActiveOnTrashPile = false;
 

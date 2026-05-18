@@ -41,6 +41,6 @@ namespace TacoVsBurrito
             resolver.ResolveOrderEnvy(caster, victim);
             isActiveOnTrashPile = false;    
         }
-        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetedPhase;
+        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
     }
 }

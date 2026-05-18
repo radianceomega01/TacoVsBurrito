@@ -19,7 +19,7 @@ namespace TacoVsBurrito
         [Header("Fields")]
         [SerializeField] protected TextMeshProUGUI nameTxtField;
         [SerializeField] protected TextMeshProUGUI DescriptionTxtField;
-        [SerializeField] protected GameObject backFaceImage;
+        [SerializeField] protected Transform backFaceImage;
 
 
         private const float DRAG_SCALE = 1.2f;
@@ -89,7 +89,7 @@ namespace TacoVsBurrito
         {
             if(interactionType == InteractionType.Drag) return;
 
-            GameEvents.OnCardClickedForCraftCrow?.Invoke(this);
+            GameEvents.OnCardClickedForActionTarget?.Invoke(this);
         }
         // =========================================================
         // BEGIN DRAG
@@ -201,7 +201,7 @@ namespace TacoVsBurrito
         }
         public void ToggleBackFace(bool showBack)
         {
-            backFaceImage.SetActive(showBack);
+            backFaceImage.gameObject.SetActive(showBack);
         }
 
         public float GetWidth() => _rectTransform.sizeDelta.x;

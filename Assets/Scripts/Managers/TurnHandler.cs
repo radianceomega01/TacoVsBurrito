@@ -85,6 +85,10 @@ namespace TacoVsBurrito
             else if(currentTurnState == TurnState.ActionResolvePhase)
             {
                 card.ExecuteAction();
+            }
+            else if(currentTurnState == TurnState.SkipPhase)
+            {
+                ManageTurnEnded(GameManager.Instance.CurrentPlayer);
             }    
         }
 
@@ -139,8 +143,9 @@ namespace TacoVsBurrito
         None,
         DrawPhase,
         PlayPhase,
-        ActionTargetedPhase,
+        ActionTargetPhase,
         NoBuenoWindowPhase,
-        ActionResolvePhase
+        ActionResolvePhase,
+        SkipPhase
     }
 }

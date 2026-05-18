@@ -20,5 +20,6 @@ namespace TacoVsBurrito
         public override void ExecuteAction() { }
 
         public override int GetModifiedMealScore(int currentScore) => currentScore * VALUE_MULTIPLIER;
+        public override TurnState GetStateOnTrashed() => TurnState.SkipPhase;
     }
 }
