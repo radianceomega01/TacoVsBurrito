@@ -7,7 +7,7 @@ namespace TacoVsBurrito
 {
     public class TurnHandler
     {
-        TurnState turnState = TurnState.None;
+        TurnState currentTurnState = TurnState.None;
         List<PlayerBase> activePlayers;
         public PlayerBase CurrentPlayer => activePlayers[currentPlayerIndex];
 
@@ -57,7 +57,7 @@ namespace TacoVsBurrito
 
         public void GoToNextState()
         {
-            switch(turnState)
+            switch(currentTurnState)
             {
                 case TurnState.None:
                     SwitchState(TurnState.DrawPhase);
@@ -69,18 +69,23 @@ namespace TacoVsBurrito
         }
         void SwitchState(TurnState turnState)
         {
-            this.turnState = turnState;
+            currentTurnState = turnState;
             Debug.Log($"State changed for player {CurrentPlayer.GetType()} to {turnState.ToString()}");
             GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
-            if (turnState == TurnState.NoBuenoWindowPhase)
-            {
-                StartNoBuenoTimer();
-            }
+            
         }
 
         void ManageActionCardTrashed(ActionCardBase card)
         {
-            SwitchState(card.GetStateOnTrashed());    
+            SwitchState(card.GetStateOnTrashed());
+            if (currentTurnState == TurnState.NoBuenoWindowPhase)
+            {
+                StartNoBuenoTimer();
+            }
+            else if(currentTurnState == TurnState.ActionResolvePhase)
+            {
+                card.ExecuteAction();
+            }    
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)
@@ -93,7 +98,7 @@ namespace TacoVsBurrito
         {
             GoToNextState();
         }
-        void ManageStartNoBuenoInterruptWindow()
+        void ManageStartNoBuenoInterruptWindow(ActionCardBase card)
         {
             StartNoBuenoTimer();
         }

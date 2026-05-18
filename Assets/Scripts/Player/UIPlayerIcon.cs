@@ -13,11 +13,13 @@ namespace TacoVsBurrito
         void Awake()
         {
             GameEvents.OnOrderEnvyAction += ManageOrderEnvyAction;
+            GameEvents.OnOrderEnvyActionTargeted += ManageOrderEnvyActionTargeted;
         }
 
         void OnDestroy()
         {
             GameEvents.OnOrderEnvyAction -= ManageOrderEnvyAction;
+            GameEvents.OnOrderEnvyActionTargeted -= ManageOrderEnvyActionTargeted;
         }
 
         void Start()
@@ -28,17 +30,24 @@ namespace TacoVsBurrito
         public void OnIconClick()
         {
             GameEvents.OnOrderEnvyActionTargeted?.Invoke(GameManager.Instance.CurrentPlayer, parentPlayer);
+            ToggleInteraction(false);
         }
 
-        void EnableInteraction()
+        void ToggleInteraction(bool value)
         {
-            iconImage.raycastTarget = true;
+            iconImage.raycastTarget = value;
         }
         void ManageOrderEnvyAction(PlayerBase player)
         {
             if(parentPlayer == player)
                 return;
-            EnableInteraction();
+            ToggleInteraction(true);
+        }
+        void ManageOrderEnvyActionTargeted(PlayerBase player, PlayerBase victim)
+        {
+            if(parentPlayer == player)
+                return;
+            ToggleInteraction(false);
         }
     }
 }

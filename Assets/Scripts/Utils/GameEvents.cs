@@ -34,8 +34,7 @@ namespace TacoVsBurrito
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCardPlacedInMeal; // (placer, destPlayer, card)
         public static Action<PlayerBase>                        OnMealCleared;      // Health Inspector wipe
         public static Action<PlayerBase>                        OnCraftyCrowActionByPlayer;      
-        public static Action<PlayerBase, PlayerBase, CardBase>  OnCraftyCrowActionTargeted;   // (caster, victim, card being targeted for steal)
-        public static Action<PlayerBase>                        OnCraftyCrowActionResolved;      
+        public static Action<PlayerBase, PlayerBase, CardBase>  OnCraftyCrowActionTargeted;   // (caster, victim, card being targeted for steal)  
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCardStolenFromMeal; // (thief, victim, card)
         public static Action<PlayerBase>                        OnOrderEnvyAction;  // (player)
         public static Action<PlayerBase, PlayerBase>            OnOrderEnvyActionTargeted;    // (swapper, swapTarget)
@@ -48,7 +47,7 @@ namespace TacoVsBurrito
 
         // ---- Action cards ----
         public static Action<ActionCardBase>                      OnActionCardTrashed;   // (card trashed)
-        public static Action                                OnStartNoBuenoInterruptWindow;
+        public static Action<ActionCardBase>                      OnStartNoBuenoInterruptWindow;
         public static Action                                OnNoBuenoPlayed;  
         public static Action                                OnHealthInspector;  // (victim)
 

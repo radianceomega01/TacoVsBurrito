@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,7 @@ namespace TacoVsBurrito
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
-        
+
         public void Trash(CardBase card)
         {
             _trashPile.Add(card);
@@ -83,15 +84,20 @@ namespace TacoVsBurrito
             if(currentTrashedCard is ActionCardBase @card && currentTrashedCard is not NoBuenoCard) //No bueno is immediately executed
             {
                 @card.ExecuteAction();
+                currentTrashedCard = null;
             }
         }
 
         void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {
             currentTurnState = state;
-            if(state == TurnState.ActionResolvePhase)
+            if(state == TurnState.ActionTargetedPhase)
             {
                 CheckAndExecuteAction();
+            }
+            else if(state == TurnState.ActionResolvePhase)
+            {
+                currentTrashedCard = null;
             }
         }
     }

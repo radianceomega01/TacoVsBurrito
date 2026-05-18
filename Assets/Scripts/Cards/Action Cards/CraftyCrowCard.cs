@@ -33,7 +33,7 @@ namespace TacoVsBurrito
             this.caster = caster;
             this.victim = victim;
             this.victimCard = card;
-            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke();
+            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
         }
         void ManageTurnStateChanged(TurnState state, PlayerBase @base)
         {

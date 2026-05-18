@@ -26,10 +26,13 @@ namespace TacoVsBurrito
         }
         void ManageActionTargeted(PlayerBase caster, PlayerBase victim)
         {
+            if(!isActiveOnTrashPile)
+                return;
+
             this.caster = caster;
             this.victim = victim;
             
-            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke();
+            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
         }
         void ManageTurnStateChanged(TurnState state, PlayerBase @base)
         {

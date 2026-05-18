@@ -27,7 +27,7 @@ namespace TacoVsBurrito
 
             GameEvents.OnTurnStarted += ManageOnTurnStarted;
             GameEvents.OnTurnStateChanged += ManageOnTurnStateChanged;
-            GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
+            GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
         }
 
@@ -35,7 +35,7 @@ namespace TacoVsBurrito
         {
             GameEvents.OnTurnStarted -= ManageOnTurnStarted;
             GameEvents.OnTurnStateChanged -= ManageOnTurnStateChanged;
-            GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
+            GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
         }
 
@@ -118,15 +118,15 @@ namespace TacoVsBurrito
                             GameEvents.OnCraftyCrowActionTargeted?.Invoke(this, victim, cardToSteal);
                         break;
                     case OrderEnvyCard:
-                        var victim2 = aIBrain.ChooseOrderEnvyVictim(this, _players);
-                        if (victim2 != null)
-                            GameEvents.OnOrderEnvyActionTargeted?.Invoke(this, victim2);
+                        var envyVictim = aIBrain.ChooseOrderEnvyVictim(this, _players);
+                        if (envyVictim != null)
+                            GameEvents.OnOrderEnvyActionTargeted?.Invoke(this, envyVictim);
                         break;
                 }
             }
         }
 
-        void ManageActionCardTrashed(ActionCardBase card)
+        void ManageNoBuenoInterruptWindow(ActionCardBase card)
         {
             if (!isSelfTurnRunning)
                 AIConsiderNoBueno(card);
@@ -150,13 +150,14 @@ namespace TacoVsBurrito
 
         void AIConsiderNoBueno(CardBase cardBeingPlayed)
         {
-            if (aIBrain.ShouldPlayNoBueno(this, cardBeingPlayed))
-            {
-                PlayNoBueno();
-            }
+            // if (aIBrain.ShouldPlayNoBueno(this, cardBeingPlayed))
+            // {
+            //     PlayNoBueno();
+            // }
         }
-        void PlayNoBueno()
+        async void PlayNoBueno()
         {
+            await Task.Delay(1500);
             int index = aIBrain.FindFirstInHand<NoBuenoCard>(this);
             if (index == -1)
                 return;
