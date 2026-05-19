@@ -15,8 +15,6 @@ namespace TacoVsBurrito
         private List<CardBase> _cards = new();
         private TurnState currentTurnState;
 
-        private CardBase currentTrashedCard;
-
         void Awake()
         {
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
@@ -34,7 +32,6 @@ namespace TacoVsBurrito
             card.ChangeParent(cardsTransform);
             card.DisableInteraction();
             card.ToggleBackFace(false);
-            currentTrashedCard = card;
 
             if (card is ActionCardBase @actionCard)
             {
@@ -148,26 +145,10 @@ namespace TacoVsBurrito
             Trash(card);
         }
 
-        void CheckAndExecuteAction()
-        {
-            if (currentTrashedCard is ActionCardBase @card && currentTrashedCard is not NoBuenoCard) //No bueno is immediately executed
-            {
-                @card.ExecuteAction();
-                currentTrashedCard = null;
-            }
-        }
 
         void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {
             currentTurnState = state;
-            if (state == TurnState.ActionTargetPhase)
-            {
-                CheckAndExecuteAction();
-            }
-            else if (state == TurnState.ActionResolvePhase || state == TurnState.SkipPhase)
-            {
-                currentTrashedCard = null;
-            }
         }
     }
 }

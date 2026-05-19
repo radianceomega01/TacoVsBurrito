@@ -14,6 +14,7 @@ namespace TacoVsBurrito
         int currentPlayerIndex = 0;
         CancellationTokenSource noBuenoTimerCts;
         private int noBuenoCounter = 0;
+        private CardBase currentTrashedCard;
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
 
@@ -77,19 +78,35 @@ namespace TacoVsBurrito
 
         void ManageActionCardTrashed(ActionCardBase card)
         {
+            currentTrashedCard = card;
+
             SwitchState(card.GetStateOnTrashed());
-            if (currentTurnState == TurnState.NoBuenoWindowPhase)
+            if (currentTurnState == TurnState.ActionTargetPhase)
+            {
+                CheckAndExecuteAction();
+                currentTrashedCard = null;
+            }
+            else if (currentTurnState == TurnState.NoBuenoWindowPhase)
             {
                 StartNoBuenoTimer();
             }
             else if(currentTurnState == TurnState.ActionResolvePhase)
             {
                 card.ExecuteAction();
+                currentTrashedCard = null;
             }
             else if(currentTurnState == TurnState.SkipPhase)
             {
                 ManageTurnEnded(GameManager.Instance.CurrentPlayer);
+                currentTrashedCard = null;
             }    
+        }
+        void CheckAndExecuteAction()
+        {
+            if (currentTrashedCard is ActionCardBase @card && currentTrashedCard is not NoBuenoCard) //No bueno is immediately executed
+            {
+                @card.ExecuteAction();
+            }
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)

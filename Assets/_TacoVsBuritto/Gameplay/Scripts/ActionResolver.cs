@@ -158,10 +158,11 @@ namespace TacoVsBurrito
                 ResolveHealthInspector(caster);
                 GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved a Health Inspector from the Trash pile! " +
                         $"It triggers immediately!");
+                return;        
             }
 
-            caster.Hand.AddCard(chosenCard);
             _trashPile.RemoveCard(chosenCard);
+            caster.Hand.AddCard(chosenCard);
             GameEvents.OnCardAddedToHand?.Invoke(caster, chosenCard);
             GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved '{chosenCard.Name}' from the Trash pile.");
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);

@@ -40,7 +40,7 @@ namespace TacoVsBurrito
         public static Action<PlayerBase, PlayerBase>            OnOrderEnvyActionTargeted;    // (swapper, swapTarget)
         public static Action<PlayerBase>                        OnMealScoreChanged; // any meal update
         public static Action<Dictionary<CardBase, int>>         OnTrashPandaAction; 
-        public static Action<CardBase>                          OnTrashPandaActionTargeted;  
+        public static Action<CardBase>                          OnTrashPileCardTargeted;  
         
         // ---- Card Drag ----
         public static Action           OnCardDragBegin;

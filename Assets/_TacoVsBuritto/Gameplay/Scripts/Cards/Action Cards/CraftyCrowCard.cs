@@ -40,8 +40,16 @@ namespace TacoVsBurrito
             if(state != TurnState.ActionResolvePhase || !isActiveOnTrashPile)
                 return;
             resolver.ResolveCraftyCrow(caster, victim, victimCard);
-            isActiveOnTrashPile = false;    
+            ResetParams();    
         }
+        void ResetParams()
+        {
+            isActiveOnTrashPile = false;
+            caster = null;
+            victim = null;
+            victimCard = null;
+        }
+
         public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
     }
 }

@@ -93,7 +93,7 @@ namespace TacoVsBurrito
         {
             isSelfTurnRunning = player == this;
 
-            if (player is AIPlayer && state == TurnState.PlayPhase)
+            if (player is AIPlayer)
             {
                 if (state == TurnState.PlayPhase)
                 {

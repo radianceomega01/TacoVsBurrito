@@ -15,11 +15,13 @@ namespace TacoVsBurrito
         {
             GameEvents.OnTrashPandaAction += ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget += CardClickedForActionTarget;
+            GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoWindowStarted;
         }
         void OnDestroy()
         {
             GameEvents.OnTrashPandaAction -= ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget -= CardClickedForActionTarget;
+            GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoWindowStarted;
         }
 
         void ManageTrashPandaAction(Dictionary<CardBase, int> cardMap)
@@ -46,19 +48,27 @@ namespace TacoVsBurrito
         {
             if(trashPileCards == null)
                 return;
-            trashPileCards.Remove(card);
+
+            trashPileCards.ForEach(card => card.ToggleInteractionType());
+             
             GameManager.Instance.GetTrashPile().PutCardsBack(trashPileCards);    
-            GameEvents.OnTrashPandaActionTargeted?.Invoke(card);
+            GameEvents.OnTrashPileCardTargeted?.Invoke(card);
 
             ResetParams();  
         }
+
+        void ManageNoBuenoWindowStarted(ActionCardBase actionCard)
+        {
+            //ResetParams();
+        }
+        
         void ResetParams()
         {
             trashPileCards.Clear();
             rootTransform.gameObject.SetActive(false);
         }
 
-        public static List<Vector3> GenerateCardPositions(Vector3 startPosition, int cardCount, float horizontalSpacing = 2f, float verticalSpacing = 2.5f)
+        static List<Vector3> GenerateCardPositions(Vector3 startPosition, int cardCount, float horizontalSpacing = 2f, float verticalSpacing = 2.5f)
         {
             List<Vector3> positions = new();
 

@@ -39,7 +39,13 @@ namespace TacoVsBurrito
             if(state != TurnState.ActionResolvePhase || !isActiveOnTrashPile)
                 return;
             resolver.ResolveOrderEnvy(caster, victim);
-            isActiveOnTrashPile = false;    
+            ResetParams();    
+        }
+        void ResetParams()
+        {
+            isActiveOnTrashPile = false;
+            caster = null;
+            victim = null;
         }
         public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
     }
