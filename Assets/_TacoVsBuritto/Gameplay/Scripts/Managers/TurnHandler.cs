@@ -81,24 +81,23 @@ namespace TacoVsBurrito
             currentTrashedCard = card;
 
             SwitchState(card.GetStateOnTrashed());
-            if (currentTurnState == TurnState.ActionTargetPhase)
+            switch (currentTurnState)
             {
-                CheckAndExecuteAction();
-                currentTrashedCard = null;
-            }
-            else if (currentTurnState == TurnState.NoBuenoWindowPhase)
-            {
-                StartNoBuenoTimer();
-            }
-            else if(currentTurnState == TurnState.ActionResolvePhase)
-            {
-                card.ExecuteAction();
-                currentTrashedCard = null;
-            }
-            else if(currentTurnState == TurnState.SkipPhase)
-            {
-                ManageTurnEnded(GameManager.Instance.CurrentPlayer);
-                currentTrashedCard = null;
+                case TurnState.ActionTargetPhase:
+                    CheckAndExecuteAction();
+                    currentTrashedCard = null;
+                    break;
+                case TurnState.NoBuenoWindowPhase:
+                    StartNoBuenoTimer();
+                    break;
+                case TurnState.ActionResolvePhase:
+                    card.ExecuteAction();
+                    currentTrashedCard = null;
+                    break;
+                case TurnState.SkipPhase:
+                    ManageTurnEnded(GameManager.Instance.CurrentPlayer);
+                    currentTrashedCard = null;
+                    break;
             }    
         }
         void CheckAndExecuteAction()

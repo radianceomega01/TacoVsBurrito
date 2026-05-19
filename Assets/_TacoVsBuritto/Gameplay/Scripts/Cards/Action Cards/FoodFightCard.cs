@@ -7,9 +7,8 @@ namespace TacoVsBurrito
     {
         public override void ExecuteAction()
         {
-            //throw new System.NotImplementedException();
+            GameEvents.OnFoodFightAction?.Invoke();
         }
-        //public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
-        public override TurnState GetStateOnTrashed() => TurnState.SkipPhase;
+        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
     }
 }

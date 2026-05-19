@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainScreen.unity
+    path: Assets/_TacoVsBuritto/Gameplay/Scenes/MainScreen.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/GamePlayScreen.unity
+    path: Assets/_TacoVsBuritto/Gameplay/Scenes/GamePlayScreen.unity
     guid: da32a3d23eec07e4da61e73b34f62382
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

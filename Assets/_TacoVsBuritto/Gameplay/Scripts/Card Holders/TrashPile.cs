@@ -27,12 +27,7 @@ namespace TacoVsBurrito
 
         public void Trash(CardBase card)
         {
-            _cards.Add(card);
-            card.ChangePosition(cardsTransform.position);
-            card.ChangeParent(cardsTransform);
-            card.DisableInteraction();
-            card.ToggleBackFace(false);
-
+            SetCardOnPile(card);
             if (card is ActionCardBase @actionCard)
             {
                 GameEvents.OnActionCardTrashed?.Invoke(@actionCard);
@@ -41,6 +36,14 @@ namespace TacoVsBurrito
             {
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
             }
+        }
+        void SetCardOnPile(CardBase card)
+        {
+            _cards.Add(card);
+            card.ChangePosition(cardsTransform.position);
+            card.ChangeParent(cardsTransform);
+            card.DisableInteraction();
+            card.ToggleBackFace(false);
         }
 
         public void RemoveCard(CardBase card)
@@ -59,7 +62,7 @@ namespace TacoVsBurrito
 
         public void TrashAll(IEnumerable<CardBase> cards)
         {
-            foreach (var c in cards) Trash(c);
+            foreach (var c in cards) SetCardOnPile(c);
         }
 
         /// View the full trash pile (for Trash Panda selection).
