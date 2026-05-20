@@ -14,19 +14,41 @@ namespace TacoVsBurrito
         List<PlayerBase> activePlayersInRound;
         List<CardBase> cardsInDrawPile;
         List<CardBase> cardsDrawn = new();
-        Dictionary<PlayerBase, CardBase> playerCardInRound;
+        Dictionary<PlayerBase, CardBase> playerCardInRound = new();
         int currentPlayerIndex;
 
         private void Awake()
         {
             GameEvents.OnFoodFightAction += BeginFoodFight;
-            foodFightDrawPile.OnCardDrawn += OnCardDrawn;
         }
 
         private void OnDestroy()
         {
             GameEvents.OnFoodFightAction -= BeginFoodFight;
+        }
+
+        void SubscribeLocalEvents()
+        {
+            foodFightDrawPile.OnCardDrawn += OnCardDrawn;
+        }
+        void UnSubscribeLocalEvents()
+        {
             foodFightDrawPile.OnCardDrawn -= OnCardDrawn;
+        }
+        void BeginFoodFight()
+        {
+            drawPile = GameManager.Instance.GetDrawPile();
+            allPlayers = new(GameManager.Instance.Players);
+            activePlayersInRound = new(GameManager.Instance.Players);
+            cardsInDrawPile = new(drawPile.PileCards);
+
+            if (CancelFoodFightOnInsufficientCards())
+            {
+                return;
+            }
+
+            EnableFoodFightDrawPile();
+            BeginRound(GameManager.Instance.CurrentPlayer);
         }
 
         void OnCardDrawn(CardBase card, PlayerBase player)
@@ -58,27 +80,14 @@ namespace TacoVsBurrito
         {
             drawPile.enabled = false;
             foodFightDrawPile = drawPile.AddComponent<FoodFightDrawPile>();
+            SubscribeLocalEvents();
             foodFightDrawPile.Init();
         }
         void DisableFoodFightDrawPile()
         {
             drawPile.enabled = true;
-            UnityEngine.Object.Destroy(drawPile.GetComponent<FoodFightDrawPile>());
-        }
-        void BeginFoodFight()
-        {
-            drawPile = GameManager.Instance.GetDrawPile();
-            allPlayers = new(GameManager.Instance.Players);
-            activePlayersInRound = new(GameManager.Instance.Players);
-            cardsInDrawPile = new(drawPile.PileCards);
-
-            if (CancelFoodFightOnInsufficientCards())
-            {
-                return;
-            }
-
-            EnableFoodFightDrawPile();
-            BeginRound(GameManager.Instance.CurrentPlayer);
+            UnSubscribeLocalEvents();
+            Destroy(foodFightDrawPile);
         }
 
         void BeginRound(PlayerBase player)
@@ -106,7 +115,7 @@ namespace TacoVsBurrito
         void FinishFoodFight(PlayerBase winner)
         {
             DisableFoodFightDrawPile();
-            foodFightDrawPile.ResetCards();
+            foodFightDrawPile.Reset();
             GameEvents.OnFoodFightFinished?.Invoke(winner);
             GameEvents.OnFoodFightCardsDrawn?.Invoke(cardsDrawn.RetrieveUniqueCards());
 
@@ -119,6 +128,7 @@ namespace TacoVsBurrito
             {
                 GameEvents.OnLogMessage?.Invoke("Food Fight cancelled due to insifficient cards in Draw Pile!");
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+                foodFightDrawPile.Reset();
                 return true;
             }
             return false;

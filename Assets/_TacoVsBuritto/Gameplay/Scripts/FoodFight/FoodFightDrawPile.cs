@@ -9,7 +9,7 @@ namespace TacoVsBurrito
     {
         DrawPile drawPile;
 
-        const float CARD_OFFSET_FROM_PLAYER = 10f;
+        const float CARD_OFFSET_FROM_PILE = 14f;
         List<CardBase> cardsDrawn = new();
 
         public Action<CardBase, PlayerBase> OnCardDrawn;
@@ -21,9 +21,7 @@ namespace TacoVsBurrito
 
         public void Init()
         {
-            drawPile.RemoveBtnListener();
             drawPile.AddBtnListener(OnDrawBtnClicked);
-
         }
 
         void OnDrawBtnClicked()
@@ -38,18 +36,21 @@ namespace TacoVsBurrito
         }
         public Vector3 GetOffsetPositionForCard(Vector3 playerPosition)
         {
-            Vector3 directionToDeck = Vector3.up * (transform.position - playerPosition).normalized.y;
-            Vector3 finalPosition = playerPosition + directionToDeck * CARD_OFFSET_FROM_PLAYER;
+            Vector3 modifiedPilePosition = new Vector3(playerPosition.x, transform.position.y, transform.position.z);
+            Vector3 directionToPlayer = (playerPosition - modifiedPilePosition).normalized;
+            Vector3 finalPosition = modifiedPilePosition + directionToPlayer * CARD_OFFSET_FROM_PILE;
 
             return finalPosition;
         }
-        public void ResetCards()
+        public void Reset()
         {
             cardsDrawn.ForEach(card =>
             {
                 card.ChangePosition(drawPile.transform.position);
                 card.ToggleBackFace(true);
             });
+
+            drawPile.ResetBtnListener();
         }
     }
 }

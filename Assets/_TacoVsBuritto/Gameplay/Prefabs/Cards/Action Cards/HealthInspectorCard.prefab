@@ -34,11 +34,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2626736977738751358, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 120
+      value: 135
       objectReference: {fileID: 0}
     - target: {fileID: 2626736977738751358, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 175
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 2626736977738751358, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -138,8 +138,7 @@ MonoBehaviour:
   isBlockable: 0
   nameTxtField: {fileID: 86108330545388899}
   DescriptionTxtField: {fileID: 4976277216565590171}
-  backFaceImage: {fileID: 8813803454908641021}
-  requiresInputToResolve: 0
+  backFaceImage: {fileID: 8811852765266045796}
 --- !u!114 &4976277216565590171 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -151,8 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!1 &8813803454908641021 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3406636661054117051, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!224 &8811852765266045796 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3413687913257193762, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
   m_PrefabInstance: {fileID: 6131130226882951750}
   m_PrefabAsset: {fileID: 0}

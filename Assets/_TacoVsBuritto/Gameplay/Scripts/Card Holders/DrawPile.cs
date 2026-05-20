@@ -23,6 +23,8 @@ namespace TacoVsBurrito
             GameEvents.OnShuffleCards += ManageCardShuffle;
             GameEvents.OnDistributeCards += DealStartingHand;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
+
+            drawBtn.onClick.AddListener(OnDrawBtnClicked);
         }
 
         void OnDestroy()
@@ -153,8 +155,16 @@ namespace TacoVsBurrito
             Shuffle(_pileCards);
         }
 
-        public void RemoveBtnListener() => drawBtn.onClick.RemoveAllListeners();
-        public void AddBtnListener(UnityAction drawClicked) => drawBtn.onClick.AddListener(drawClicked);
+        public void AddBtnListener(UnityAction drawClicked)
+        {
+            drawBtn.onClick.RemoveAllListeners();
+            drawBtn.onClick.AddListener(drawClicked);
+        }
+        public void ResetBtnListener()
+        {
+            drawBtn.onClick.RemoveAllListeners();
+            drawBtn.onClick.AddListener(OnDrawBtnClicked);
+        }
 
     }
 }

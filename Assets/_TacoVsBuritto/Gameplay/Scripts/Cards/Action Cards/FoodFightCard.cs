@@ -23,6 +23,7 @@ namespace TacoVsBurrito
         public override void ExecuteAction()
         {
             GameEvents.OnFoodFightAction?.Invoke();
+            GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT!");
         }
 
         void ManageCardTargeted(CardBase selectedCard)
@@ -34,6 +35,6 @@ namespace TacoVsBurrito
             this.winner = winner;
         }
 
-        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
+        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
     }
 }

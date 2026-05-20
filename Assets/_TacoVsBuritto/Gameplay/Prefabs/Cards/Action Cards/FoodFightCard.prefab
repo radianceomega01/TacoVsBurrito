@@ -34,11 +34,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2626736977738751358, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 120
+      value: 135
       objectReference: {fileID: 0}
     - target: {fileID: 2626736977738751358, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 175
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 2626736977738751358, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -104,9 +104,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2266344987657155032}
   m_SourcePrefab: {fileID: 100100000, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
---- !u!1 &897877035505435010 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3406636661054117051, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!224 &895354877646013467 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3413687913257193762, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
   m_PrefabInstance: {fileID: 2536418940091651385}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &3686834150225614820 stripped
@@ -143,8 +143,7 @@ MonoBehaviour:
   isBlockable: 1
   nameTxtField: {fileID: 8580737114669642268}
   DescriptionTxtField: {fileID: 3686834150225614820}
-  backFaceImage: {fileID: 897877035505435010}
-  requiresInputToResolve: 0
+  backFaceImage: {fileID: 895354877646013467}
 --- !u!114 &8580737114669642268 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6064041265733347109, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

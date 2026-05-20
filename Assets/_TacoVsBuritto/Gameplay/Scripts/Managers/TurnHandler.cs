@@ -160,6 +160,7 @@ namespace TacoVsBurrito
         {
             noBuenoCounter++;
             SwitchState(TurnState.NoBuenoWindowPhase);
+            StartNoBuenoTimer();
         }
     }
 
