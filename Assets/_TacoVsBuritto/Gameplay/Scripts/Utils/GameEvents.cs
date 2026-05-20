@@ -20,6 +20,7 @@ namespace TacoVsBurrito
         public static Action<PlayerBase>                OnTurnStarted;
         public static Action<TurnState, PlayerBase>     OnTurnStateChanged;
         public static Action<PlayerBase>                OnTurnEnded;
+        public static Action<PlayerBase>                OnTurnChanged;
         public static Action<PlayerBase>                OnGameOver;         // winner
 
         // ---- Draw pile ----
@@ -40,8 +41,10 @@ namespace TacoVsBurrito
         public static Action<PlayerBase, PlayerBase>            OnOrderEnvyActionTargeted;    // (swapper, swapTarget)
         public static Action<PlayerBase>                        OnMealScoreChanged; // any meal update
         public static Action<Dictionary<CardBase, int>>         OnTrashPandaAction; 
-        public static Action<CardBase>                          OnTrashPileCardTargeted; 
+        public static Action<CardBase>                          OnCardsPileCardTargeted; 
         public static Action                                    OnFoodFightAction;
+        public static Action<PlayerBase>                        OnFoodFightFinished; //winner
+        public static Action<Dictionary<CardBase, int>>         OnFoodFightCardsDrawn; // All cards drawn during food fight
         
         // ---- Card Drag ----
         public static Action           OnCardDragBegin;
@@ -83,35 +86,5 @@ namespace TacoVsBurrito
 
         // ---- Food Fight specific ----
         public static Action<PlayerBase, CardBase>          OnFoodFightFlip;    // (player, flipped card)
-
-        // Clears all subscriptions (call on scene reload)
-        public static void Clear()
-        {
-            OnGameStarted           = null;
-            OnTurnStarted           = null;
-            OnTurnEnded             = null;
-            OnGameOver              = null;
-            OnCardDrawn             = null;
-            OnDrawPileEmpty         = null;
-            OnCardAddedToHand       = null;
-            OnHandChanged           = null;
-            OnCardPlacedInMeal      = null;
-            OnMealCleared           = null;
-            OnCardStolenFromMeal    = null;
-            OnOrderEnvyAction         = null;
-            OnOrderEnvyActionTargeted = null;
-            OnMealScoreChanged      = null;
-            OnNoBuenoPlayed         = null;
-            OnHealthInspector       = null;
-            OnCardAboutToBePlayed   = null;
-            OnNeedPlayerBaseTarget      = null;
-            OnNeedCardFromMeal      = null;
-            OnNeedCardFromTrash     = null;
-            OnNeedPlayerBaseAndMealCard = null;
-            OnScoreChanged          = null;
-            OnLogMessage            = null;
-            OnDrawPhaseSkipped      = null;
-            OnFoodFightFlip         = null;
-        }
     }
 }

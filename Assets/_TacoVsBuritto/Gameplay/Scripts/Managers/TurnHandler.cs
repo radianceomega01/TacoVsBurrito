@@ -24,6 +24,7 @@ namespace TacoVsBurrito
             GameEvents.OnGameInit += DecidePlayers;
             GameEvents.OnGameStarted += StartGame;
             GameEvents.OnTurnEnded += ManageTurnEnded;
+            GameEvents.OnTurnChanged += ManageTurnChanged;
             GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
@@ -35,6 +36,7 @@ namespace TacoVsBurrito
             GameEvents.OnGameInit -= DecidePlayers;
             GameEvents.OnGameStarted -= StartGame;
             GameEvents.OnTurnEnded -= ManageTurnEnded;
+            GameEvents.OnTurnChanged -= ManageTurnChanged;
             GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
@@ -114,6 +116,13 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
             SwitchState(TurnState.DrawPhase);
         }
+        void ManageTurnChanged(PlayerBase newPlayer)
+        {
+            currentPlayerIndex = newPlayer.Index;
+            GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
+            SwitchState(TurnState.DrawPhase);
+        }
+
         void ManageDrawPhaseSkipped()
         {
             GoToNextState();

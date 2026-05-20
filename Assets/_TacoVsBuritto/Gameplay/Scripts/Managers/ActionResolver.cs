@@ -175,59 +175,18 @@ namespace TacoVsBurrito
         /// Executes the Food Fight.
         /// PlayerBases = all PlayerBases in clockwise order, starting with the caster.
         /// Returns a log. Winning PlayerBase gets to keep one card; rest shuffle back.
-        public string ResolveFoodFight(PlayerBase caster, FoodFightCard foodFightCard,
-                                        List<PlayerBase> clockwisePlayerBases)
+        public void ResolveFoodFight(PlayerBase winner, CardBase chosenCard)
         {
-            _trashPile.Trash(foodFightCard);
-
-            // Each PlayerBase flips one card from draw pile
-            var flipped = new Dictionary<PlayerBase, CardBase>();
-            foreach (var p in clockwisePlayerBases)
+            if (chosenCard is HealthInspectorCard card)
             {
-                CardBase f = _drawPile.FlipTop();
-                if (f != null)
-                    flipped[p] = f;
+                // Health Inspector triggers IMMEDIATELY when taken from trash
+                ResolveHealthInspector(winner);
+                GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT! {winner.Name} selected a Health Inspector from the FoodFight! " +
+                        $"It triggers immediately!");
+                return;        
             }
-
-            if (flipped.Count == 0)
-                return "🍽 Food Fight! No cards left to flip.";
-
-            // Build log
-            var sb = new System.Text.StringBuilder();
-            sb.AppendLine("🍽 FOOD FIGHT!");
-            foreach (var kv in flipped)
-                sb.AppendLine($"  {kv.Key.Name} flipped: {kv.Value.Name} " +
-                              $"[{ValueForFoodFight(kv.Value)} pt]");
-
-            // Find winner(s): highest ingredient value; non-ingredients = 0
-            int bestValue = flipped.Values.Max(c => ValueForFoodFight(c));
-            var winners   = flipped.Where(kv => ValueForFoodFight(kv.Value) == bestValue)
-                                   .ToList();
-
-            // Winners each keep their card
-            var toShuffle = new List<CardBase>();
-            foreach (var kv in flipped)
-            {
-                if (winners.Any(w => w.Key == kv.Key))
-                {
-                    kv.Key.Hand.AddCard(kv.Value);
-                    GameEvents.OnCardAddedToHand?.Invoke(kv.Key, kv.Value);
-                    sb.AppendLine($"  🏆 {kv.Key.Name} wins and keeps '{kv.Value.Name}'!");
-                }
-                else
-                {
-                    toShuffle.Add(kv.Value);
-                }
-            }
-
-            // Shuffle remaining cards back into draw pile
-            if (toShuffle.Count > 0)
-            {
-                _drawPile.ShuffleBackIn(toShuffle);
-                sb.AppendLine($"  {toShuffle.Count} card(s) shuffled back into draw pile.");
-            }
-
-            return sb.ToString().TrimEnd();
+            winner.Hand.AddCard(chosenCard);
+            GameEvents.OnTurnChanged?.Invoke(winner);
         }
 
         private int ValueForFoodFight(CardBase card) =>

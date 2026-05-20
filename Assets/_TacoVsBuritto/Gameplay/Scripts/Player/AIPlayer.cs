@@ -26,6 +26,7 @@ namespace TacoVsBurrito
             aIBrain = transform.AddComponent<AIBrain>();
 
             GameEvents.OnTurnStarted += ManageOnTurnStarted;
+            GameEvents.OnTurnChanged += ManageOnTurnChanged;
             GameEvents.OnTurnStateChanged += ManageOnTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
@@ -34,6 +35,7 @@ namespace TacoVsBurrito
         void OnDestroy()
         {
             GameEvents.OnTurnStarted -= ManageOnTurnStarted;
+            GameEvents.OnTurnChanged -= ManageOnTurnChanged;
             GameEvents.OnTurnStateChanged -= ManageOnTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
@@ -52,6 +54,7 @@ namespace TacoVsBurrito
         {
             noBuenoCounter = 0;
             currentActionCardPlayed = null;
+            isSelfTurnRunning = player == this;
 
             if (player is AIPlayer && !drawPile.IsDrawPileEmpty)
                 DrawACard();
@@ -60,7 +63,7 @@ namespace TacoVsBurrito
         async void DrawACard()
         {
             await Task.Delay(CARD_DRAW_DELAY_IN_MS);
-            drawPile.OnDrawBtnClicked();
+            drawPile.TriggerDrawBtnClick();
         }
 
         async void PlayACard()
@@ -91,8 +94,6 @@ namespace TacoVsBurrito
 
         void ManageOnTurnStateChanged(TurnState state, PlayerBase player)
         {
-            isSelfTurnRunning = player == this;
-
             if (player is AIPlayer)
             {
                 if (state == TurnState.PlayPhase)
@@ -104,6 +105,12 @@ namespace TacoVsBurrito
                     ResolveAction();
                 }
             }
+        }
+        void ManageOnTurnChanged(PlayerBase player)
+        {
+            isSelfTurnRunning = player == this;
+            if (player is AIPlayer)
+                DrawACard();
         }
 
         void ResolveAction()

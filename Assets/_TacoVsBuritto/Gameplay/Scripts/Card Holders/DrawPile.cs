@@ -1,6 +1,8 @@
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 namespace TacoVsBurrito
 {
@@ -8,11 +10,12 @@ namespace TacoVsBurrito
     {
         [SerializeField] Transform cardsParent;
         [SerializeField] Button drawBtn;
-        private List<CardBase> _drawPile = new();
+        private List<CardBase> _pileCards = new();
         private const int STARTING_HAND_SIZE = 5;
 
-        public int DrawCount => _drawPile.Count;
-        public bool IsDrawPileEmpty => _drawPile.Count == 0;
+        public int CardCount => _pileCards.Count;
+        public bool IsDrawPileEmpty => _pileCards.Count == 0;
+        public IReadOnlyList<CardBase> PileCards => _pileCards;
 
 
         void Awake()
@@ -40,21 +43,21 @@ namespace TacoVsBurrito
             {
                 if (!cardsParent.GetChild(i).TryGetComponent<CardBase>(out var card))
                     continue;
-                _drawPile.Add(card);
+                _pileCards.Add(card);
             }
         }
 
         void ManageCardShuffle()
         {
-            Shuffle(_drawPile);
+            Shuffle(_pileCards);
         }
 
         public CardBase Draw()
         {
-            if (_drawPile.Count == 0)
+            if (_pileCards.Count == 0)
                 return null;
-            var c = _drawPile[^1];
-            _drawPile.RemoveAt(_drawPile.Count - 1);
+            var c = _pileCards[^1];
+            _pileCards.RemoveAt(_pileCards.Count - 1);
             return c;
         }
         public List<CardBase> DrawMany(int count)
@@ -79,7 +82,7 @@ namespace TacoVsBurrito
                 if (card is HealthInspectorCard)
                 {
                     // Move to bottom of deck
-                    _drawPile.Insert(0, card);
+                    _pileCards.Insert(0, card);
                     card.ChangeSiblingIndex(0);
                     continue;                               // draw again
                 }
@@ -117,8 +120,9 @@ namespace TacoVsBurrito
             }
             GameManager.Instance.CardDrawnFromPile(drawnCard);
         }
+        public void TriggerDrawBtnClick() => drawBtn.onClick.Invoke();
 
-        void TogglePileInteraction(bool value) => drawBtn.interactable = value;
+        public void TogglePileInteraction(bool value) => drawBtn.interactable = value;
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
@@ -145,8 +149,12 @@ namespace TacoVsBurrito
         /// Shuffle a list of cards back into the draw pile (Food Fight leftovers).
         public void ShuffleBackIn(List<CardBase> cards)
         {
-            _drawPile.AddRange(cards);
-            Shuffle(_drawPile);
+            _pileCards.AddRange(cards);
+            Shuffle(_pileCards);
         }
+
+        public void RemoveBtnListener() => drawBtn.onClick.RemoveAllListeners();
+        public void AddBtnListener(UnityAction drawClicked) => drawBtn.onClick.AddListener(drawClicked);
+
     }
 }

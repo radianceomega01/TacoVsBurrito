@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class TrashPileCardSelector : MonoBehaviour
+    public class CardsPileCardSelector : MonoBehaviour
     {
         [SerializeField] Transform cardsParent;
         [SerializeField] Transform rootTransform;
@@ -15,25 +15,33 @@ namespace TacoVsBurrito
         {
             GameEvents.OnTrashPandaAction += ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget += CardClickedForActionTarget;
-            GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoWindowStarted;
+            GameEvents.OnFoodFightCardsDrawn += ManageFoodFightCardsDrawn;
+            //GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoWindowStarted;
         }
         void OnDestroy()
         {
             GameEvents.OnTrashPandaAction -= ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget -= CardClickedForActionTarget;
-            GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoWindowStarted;
+            GameEvents.OnFoodFightCardsDrawn -= ManageFoodFightCardsDrawn;
+            //GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoWindowStarted;
         }
 
         void ManageTrashPandaAction(Dictionary<CardBase, int> cardMap)
         {
+            ArrageCardsToSelect(cardMap);
+        }
+
+        void ManageFoodFightCardsDrawn(Dictionary<CardBase, int> cardMap)
+        {
+            ArrageCardsToSelect(cardMap);
+        }
+
+
+        void ArrageCardsToSelect(Dictionary<CardBase, int> cardMap)
+        {
             rootTransform.gameObject.SetActive(true);
 
-            List<Vector3> positions =
-            GenerateCardPositions(
-                startPosition: cardsParent.position,
-                cardCount: cardMap.Count,
-                horizontalSpacing: 10f,
-                verticalSpacing: 14f);
+            List<Vector3> positions = GenerateCardPositions(cardsParent.position, cardMap.Count);
 
             trashPileCards = cardMap.Keys.ToList();
             for(int i=0; i<trashPileCards.Count; i++)
@@ -44,6 +52,7 @@ namespace TacoVsBurrito
                 trashPileCards[i].transform.SetParent(cardsParent);
             }
         }
+
         void CardClickedForActionTarget(CardBase card)
         {
             if(trashPileCards == null)
@@ -52,15 +61,15 @@ namespace TacoVsBurrito
             trashPileCards.ForEach(card => card.ToggleInteractionType());
              
             GameManager.Instance.GetTrashPile().PutCardsBack(trashPileCards);    
-            GameEvents.OnTrashPileCardTargeted?.Invoke(card);
+            GameEvents.OnCardsPileCardTargeted?.Invoke(card);
 
             ResetParams();  
         }
 
-        void ManageNoBuenoWindowStarted(ActionCardBase actionCard)
-        {
-            //ResetParams();
-        }
+        // void ManageNoBuenoWindowStarted(ActionCardBase actionCard)
+        // {
+        //     //ResetParams();
+        // }
         
         void ResetParams()
         {
@@ -68,7 +77,7 @@ namespace TacoVsBurrito
             rootTransform.gameObject.SetActive(false);
         }
 
-        static List<Vector3> GenerateCardPositions(Vector3 startPosition, int cardCount, float horizontalSpacing = 2f, float verticalSpacing = 2.5f)
+        static List<Vector3> GenerateCardPositions(Vector3 startPosition, int cardCount, float horizontalSpacing = 10f, float verticalSpacing = 14f)
         {
             List<Vector3> positions = new();
 

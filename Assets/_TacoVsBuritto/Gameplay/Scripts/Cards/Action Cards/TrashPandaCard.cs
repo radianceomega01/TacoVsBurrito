@@ -13,13 +13,13 @@ namespace TacoVsBurrito
 
         protected override void Awake() {
             base.Awake();
-            GameEvents.OnTrashPileCardTargeted += ManageTrashPandaTargeted;
+            GameEvents.OnCardsPileCardTargeted += ManageTrashPandaTargeted;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
         protected override void OnDestroy() {
             base.OnDestroy();
-            GameEvents.OnTrashPileCardTargeted -= ManageTrashPandaTargeted;
+            GameEvents.OnCardsPileCardTargeted -= ManageTrashPandaTargeted;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 

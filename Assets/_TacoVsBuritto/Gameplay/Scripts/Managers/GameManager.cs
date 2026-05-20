@@ -383,7 +383,7 @@ namespace TacoVsBurrito
                 // ---- Food Fight ----
                 case FoodFightCard c:
                     var clockwise = GetClockwiseOrderFrom(caster);
-                    log = _resolver.ResolveFoodFight(caster, c, clockwise);
+                    _resolver.ResolveFoodFight(caster, c);
                     foreach (var p in clockwise) GameEvents.OnHandChanged?.Invoke(p);
                     break;
 
