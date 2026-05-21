@@ -4,52 +4,27 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class CraftyCrowCard : ActionCardBase
+    public class CraftyCrowCard : ActionCardBase, ITargetTypeAction
     {
-        PlayerBase caster;
-        PlayerBase victim;
-        CardBase victimCard;
-        protected override void Awake() {
-            base.Awake();
-            GameEvents.OnCraftyCrowActionTargeted += ManageActionTargeted;
-            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
-        }
-
-        protected override void OnDestroy() {
-            base.OnDestroy();
-            GameEvents.OnCraftyCrowActionTargeted -= ManageActionTargeted;
-            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
-        }
+        TargetTypeContext targetTypeContext;
+        
         public override void ExecuteAction()
         {
-            isActiveOnTrashPile = true;
             GameEvents.OnCraftyCrowActionByPlayer?.Invoke(GameManager.Instance.CurrentPlayer);
         }
-        void ManageActionTargeted(PlayerBase caster, PlayerBase victim, CardBase card)
-        {
-            if(!isActiveOnTrashPile)
-                return;
 
-            this.caster = caster;
-            this.victim = victim;
-            this.victimCard = card;
+
+        public void OnActionTargeted(TargetTypeContext targetTypeContext)
+        {
+            this.targetTypeContext = targetTypeContext;
             GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
         }
-        void ManageTurnStateChanged(TurnState state, PlayerBase @base)
-        {
-            if(state != TurnState.ActionResolvePhase || !isActiveOnTrashPile)
-                return;
-            resolver.ResolveCraftyCrow(caster, victim, victimCard);
-            ResetParams();    
-        }
-        void ResetParams()
-        {
-            isActiveOnTrashPile = false;
-            caster = null;
-            victim = null;
-            victimCard = null;
-        }
 
+        public void ResolveAction()
+        {
+            resolver.ResolveCraftyCrow(targetTypeContext.caster, targetTypeContext.victim, targetTypeContext.cardTargeted);
+            targetTypeContext = default;
+        }
         public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
     }
 }

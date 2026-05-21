@@ -21,7 +21,7 @@ namespace TacoVsBurrito
 
         public void Init()
         {
-            drawPile.AddBtnListener(OnDrawBtnClicked);
+            drawPile.ChangeBtnListener(OnDrawBtnClicked);
         }
 
         void OnDrawBtnClicked()

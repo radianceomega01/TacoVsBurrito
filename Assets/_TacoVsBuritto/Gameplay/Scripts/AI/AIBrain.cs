@@ -46,7 +46,7 @@ namespace TacoVsBurrito
                 DecideEasy(ai, allPlayers); // don't play No Bueno
 
             int dest = -1; // default trash pile
-            if (card.IsPlaceableInMeal)
+            if (card is IMealTypeAction)
             {
                 if (card is TummyAcheCard)
                     dest = PickRandomOpponent(ai, allPlayers);

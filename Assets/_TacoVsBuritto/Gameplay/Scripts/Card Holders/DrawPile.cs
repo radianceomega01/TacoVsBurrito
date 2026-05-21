@@ -155,7 +155,7 @@ namespace TacoVsBurrito
             Shuffle(_pileCards);
         }
 
-        public void AddBtnListener(UnityAction drawClicked)
+        public void ChangeBtnListener(UnityAction drawClicked)
         {
             drawBtn.onClick.RemoveAllListeners();
             drawBtn.onClick.AddListener(drawClicked);

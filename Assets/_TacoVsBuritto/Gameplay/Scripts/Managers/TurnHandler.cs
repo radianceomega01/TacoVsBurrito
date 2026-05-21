@@ -14,7 +14,7 @@ namespace TacoVsBurrito
         int currentPlayerIndex = 0;
         CancellationTokenSource noBuenoTimerCts;
         private int noBuenoCounter = 0;
-        private CardBase currentTrashedCard;
+        private ActionCardBase currentTrashedCard;
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
 
@@ -29,6 +29,10 @@ namespace TacoVsBurrito
             GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
+
+            GameEvents.OnCraftyCrowActionTargeted += ManageTargetAction;
+            GameEvents.OnOrderEnvyActionTargeted += ManageTargetAction;
+            GameEvents.OnCardsPileCardTargeted += ManageTargetAction;
         }
 
         ~TurnHandler()
@@ -41,6 +45,10 @@ namespace TacoVsBurrito
             GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
+
+            GameEvents.OnCraftyCrowActionTargeted -= ManageTargetAction;
+            GameEvents.OnOrderEnvyActionTargeted -= ManageTargetAction;
+            GameEvents.OnCardsPileCardTargeted -= ManageTargetAction;
         }
 
         void DecidePlayers(List<PlayerBase> players)
@@ -80,34 +88,10 @@ namespace TacoVsBurrito
 
         void ManageActionCardTrashed(ActionCardBase card)
         {
-            currentTrashedCard = card;
+            if(card is not NoBuenoCard) currentTrashedCard = card;
 
             SwitchState(card.GetStateOnTrashed());
-            switch (currentTurnState)
-            {
-                case TurnState.ActionTargetPhase:
-                    CheckAndExecuteAction();
-                    currentTrashedCard = null;
-                    break;
-                case TurnState.NoBuenoWindowPhase:
-                    StartNoBuenoTimer();
-                    break;
-                case TurnState.ActionResolvePhase:
-                    card.ExecuteAction();
-                    currentTrashedCard = null;
-                    break;
-                case TurnState.SkipPhase:
-                    ManageTurnEnded(GameManager.Instance.CurrentPlayer);
-                    currentTrashedCard = null;
-                    break;
-            }    
-        }
-        void CheckAndExecuteAction()
-        {
-            if (currentTrashedCard is ActionCardBase @card && currentTrashedCard is not NoBuenoCard) //No bueno is immediately executed
-            {
-                @card.ExecuteAction();
-            }
+            card.ExecuteAction();    
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)
@@ -115,6 +99,7 @@ namespace TacoVsBurrito
             currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
             SwitchState(TurnState.DrawPhase);
+            currentTrashedCard = null;
         }
         void ManageTurnChanged(PlayerBase newPlayer)
         {
@@ -145,7 +130,10 @@ namespace TacoVsBurrito
                 Debug.Log("No Bueno window expired");
                 GameEvents.OnLogMessage?.Invoke("⏰ No Bueno window expired!");
                 if(noBuenoCounter%2 == 0)
+                {
                     SwitchState(TurnState.ActionResolvePhase);
+                    CheckAndResolveAction();
+                }
                 else
                     ManageTurnEnded(GameManager.Instance.CurrentPlayer);
                 noBuenoCounter = 0;    
@@ -156,11 +144,26 @@ namespace TacoVsBurrito
             }
         }
 
+        void CheckAndResolveAction()
+        {
+            if (currentTrashedCard != null && currentTrashedCard is ITargetTypeAction targetTyeCard) //No bueno is immediately executed
+            {
+                targetTyeCard.ResolveAction();
+            }
+        }
+
         void ManageNoBuenoPlayed()
         {
             noBuenoCounter++;
             SwitchState(TurnState.NoBuenoWindowPhase);
             StartNoBuenoTimer();
+        }
+        void ManageTargetAction(TargetTypeContext context)
+        {
+            if(currentTrashedCard is ITargetTypeAction targetTypeCard)
+            {
+                targetTypeCard.OnActionTargeted(context);
+            }
         }
     }
 

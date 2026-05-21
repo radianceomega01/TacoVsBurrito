@@ -6,51 +6,26 @@ using System.Threading.Tasks;
 
 namespace TacoVsBurrito
 {
-    public class TrashPandaCard : ActionCardBase
+    public class TrashPandaCard : ActionCardBase, ITargetTypeAction
     {
-        TrashPile trashPile;
-        CardBase choosenTrashCard; 
-
-        protected override void Awake() {
-            base.Awake();
-            GameEvents.OnCardsPileCardTargeted += ManageTrashPandaTargeted;
-            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
-        }
-
-        protected override void OnDestroy() {
-            base.OnDestroy();
-            GameEvents.OnCardsPileCardTargeted -= ManageTrashPandaTargeted;
-            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
-        }
+        TargetTypeContext targetTypeContext;
 
         public override async void ExecuteAction()
         {
-            isActiveOnTrashPile = true;
-
             await Task.Delay(700);
-            trashPile = GameManager.Instance.GetTrashPile();
-            GameEvents.OnTrashPandaAction?.Invoke(trashPile.RetrieveFromTrash());
+            GameEvents.OnTrashPandaAction?.Invoke(GameManager.Instance.GetTrashPile().RetrieveFromTrash());
         }
 
-        private void ManageTrashPandaTargeted(CardBase card)
+        public void OnActionTargeted(TargetTypeContext targetTypeContext)
         {
-            if(!isActiveOnTrashPile)
-                return;
-
-            choosenTrashCard = card;
+            this.targetTypeContext = targetTypeContext;
             GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
         }
-        void ManageTurnStateChanged(TurnState state, PlayerBase player)
+
+        public void ResolveAction()
         {
-            if(state != TurnState.ActionResolvePhase || !isActiveOnTrashPile)
-                return;
-            resolver.ResolveTrashPanda(GameManager.Instance.CurrentPlayer, choosenTrashCard);
-            ResetParams();   
-        }
-        void ResetParams()
-        {
-            isActiveOnTrashPile = false;
-            choosenTrashCard = null;
+            resolver.ResolveTrashPanda(targetTypeContext.caster, targetTypeContext.cardTargeted);
+            targetTypeContext = default;
         }
         public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
     }

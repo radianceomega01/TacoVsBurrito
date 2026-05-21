@@ -9,7 +9,6 @@ namespace TacoVsBurrito
     {
         public bool IsTargetTypeAction => GetStateOnTrashed() == TurnState.ActionTargetPhase;
         protected ActionResolver resolver;
-        protected bool isActiveOnTrashPile = false;
 
         protected override void Awake() {
             base.Awake();

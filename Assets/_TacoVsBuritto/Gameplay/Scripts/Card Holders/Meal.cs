@@ -53,7 +53,7 @@ namespace TacoVsBurrito
         /// Add a card (Ingredient, TummyAche, or HotSauceBoss) to this meal.
         public void AddCard(CardBase card)
         {
-            if (!card.IsPlaceableInMeal)
+            if (card is not IMealTypeAction)
                 return;
             _cards.Add(card);
             card.DisableInteraction();
@@ -100,9 +100,13 @@ namespace TacoVsBurrito
 
             foreach (var card in _cards)
             {
-                if (card is IngredientCardBase || card is TummyAcheCard)
+                if (card is IngredientCardBase @ingredientCard)
                 {
-                    score = card.GetModifiedMealScore(score);
+                    score = @ingredientCard.GetModifiedMealScore(score);
+                }
+                else if(card is TummyAcheCard @tummyAcheCard)
+                {
+                    score = @tummyAcheCard.GetModifiedMealScore(score);
                 }
                 else if (card is HotSauceBossCard @hotSauceBossCard)
                 {
@@ -126,7 +130,7 @@ namespace TacoVsBurrito
 
         public bool CanDrop(CardBase card)
         {
-            return card.IsPlaceableInMeal;
+            return card is IMealTypeAction;
         }
         public void DropCardAfterDrag(CardBase card)
         {
@@ -181,8 +185,8 @@ namespace TacoVsBurrito
             if(!_cards.Contains(card))
                 return;
                 
-            GameEvents.OnCraftyCrowActionTargeted?.Invoke(GameManager.Instance.CurrentPlayer, parentPlayer, card);
             DisableCraftyCrowAction(GameManager.Instance.CurrentPlayer);
+            GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
         }
         
     }

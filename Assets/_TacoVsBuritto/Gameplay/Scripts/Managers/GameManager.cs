@@ -57,16 +57,6 @@ namespace TacoVsBurrito
         private ActionResolver _resolver;
         private TurnHandler _turnHandler;
         private GameState gameState = GameState.None;
-        private bool _gameRunning;
-
-        // Human-turn gate
-        private bool _humanPlayedCard = false;
-
-        // No Bueno interrupt gate
-        private bool _noBuenoWindowOpen = false;
-        private bool _noBuenoWasPlayed = false;
-        private PlayerBase _noBuenoBlocker = null;
-        private NoBuenoCard _noBuenoCard = null;
 
         // -------------------------------------------------------
         //  Public accessors
@@ -86,11 +76,6 @@ namespace TacoVsBurrito
             _turnHandler = new TurnHandler();
         }
 
-        private void OnDestroy()
-        {
-            
-        }
-
         // -------------------------------------------------------
         //  Game Start
         // -------------------------------------------------------
@@ -100,50 +85,6 @@ namespace TacoVsBurrito
             _players.Add(player);
             GameEvents.OnActionResolverSet?.Invoke(_resolver);
         }
-
-        // -------------------------------------------------------
-        //  Main game loop
-        // -------------------------------------------------------
-        // private IEnumerator GameLoop()
-        // {
-        //     while (_gameRunning)
-        //     {
-        //         var current = CurrentPlayer;
-        //         GameEvents.OnTurnStarted?.Invoke(current);
-        //         GameEvents.OnLogMessage?.Invoke($"\n--- {current.Name}'s turn ---");
-
-        //         // ---- 1. DRAW PHASE ----
-
-        //         // ---- 2. PLAY PHASE ----
-        //         // Check if this player is out of cards (game ends if so)
-        //         if (current.Hand.Count == 0)
-        //         {
-        //             // Should not normally happen mid-loop but guard it
-        //             GameEvents.OnLogMessage?.Invoke($"  {current.Name} has no cards – skipping play.");
-        //             GameEvents.OnTurnEnded?.Invoke(current);
-        //             AdvanceToNextPlayer();
-        //             yield return new WaitForSeconds(0.3f);
-        //             continue;
-        //         }
-
-        //         if (current is AIPlayer @player)
-        //         {
-        //             yield return StartCoroutine(ExecuteAITurn(@player));
-        //         }
-        //         else
-        //         {
-        //             // Human: wait until PlayCard() or DiscardCard() is called
-        //             _humanPlayedCard = false;
-        //             yield return new WaitUntil(() => _humanPlayedCard || !_gameRunning);
-        //         }
-
-        //         if (!_gameRunning) yield break;
-
-        //         GameEvents.OnTurnEnded?.Invoke(current);
-        //         AdvanceToNextPlayer();
-        //         yield return new WaitForSeconds(15f);
-        //     }
-        // }
 
         public void CardDrawnFromPile(CardBase card)
         {
@@ -170,313 +111,14 @@ namespace TacoVsBurrito
         }
 
         // -------------------------------------------------------
-        //  Human API  (called by UI)
-        // -------------------------------------------------------
-
-        /// Human places an ingredient/tummy ache/hot sauce into a meal.
-        /// destPlayerBaseIndex: whose meal to place it in (-1 = own meal).
-        public void HumanPlacesCardInMeal(int handIndex, int destPlayerBaseIndex)
-        {
-            if (!IsHumanTurn()) return;
-            var current = CurrentPlayer;
-            var card = current.Hand.GetAt(handIndex);
-            if (card == null || !card.IsPlaceableInMeal) return;
-
-            var dest = destPlayerBaseIndex < 0 ? current : GetPlayerBase(destPlayerBaseIndex);
-            if (dest == null) return;
-
-            bool isLastCard = current.Hand.Count == 1;
-
-            // Open No Bueno interrupt window (other playerBasePlayerBases can react)
-            StartCoroutine(NoBuenoInterruptWindow(current, card, isLastCard, () =>
-            {
-                if (_noBuenoWasPlayed) return; // blocked – card already trashed in NoBueno resolver
-
-                string log = _resolver.PlaceCardInMeal(current, card, dest);
-                GameEvents.OnLogMessage?.Invoke(log);
-                GameEvents.OnMealScoreChanged?.Invoke(dest);
-                GameEvents.OnScoreChanged?.Invoke(dest, dest.Score);
-
-                if (isLastCard) TriggerGameEnd();
-                else _humanPlayedCard = true;
-            }));
-        }
-
-        /// Human plays an action card.
-        /// targetPlayerBaseIndex: chosen target playerBasePlayerBase (-1 if not needed yet).
-        public void HumanPlaysActionCard(int handIndex, int targetPlayerBaseIndex = -1)
-        {
-            if (!IsHumanTurn()) return;
-            var current = CurrentPlayer;
-            var card = current.Hand.GetAt(handIndex);
-            if (card == null) return;
-
-            // Health Inspector can't be played from hand (only triggered on draw)
-            if (card is HealthInspectorCard)
-            {
-                GameEvents.OnLogMessage?.Invoke("⚠ Health Inspector cannot be played from hand.");
-                return;
-            }
-
-            bool isLastCard = current.Hand.Count == 1;
-
-            StartCoroutine(NoBuenoInterruptWindow(current, card, isLastCard, () =>
-            {
-                if (_noBuenoWasPlayed) return;
-                current.Hand.RemoveCard(card);
-                StartCoroutine(ResolveActionCard(current, card, targetPlayerBaseIndex, isLastCard));
-            }));
-        }
-
-        /// Human discards a card (counts as their play for the turn).
-        public void HumanDiscardsCard(int handIndex)
-        {
-            if (!IsHumanTurn()) return;
-            var current = CurrentPlayer;
-            var card = current.Hand.GetAt(handIndex);
-            if (card == null) return;
-
-            bool isLastCard = current.Hand.Count == 1;
-            current.Hand.RemoveCard(card);
-            trashPile.Trash(card);
-            GameEvents.OnHandChanged?.Invoke(current);
-            GameEvents.OnLogMessage?.Invoke($"  {current.Name} discarded '{card.Name}'.");
-
-            if (isLastCard) TriggerGameEnd();
-            else _humanPlayedCard = true;
-        }
-
-        /// Human plays No Bueno to block a card mid-interrupt window.
-        public void HumanPlaysNoBueno(int handIndex)
-        {
-            if (!_noBuenoWindowOpen) return;
-            var current = CurrentPlayer; // the blocker can be ANY playerBasePlayerBase (human only here)
-            // Find the human playerBasePlayerBase who has this No Bueno
-            // For simplicity we allow any human playerBasePlayerBase to trigger this
-            foreach (var p in _players)
-            {
-                if (p is HumanPlayer)
-                {
-                    var nb = p.Hand.GetAt(handIndex);
-                    if (nb != null && nb is NoBuenoCard)
-                    {
-                        _noBuenoBlocker = p;
-                        _noBuenoCard = (NoBuenoCard)nb;
-                        _noBuenoWasPlayed = true;
-                        _noBuenoWindowOpen = false;
-                        return;
-                    }
-                }
-            }
-        }
-
-        // -------------------------------------------------------
-        //  No Bueno interrupt window coroutine
-        // -------------------------------------------------------
-        private IEnumerator NoBuenoInterruptWindow(PlayerBase active, CardBase card,
-                                                    bool isLastCard, System.Action onProceed)
-        {
-            _noBuenoWasPlayed = false;
-            _noBuenoBlocker = null;
-            _noBuenoCard = null;
-
-            // Health Inspector and last-card plays skip the window entirely
-            if (card is HealthInspectorCard || isLastCard)
-            {
-                onProceed?.Invoke();
-                yield break;
-            }
-
-            // Notify UI that a card is about to be played
-            _noBuenoWindowOpen = true;
-            GameEvents.OnCardAboutToBePlayed?.Invoke(active, card, isLastCard,
-                (blocker, noBueno) =>
-                {
-                    _noBuenoBlocker = blocker;
-                    _noBuenoCard = (NoBuenoCard)noBueno;
-                    _noBuenoWasPlayed = true;
-                    _noBuenoWindowOpen = false;
-                });
-
-            // Wait a short window for human/AI No Bueno reactions
-            float elapsed = 0f;
-            float window = 1.5f;   // seconds to react
-            while (_noBuenoWindowOpen && elapsed < window)
-            {
-                elapsed += Time.deltaTime;
-
-                // AI player auto-decide No Bueno during the window
-                foreach (var p in _players)
-                {
-                    // if (p is AIPlayer @player && p != active)
-                    //     AIConsiderNoBueno(@player, card);
-                }
-
-                yield return null;
-            }
-            _noBuenoWindowOpen = false;
-
-            if (_noBuenoWasPlayed && _noBuenoBlocker != null && _noBuenoCard != null)
-            {
-                // Check if the No Bueno itself can be countered (another playerBasePlayerBase plays No Bueno)
-                // In base implementation we resolve one level of No Bueno chaining
-                //string log = _resolver.ResolveNoBueno(_noBuenoBlocker, _noBuenoCard, card);
-                //GameEvents.OnLogMessage?.Invoke(log);
-                //GameEvents.OnHandChanged?.Invoke(_noBuenoBlocker);
-                // card is now trashed; do NOT proceed with original effect
-            }
-            else
-            {
-                onProceed?.Invoke();
-            }
-        }
-
-        // -------------------------------------------------------
-        //  Action card resolution
-        // -------------------------------------------------------
-        private IEnumerator ResolveActionCard(PlayerBase caster, CardBase card,
-                                               int preSelectedTarget, bool wasLastCard)
-        {
-            string log = "";
-
-            switch (card)
-            {
-                // ---- Crafty Crow: pick a playerBasePlayerBase then pick a card from their meal ----
-                case CraftyCrowCard c:
-                    yield return StartCoroutine(ResolveWithPlayerBaseThenMealCard(
-                        caster, card, "Choose a playerBasePlayerBase to steal from:", wasLastCard,
-                        (victim, stolen) =>
-                        {
-                            //log = _resolver.ResolveCraftyCrow(caster, c, victim, stolen);
-                        }));
-                    break;
-
-                // ---- Trash Panda: pick a card from Trash pile ----
-                case TrashPandaCard c:
-                    var trash = trashPile.PeekTrash().ToList();
-                    if (trash.Count == 0)
-                    {
-                        trashPile.Trash(card);
-                        log = $"🦝 Trash Panda: Trash pile is empty!";
-                    }
-                    else
-                    {
-                        bool done = false;
-                        GameEvents.OnNeedCardFromTrash?.Invoke(
-                            "Choose a card to retrieve from the Trash pile:", trash,
-                            chosen =>
-                            {
-                                _resolver.ResolveTrashPanda(caster, chosen);
-                                done = true;
-                            });
-                        if (caster is AIPlayer)
-                        {
-                            var best = AIPickBestFromTrash(caster, trash);
-                            _resolver.ResolveTrashPanda(caster, best);
-                            log = $"🦝 Trash Panda! {caster.Name} retrieved '{best.Name}' from the Trash pile.";
-                            done = true;
-                        }
-                        yield return new WaitUntil(() => done);
-                    }
-                    break;
-
-                // ---- Food Fight ----
-                case FoodFightCard c:
-                    var clockwise = GetClockwiseOrderFrom(caster);
-                    _resolver.ResolveFoodFight(caster, c);
-                    foreach (var p in clockwise) GameEvents.OnHandChanged?.Invoke(p);
-                    break;
-
-                // ---- Order Envy: pick a playerBasePlayerBase ----
-                case OrderEnvyCard c:
-                    yield return StartCoroutine(ResolveWithPlayerBaseTarget(
-                        caster, c, "Choose a playerBasePlayerBase to swap with:", wasLastCard,
-                        target =>
-                        {
-                            //log = _resolver.ResolveOrderEnvy(caster, c, target);
-                        }));
-                    break;
-
-                default:
-                    trashPile.Trash(card);
-                    log = $"⚠ Unknown action on card '{card.Name}'.";
-                    break;
-            }
-
-            GameEvents.OnLogMessage?.Invoke(log);
-            foreach (var p in _players)
-            {
-                GameEvents.OnHandChanged?.Invoke(p);
-                GameEvents.OnScoreChanged?.Invoke(p, p.Score);
-            }
-
-            if (wasLastCard) TriggerGameEnd();
-            else _humanPlayedCard = true;
-        }
-
-        // ---- Helper: resolve after picking a target playerBasePlayerBase ----
-        private IEnumerator ResolveWithPlayerBaseTarget(PlayerBase caster, CardBase card, string prompt,
-                                                     bool wasLastCard, System.Action<PlayerBase> onTarget)
-        {
-            var targets = _players.Where(p => p != caster).ToList();
-            bool done = false;
-
-            if (caster is AIPlayer)
-            {
-                onTarget(AIPickTarget(caster));
-                done = true;
-            }
-            else
-            {
-                GameEvents.OnNeedPlayerBaseTarget?.Invoke(prompt, targets, target =>
-                {
-                    onTarget(target);
-                    done = true;
-                });
-            }
-            yield return new WaitUntil(() => done);
-        }
-
-        // ---- Helper: resolve after picking playerBasePlayerBase then card from their meal ----
-        private IEnumerator ResolveWithPlayerBaseThenMealCard(PlayerBase caster, CardBase card, string prompt,
-                                                           bool wasLastCard,
-                                                           System.Action<PlayerBase, CardBase> onResult)
-        {
-            bool done = false;
-
-            if (caster is AIPlayer)
-            {
-                var victim = AIPickTarget(caster);
-                var stolen = AIPickCardFromMeal(victim);
-                if (stolen != null) onResult(victim, stolen);
-                done = true;
-            }
-            else
-            {
-                var targets = _players.Where(p => p != caster && p.Meal.Cards.Count > 0).ToList();
-                if (targets.Count == 0) { trashPile.Trash(card); done = true; }
-                else
-                {
-                    GameEvents.OnNeedPlayerBaseAndMealCard?.Invoke(prompt, targets,
-                        (victim, stolen) =>
-                        {
-                            onResult(victim, stolen);
-                            done = true;
-                        });
-                }
-            }
-            yield return new WaitUntil(() => done);
-        }
-
-        // -------------------------------------------------------
         //  End of game
         // -------------------------------------------------------
-        private void TriggerGameEnd()
-        {
-            _gameRunning = false;
-            GameEvents.OnLogMessage?.Invoke("\n🎴 A player played their last card — GAME OVER!");
-            StartCoroutine(FinalScoring());
-        }
+        // private void TriggerGameEnd()
+        // {
+        //     _gameRunning = false;
+        //     GameEvents.OnLogMessage?.Invoke("\n🎴 A player played their last card — GAME OVER!");
+        //     StartCoroutine(FinalScoring());
+        // }
 
         private IEnumerator FinalScoring()
         {
@@ -545,33 +187,7 @@ namespace TacoVsBurrito
                 order.Add(_players[(idx + i) % _players.Count]);
             return order;
         }
-
-        public PlayerBase GetPlayerBase(int index) =>
-            (index >= 0 && index < _players.Count) ? _players[index] : null;
-
-        private bool IsHumanTurn() =>
-            _gameRunning && CurrentPlayer is HumanPlayer && !_humanPlayedCard;
-
-        // ---- AI helpers ----
-        private PlayerBase AIPickTarget(PlayerBase ai) =>
-            _players.Where(p => p != ai).OrderByDescending(p => p.Score).FirstOrDefault() ?? _players[0];
-
-        private CardBase AIPickCardFromMeal(PlayerBase target)
-        {
-            // Prefer stealing Hot Sauce Boss, then highest ingredient
-            var cards = target.Meal.Cards;
-            return cards.OrderByDescending(c =>
-                c is HotSauceBossCard ? 10 : 0).FirstOrDefault();
-        }
-
-        private CardBase AIPickBestFromTrash(PlayerBase ai, List<CardBase> trash)
-        {
-            return trash.OrderByDescending(c =>
-                c is IngredientCardBase @base ? @base.CardValue + 10 :
-                c is HotSauceBossCard ? 50 :
-                c is ActionCardBase ? 5 : 0
-            ).FirstOrDefault();
-        }
+        
         public TrashPile GetTrashPile() => trashPile;
         public DrawPile GetDrawPile() => drawPile;
     }

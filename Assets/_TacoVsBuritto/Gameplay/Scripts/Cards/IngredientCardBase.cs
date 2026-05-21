@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class IngredientCardBase : CardBase
+    public class IngredientCardBase : CardBase, IMealTypeAction
     {
         [Header("Scoring")]
         [SerializeField] int cardValue = 1;
@@ -18,10 +18,9 @@ namespace TacoVsBurrito
             base.Start();
             ValueTxtField.text = cardValue.ToString();
         }
-        public override int GetModifiedMealScore(int currentScore)
+        public int GetModifiedMealScore(int currentScore)
         {
             return currentScore + cardValue;
         }
-
     }
 }

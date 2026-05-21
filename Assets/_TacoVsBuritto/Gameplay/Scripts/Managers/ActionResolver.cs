@@ -97,20 +97,6 @@ namespace TacoVsBurrito
         }
 
         // ==========================================================
-        //  NO BUENO  (reactive – can be played by ANYONE)
-        // ==========================================================
-
-        /// Returns true if No Bueno can legally be played right now.
-        /// blocker = PlayerBase trying to play No Bueno
-        /// targetCard = the card being blocked
-        /// isLastCard = is targetCard the very last card in the target's hand?
-        public bool CanPlayNoBueno(NoBuenoCard noBuenoCard, CardBase targetCard, bool isLastCard)
-        {
-            if (isLastCard)                   return false;  // last card unblockable
-            return true;
-        }
-
-        // ==========================================================
         //  CRAFTY CROW
         // ==========================================================
 
@@ -204,27 +190,6 @@ namespace TacoVsBurrito
 
             GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.Name} swapped their hand and meal with {target.Name}!");
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
-        }
-
-        // ==========================================================
-        //  Place a meal card into any meal (ingredient/tummy ache/hot sauce)
-        // ==========================================================
-
-        /// Place an ingredient-type card from caster's hand into the destination meal.
-        /// destPlayerBase may be self or any opponent.
-        public string PlaceCardInMeal(PlayerBase caster, CardBase card, PlayerBase destPlayerBase)
-        {
-            if (!card.IsPlaceableInMeal)
-                return $"⚠ '{card.Name}' cannot be placed in a meal.";
-
-            caster.Hand.RemoveCard(card);
-            destPlayerBase.Meal.AddCard(card);
-
-            GameEvents.OnCardPlacedInMeal?.Invoke(caster, destPlayerBase, card);
-
-            string dest = (caster == destPlayerBase) ? "their own meal" : $"{destPlayerBase.Name}'s meal";
-
-            return $"🍽 {caster.Name} placed '{card.Name}' into {dest}.";
         }
     }
 }

@@ -29,23 +29,26 @@ namespace TacoVsBurrito
 
         public void OnIconClick()
         {
-            GameEvents.OnOrderEnvyActionTargeted?.Invoke(GameManager.Instance.CurrentPlayer, parentPlayer);
-            ToggleInteraction(false);
+            GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, null));
         }
-
-        void ToggleInteraction(bool value)
-        {
-            iconImage.raycastTarget = value;
-        }
+        
         void ManageOrderEnvyAction(PlayerBase player)
         {
             if(parentPlayer == player)
                 return;
             ToggleInteraction(true);
         }
-        void ManageOrderEnvyActionTargeted(PlayerBase player, PlayerBase victim)
+
+        //For self player who had interaction enabled
+        void ToggleInteraction(bool value)
         {
-            if(parentPlayer == player)
+            iconImage.raycastTarget = value;
+        }
+
+        //For other players who had interaction enabled
+        void ManageOrderEnvyActionTargeted(TargetTypeContext targetTypeContext)
+        {
+            if(parentPlayer == targetTypeContext.caster)
                 return;
             ToggleInteraction(false);
         }

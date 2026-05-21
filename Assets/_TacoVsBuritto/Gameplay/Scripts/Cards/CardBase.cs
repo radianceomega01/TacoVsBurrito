@@ -13,8 +13,6 @@ namespace TacoVsBurrito
         [Header("Identity")]
         [SerializeField] string cardName = "Unnamed Card";
         [SerializeField] string DescriptionText = "";
-        [SerializeField] bool isPlaceableInMeal = false;
-        [SerializeField] bool isBlockable = false;
 
         [Header("Fields")]
         [SerializeField] protected TextMeshProUGUI nameTxtField;
@@ -41,11 +39,6 @@ namespace TacoVsBurrito
 
         public string Name { get { return cardName; } }
 
-        // Common helpers
-        public virtual bool IsPlaceableInMeal => isPlaceableInMeal;
-        public virtual bool IsBlockable => isBlockable;
-
-        public virtual int GetModifiedMealScore(int currentScore) { return currentScore; }
 
         protected virtual void Awake()
         {

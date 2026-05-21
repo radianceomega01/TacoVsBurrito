@@ -26,9 +26,9 @@ namespace TacoVsBurrito
             GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT!");
         }
 
-        void ManageCardTargeted(CardBase selectedCard)
+        void ManageCardTargeted(TargetTypeContext targetTypeContext)
         {
-            resolver.ResolveFoodFight(winner, selectedCard);
+            resolver.ResolveFoodFight(winner, targetTypeContext.cardTargeted);
         }
         void ManageFoodFightFinished(PlayerBase winner)
         {

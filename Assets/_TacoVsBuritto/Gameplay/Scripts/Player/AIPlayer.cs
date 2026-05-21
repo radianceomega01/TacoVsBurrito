@@ -46,11 +46,12 @@ namespace TacoVsBurrito
             drawPile = GameManager.Instance.GetDrawPile();
             trashPile = GameManager.Instance.GetTrashPile();
 
+            //aIBrain.SetDifficulty(difficulty);
             aIBrain.SetDifficulty(AIDifficulty.Hard);
         }
 
         public AIBrain GetBrain() => aIBrain;
-        async void ManageOnTurnStarted(PlayerBase player)
+        void ManageOnTurnStarted(PlayerBase player)
         {
             noBuenoCounter = 0;
             currentActionCardPlayed = null;
@@ -122,12 +123,12 @@ namespace TacoVsBurrito
                     case CraftyCrowCard:
                         aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
                         if (victim != null)
-                            GameEvents.OnCraftyCrowActionTargeted?.Invoke(this, victim, cardToSteal);
+                            GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(this, victim, cardToSteal));
                         break;
                     case OrderEnvyCard:
                         var envyVictim = aIBrain.ChooseOrderEnvyVictim(this, _players);
                         if (envyVictim != null)
-                            GameEvents.OnOrderEnvyActionTargeted?.Invoke(this, envyVictim);
+                            GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(this, envyVictim, null));
                         break;
                 }
             }
