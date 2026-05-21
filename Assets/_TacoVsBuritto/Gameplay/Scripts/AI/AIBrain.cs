@@ -252,6 +252,19 @@ namespace TacoVsBurrito
         {
             return opponent.Meal.Cards.OrderByDescending(c => c is HotSauceBossCard ? 100 : (c is IngredientCardBase ib ? ib.CardValue : 0)).FirstOrDefault();
         }
+        public CardBase PickBestCardFromCardPile(List<CardBase> cards)
+        {
+            return cards.OrderByDescending(c =>
+            {
+                if(c is HotSauceBossCard) return 100;
+                else if(c is CraftyCrowCard) return 90;
+                else if(c is OrderEnvyCard) return 80;
+                else if(c is TrashPandaCard) return 70;
+                else if(c is NoBuenoCard) return 60;
+                else if (c is IngredientCardBase ingredientCard) return ingredientCard.CardValue;
+                else return 0;
+            }).FirstOrDefault();
+        }
 
     }
     public enum AIDifficulty { Easy, Normal, Hard }

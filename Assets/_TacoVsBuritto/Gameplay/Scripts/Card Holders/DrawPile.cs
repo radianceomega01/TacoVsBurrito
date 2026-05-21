@@ -122,6 +122,7 @@ namespace TacoVsBurrito
             }
             GameManager.Instance.CardDrawnFromPile(drawnCard);
         }
+        
         public void TriggerDrawBtnClick() => drawBtn.onClick.Invoke();
 
         public void TogglePileInteraction(bool value) => drawBtn.interactable = value;

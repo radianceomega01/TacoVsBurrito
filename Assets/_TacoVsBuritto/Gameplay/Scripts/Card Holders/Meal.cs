@@ -33,13 +33,13 @@ namespace TacoVsBurrito
         {
             _cards = new();
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
-            GameEvents.OnCraftyCrowActionByPlayer += ManageCraftyCrowAction;
+            GameEvents.OnCraftyCrowAction += ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget += ManageCardClickedForCraftyCrow;
         }
         void OnDestroy()
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
-            GameEvents.OnCraftyCrowActionByPlayer -= ManageCraftyCrowAction;
+            GameEvents.OnCraftyCrowAction -= ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget -= ManageCardClickedForCraftyCrow;
         }
 
@@ -157,9 +157,9 @@ namespace TacoVsBurrito
         }
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player){}
-        void ManageCraftyCrowAction(PlayerBase player)
+        void ManageCraftyCrowAction()
         {
-            if(player != parentPlayer)
+            if(GameManager.Instance.CurrentPlayer != parentPlayer)
             {
                 _cards.ForEach(card =>
                 {

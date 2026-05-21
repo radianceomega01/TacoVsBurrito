@@ -12,7 +12,15 @@ namespace TacoVsBurrito
 
         public override async void ExecuteAction()
         {
-            await Task.Delay(700);
+            await Task.Delay(500);
+            Dictionary<CardBase, int> pileCards = GameManager.Instance.GetTrashPile().RetrieveFromTrash();
+
+            if(pileCards.Count == 0)
+            {
+                GameEvents.OnLogMessage("TrashPanda cancelled due to insufficient cards!");
+                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+                return;
+            }
             GameEvents.OnTrashPandaAction?.Invoke(GameManager.Instance.GetTrashPile().RetrieveFromTrash());
         }
 

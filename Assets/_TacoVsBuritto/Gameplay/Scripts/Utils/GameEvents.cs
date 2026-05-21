@@ -34,7 +34,7 @@ namespace TacoVsBurrito
         // ---- Meal changes ----
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCardPlacedInMeal; // (placer, destPlayer, card)
         public static Action<PlayerBase>                        OnMealCleared;      // Health Inspector wipe
-        public static Action<PlayerBase>                        OnCraftyCrowActionByPlayer;      
+        public static Action                                    OnCraftyCrowAction;      
         public static Action<TargetTypeContext>                 OnCraftyCrowActionTargeted;   // (caster, victim, card being targeted for steal)  
         public static Action<PlayerBase, PlayerBase, CardBase>  OnCardStolenFromMeal; // (thief, victim, card)
         public static Action<PlayerBase>                        OnOrderEnvyAction;  // (player)
@@ -43,7 +43,6 @@ namespace TacoVsBurrito
         public static Action<Dictionary<CardBase, int>>         OnTrashPandaAction; 
         public static Action<TargetTypeContext>                 OnCardsPileCardTargeted; 
         public static Action                                    OnFoodFightAction;
-        public static Action<PlayerBase>                        OnFoodFightFinished; //winner
         public static Action<Dictionary<CardBase, int>>         OnCardSelectionForFoodFightWinner; // All cards drawn during food fight
 
         

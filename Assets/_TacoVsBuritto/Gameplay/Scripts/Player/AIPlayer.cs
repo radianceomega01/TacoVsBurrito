@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -30,6 +31,11 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged += ManageOnTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
+
+            GameEvents.OnCraftyCrowAction += ManageCraftyCraftyCrowAction;
+            GameEvents.OnOrderEnvyAction += ManageOrderEnvyAction;
+            GameEvents.OnTrashPandaAction += ManageCardSelectionAction;
+            GameEvents.OnCardSelectionForFoodFightWinner += ManageCardSelectionAction;
         }
 
         void OnDestroy()
@@ -39,6 +45,12 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged -= ManageOnTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
+
+            GameEvents.OnCraftyCrowAction -= ManageCraftyCraftyCrowAction;
+            GameEvents.OnOrderEnvyAction -= ManageOrderEnvyAction;
+            GameEvents.OnTrashPandaAction -= ManageCardSelectionAction;
+            GameEvents.OnCardSelectionForFoodFightWinner -= ManageCardSelectionAction;
+
         }
 
         void Start()
@@ -101,10 +113,6 @@ namespace TacoVsBurrito
                 {
                     PlayACard();
                 }
-                else if (state == TurnState.ActionResolvePhase)
-                {
-                    ResolveAction();
-                }
             }
         }
         void ManageOnTurnChanged(PlayerBase player)
@@ -114,24 +122,33 @@ namespace TacoVsBurrito
                 DrawACard();
         }
 
-        void ResolveAction()
+        void ManageOrderEnvyAction(PlayerBase @base)
         {
-            if(currentActionCardPlayed != null && currentActionCardPlayed.IsTargetTypeAction)
-            {
-                switch (currentActionCardPlayed)
-                {
-                    case CraftyCrowCard:
-                        aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
-                        if (victim != null)
-                            GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(this, victim, cardToSteal));
-                        break;
-                    case OrderEnvyCard:
-                        var envyVictim = aIBrain.ChooseOrderEnvyVictim(this, _players);
-                        if (envyVictim != null)
-                            GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(this, envyVictim, null));
-                        break;
-                }
-            }
+            if(!isSelfTurnRunning)
+                return;
+                
+            var envyVictim = aIBrain.ChooseOrderEnvyVictim(this, _players);
+            if (envyVictim != null)
+                GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(this, envyVictim, null));
+        }
+
+        void ManageCraftyCraftyCrowAction()
+        {
+            if(!isSelfTurnRunning)
+                return;
+
+            aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
+            if (victim != null)
+                GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(this, victim, cardToSteal));
+        }
+
+        void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary)
+        {
+            if(!isSelfTurnRunning)
+                return;
+
+            CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
+            GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(this, null, cardPicked));
         }
 
         void ManageNoBuenoInterruptWindow(ActionCardBase card)
