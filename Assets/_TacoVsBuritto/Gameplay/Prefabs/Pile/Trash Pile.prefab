@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1239d44e96f1a574fb1277e95b8e4a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.TrashPile
-  cardsTransform: {fileID: 1019064733570298294}
+  cardsParent: {fileID: 1019064733570298294}
 --- !u!222 &3432193496303998267
 CanvasRenderer:
   m_ObjectHideFlags: 0

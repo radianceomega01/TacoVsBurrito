@@ -8,8 +8,7 @@ namespace TacoVsBurrito
     {
         public override void ExecuteAction()
         {
-            GameEvents.OnFoodFightAction?.Invoke();
-            GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT!");
+            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
         }
 
         public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
@@ -19,6 +18,10 @@ namespace TacoVsBurrito
             resolver.ResolveFoodFight(targetTypeContext.caster, targetTypeContext.cardTargeted);
         }
 
-        public void ResolveAction(){}
+        public void ResolveAction()
+        {
+            GameEvents.OnFoodFightAction?.Invoke();
+            GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT!");
+        }
     }
 }

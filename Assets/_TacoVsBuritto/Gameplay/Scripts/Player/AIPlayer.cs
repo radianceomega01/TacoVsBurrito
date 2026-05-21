@@ -148,7 +148,7 @@ namespace TacoVsBurrito
                 return;
 
             CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
-            GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(this, null, cardPicked));
+            GameEvents.OnCardClickedForActionTargetByAI?.Invoke(cardPicked);
         }
 
         void ManageNoBuenoInterruptWindow(ActionCardBase card)

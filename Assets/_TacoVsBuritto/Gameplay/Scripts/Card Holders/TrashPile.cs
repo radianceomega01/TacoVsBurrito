@@ -7,12 +7,9 @@ using UnityEngine.UI;
 
 namespace TacoVsBurrito
 {
-    public class TrashPile : MonoBehaviour, ICardDropTarget
+    public class TrashPile : CardPileBase, ICardDropTarget
     {
-        [SerializeField] Transform cardsTransform;
-        public int TrashCount => _cards.Count;
-
-        private List<CardBase> _cards = new();
+        public int TrashCount => pileCards.Count;
         private TurnState currentTurnState;
 
         void Awake()
@@ -39,25 +36,16 @@ namespace TacoVsBurrito
         }
         void SetCardOnPile(CardBase card)
         {
-            _cards.Add(card);
-            card.ChangePosition(cardsTransform.position);
-            card.ChangeParent(cardsTransform);
+            pileCards.Add(card);
+            card.ChangePosition(cardsParent.position);
+            card.ChangeParent(cardsParent);
             card.DisableInteraction();
             card.ToggleBackFace(false);
         }
 
         public void RemoveCard(CardBase card)
         {
-            _cards.Remove(card);
-        }
-        public void PutCardsBack(List<CardBase> cards)
-        {
-            foreach (var card in cards)
-            {
-                card.ChangePosition(cardsTransform.position);
-                card.ChangeParent(cardsTransform);
-                card.DisableInteraction();
-            }
+            pileCards.Remove(card);
         }
 
         public void TrashAll(IEnumerable<CardBase> cards)
@@ -65,12 +53,9 @@ namespace TacoVsBurrito
             foreach (var c in cards) SetCardOnPile(c);
         }
 
-        /// View the full trash pile (for Trash Panda selection).
-        public IReadOnlyList<CardBase> PeekTrash() => _cards;
-
         public Dictionary<CardBase, int> RetrieveFromTrash()
         {
-            return _cards.RetrieveUniqueCards();
+            return pileCards.RetrieveUniqueCards();
         }
 
         public bool CanDrop(CardBase card)
@@ -85,6 +70,14 @@ namespace TacoVsBurrito
             Trash(card);
         }
 
+        public override void PutCardsBack(List<CardBase> cards)
+        {
+            base.PutCardsBack(cards);
+            foreach (var card in cards)
+            {
+                card.ToggleBackFace(false);
+            }
+        }
 
         void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {

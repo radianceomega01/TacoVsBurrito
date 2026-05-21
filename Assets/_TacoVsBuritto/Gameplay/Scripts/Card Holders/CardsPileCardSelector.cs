@@ -11,26 +11,31 @@ namespace TacoVsBurrito
         [SerializeField] Transform rootTransform;
 
         List<CardBase> pileCards;
+        CardPileBase cardPile;
         void Awake()
         {
             GameEvents.OnTrashPandaAction += ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget += CardClickedForActionTarget;
             GameEvents.OnCardSelectionForFoodFightWinner += ManageCardSelectionForFoodFightWinner;
+            GameEvents.OnCardClickedForActionTargetByAI += CardClickedForActionTargetByAI;
         }
         void OnDestroy()
         {
             GameEvents.OnTrashPandaAction -= ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget -= CardClickedForActionTarget;
             GameEvents.OnCardSelectionForFoodFightWinner -= ManageCardSelectionForFoodFightWinner;
+            GameEvents.OnCardClickedForActionTargetByAI -= CardClickedForActionTargetByAI;
         }
 
         void ManageTrashPandaAction(Dictionary<CardBase, int> cardMap)
         {
+            cardPile = GameManager.Instance.GetTrashPile();
             ArrageCardsToSelect(cardMap);
         }
 
         void ManageCardSelectionForFoodFightWinner(Dictionary<CardBase, int> cardMap)
         {
+            cardPile = GameManager.Instance.GetDrawPile();
             ArrageCardsToSelect(cardMap);
         }
 
@@ -44,25 +49,26 @@ namespace TacoVsBurrito
             pileCards = cardMap.Keys.ToList();
             for(int i=0; i<pileCards.Count; i++)
             {
+                pileCards[i].ToggleBackFace(false);
                 pileCards[i].ToggleInteractionType();
-                pileCards[i].EnableInteraction();
                 pileCards[i].ChangePosition(positions[i]);
                 pileCards[i].transform.SetParent(cardsParent);
+
+                if(GameManager.Instance.CurrentPlayer is  SelfPlayer)
+                    pileCards[i].EnableInteraction();
             }
         }
 
         void CardClickedForActionTarget(CardBase card)
         {
-            if(pileCards == null)
-                return;
-
             pileCards.ForEach(card => card.ToggleInteractionType());
-             
-            GameManager.Instance.GetTrashPile().PutCardsBack(pileCards);    
+            cardPile.PutCardsBack(pileCards);
+
             GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, null, card));
 
             ResetParams();  
         }
+        void CardClickedForActionTargetByAI(CardBase card) => CardClickedForActionTarget(card);
         
         void ResetParams()
         {
