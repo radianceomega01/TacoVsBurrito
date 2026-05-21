@@ -154,6 +154,12 @@ namespace TacoVsBurrito
 
         void ManageNoBuenoPlayed()
         {
+            if(currentTrashedCard == null)
+            {
+                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+                return;
+            }
+
             noBuenoCounter++;
             SwitchState(TurnState.NoBuenoWindowPhase);
             StartNoBuenoTimer();

@@ -61,7 +61,7 @@ namespace TacoVsBurrito
             trashPileCards.ForEach(card => card.ToggleInteractionType());
              
             GameManager.Instance.GetTrashPile().PutCardsBack(trashPileCards);    
-            GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(null, null, card));
+            GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, null, card));
 
             ResetParams();  
         }

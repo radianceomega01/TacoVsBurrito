@@ -17,7 +17,10 @@ namespace TacoVsBurrito
             ValueTxtField.text = $"X{VALUE_MULTIPLIER}";
         }
 
-        public override void ExecuteAction() { }
+        public override void ExecuteAction()
+        {
+            GameEvents.OnTurnEnded(GameManager.Instance.CurrentPlayer);
+        }
 
         public int GetModifiedMealScore(int currentScore) => currentScore * VALUE_MULTIPLIER;
         public override TurnState GetStateOnTrashed() => TurnState.SkipPhase;

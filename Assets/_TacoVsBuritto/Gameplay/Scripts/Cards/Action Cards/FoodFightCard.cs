@@ -10,14 +10,14 @@ namespace TacoVsBurrito
 
         protected override void Awake() {
             base.Awake();
-            GameEvents.OnCardsPileCardTargeted += ManageCardTargeted;
-            GameEvents.OnFoodFightFinished += ManageFoodFightFinished;
+            // GameEvents.OnCardsPileCardTargeted += ManageCardTargeted;
+            // GameEvents.OnFoodFightFinished += ManageFoodFightFinished;
         }
 
         protected override void OnDestroy() {
             base.OnDestroy();
-            GameEvents.OnCardsPileCardTargeted -= ManageCardTargeted;
-            GameEvents.OnFoodFightFinished -= ManageFoodFightFinished;
+            // GameEvents.OnCardsPileCardTargeted -= ManageCardTargeted;
+            // GameEvents.OnFoodFightFinished -= ManageFoodFightFinished;
         }
 
         public override void ExecuteAction()

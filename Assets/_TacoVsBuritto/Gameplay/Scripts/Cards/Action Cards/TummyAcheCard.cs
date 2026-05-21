@@ -18,7 +18,10 @@ namespace TacoVsBurrito
             ValueTxtField.text = cardValue.ToString();
         }
 
-        public override void ExecuteAction() { }
+        public override void ExecuteAction()
+        {
+            GameEvents.OnTurnEnded(GameManager.Instance.CurrentPlayer);
+        }
 
         public int GetModifiedMealScore(int currentScore) => currentScore + cardValue;
         public override TurnState GetStateOnTrashed() => TurnState.SkipPhase;
