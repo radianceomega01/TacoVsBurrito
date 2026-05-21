@@ -117,7 +117,7 @@ namespace TacoVsBurrito
             DisableFoodFightDrawPile();
             foodFightDrawPile.Reset();
             GameEvents.OnFoodFightFinished?.Invoke(winner);
-            GameEvents.OnFoodFightCardsDrawn?.Invoke(cardsDrawn.RetrieveUniqueCards());
+            GameEvents.OnCardSelectionForFoodFightWinner?.Invoke(cardsDrawn.RetrieveUniqueCards());
 
             ResetParams();
         }

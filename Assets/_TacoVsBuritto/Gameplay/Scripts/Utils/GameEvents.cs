@@ -44,7 +44,7 @@ namespace TacoVsBurrito
         public static Action<TargetTypeContext>                 OnCardsPileCardTargeted; 
         public static Action                                    OnFoodFightAction;
         public static Action<PlayerBase>                        OnFoodFightFinished; //winner
-        public static Action<Dictionary<CardBase, int>>         OnFoodFightCardsDrawn; // All cards drawn during food fight
+        public static Action<Dictionary<CardBase, int>>         OnCardSelectionForFoodFightWinner; // All cards drawn during food fight
 
         
         // ---- Card Drag ----

@@ -10,20 +10,18 @@ namespace TacoVsBurrito
         [SerializeField] Transform cardsParent;
         [SerializeField] Transform rootTransform;
 
-        List<CardBase> trashPileCards;
+        List<CardBase> pileCards;
         void Awake()
         {
             GameEvents.OnTrashPandaAction += ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget += CardClickedForActionTarget;
-            GameEvents.OnFoodFightCardsDrawn += ManageFoodFightCardsDrawn;
-            //GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoWindowStarted;
+            GameEvents.OnCardSelectionForFoodFightWinner += ManageCardSelectionForFoodFightWinner;
         }
         void OnDestroy()
         {
             GameEvents.OnTrashPandaAction -= ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget -= CardClickedForActionTarget;
-            GameEvents.OnFoodFightCardsDrawn -= ManageFoodFightCardsDrawn;
-            //GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoWindowStarted;
+            GameEvents.OnCardSelectionForFoodFightWinner -= ManageCardSelectionForFoodFightWinner;
         }
 
         void ManageTrashPandaAction(Dictionary<CardBase, int> cardMap)
@@ -31,7 +29,7 @@ namespace TacoVsBurrito
             ArrageCardsToSelect(cardMap);
         }
 
-        void ManageFoodFightCardsDrawn(Dictionary<CardBase, int> cardMap)
+        void ManageCardSelectionForFoodFightWinner(Dictionary<CardBase, int> cardMap)
         {
             ArrageCardsToSelect(cardMap);
         }
@@ -43,37 +41,32 @@ namespace TacoVsBurrito
 
             List<Vector3> positions = GenerateCardPositions(cardsParent.position, cardMap.Count);
 
-            trashPileCards = cardMap.Keys.ToList();
-            for(int i=0; i<trashPileCards.Count; i++)
+            pileCards = cardMap.Keys.ToList();
+            for(int i=0; i<pileCards.Count; i++)
             {
-                trashPileCards[i].ToggleInteractionType();
-                trashPileCards[i].EnableInteraction();
-                trashPileCards[i].ChangePosition(positions[i]);
-                trashPileCards[i].transform.SetParent(cardsParent);
+                pileCards[i].ToggleInteractionType();
+                pileCards[i].EnableInteraction();
+                pileCards[i].ChangePosition(positions[i]);
+                pileCards[i].transform.SetParent(cardsParent);
             }
         }
 
         void CardClickedForActionTarget(CardBase card)
         {
-            if(trashPileCards == null)
+            if(pileCards == null)
                 return;
 
-            trashPileCards.ForEach(card => card.ToggleInteractionType());
+            pileCards.ForEach(card => card.ToggleInteractionType());
              
-            GameManager.Instance.GetTrashPile().PutCardsBack(trashPileCards);    
+            GameManager.Instance.GetTrashPile().PutCardsBack(pileCards);    
             GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, null, card));
 
             ResetParams();  
         }
-
-        // void ManageNoBuenoWindowStarted(ActionCardBase actionCard)
-        // {
-        //     //ResetParams();
-        // }
         
         void ResetParams()
         {
-            trashPileCards.Clear();
+            pileCards.Clear();
             rootTransform.gameObject.SetActive(false);
         }
 
