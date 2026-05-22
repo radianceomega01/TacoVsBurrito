@@ -11,8 +11,6 @@ namespace TacoVsBurrito
             GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
         }
 
-        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
-
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
         {
             resolver.ResolveFoodFight(targetTypeContext.caster, targetTypeContext.cardTargeted);
@@ -21,7 +19,8 @@ namespace TacoVsBurrito
         public void ResolveAction()
         {
             GameEvents.OnFoodFightAction?.Invoke();
-            GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT!");
         }
+        
+        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
     }
 }

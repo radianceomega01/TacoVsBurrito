@@ -27,7 +27,6 @@ namespace TacoVsBurrito
             aIBrain = transform.AddComponent<AIBrain>();
 
             GameEvents.OnTurnStarted += ManageTurnStarted;
-            //GameEvents.OnTurnChanged += ManageTurnChanged;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
@@ -41,7 +40,6 @@ namespace TacoVsBurrito
         void OnDestroy()
         {
             GameEvents.OnTurnStarted -= ManageTurnStarted;
-            //GameEvents.OnTurnChanged -= ManageTurnChanged;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
@@ -72,7 +70,6 @@ namespace TacoVsBurrito
 
             if (isSelfTurnRunning && !drawPile.IsDrawPileEmpty)
             {
-                Debug.Log("Inside TurnStarted");
                 DrawACard();
             }
         }
@@ -80,7 +77,6 @@ namespace TacoVsBurrito
         async void DrawACard()
         {
             await Task.Delay(CARD_DRAW_DELAY_IN_MS);
-            Debug.Log("AI clicked draw btn");
             drawPile.TriggerDrawBtnClick();
         }
 
@@ -120,16 +116,6 @@ namespace TacoVsBurrito
                 }
             }
         }
-        // void ManageTurnChanged(PlayerBase player)
-        // {
-            
-        //     isSelfTurnRunning = player is AIPlayer;
-        //     if (isSelfTurnRunning)
-        //     {
-        //         Debug.Log("Inside Turnchanged");
-        //         DrawACard();
-        //     }
-        // }
 
         void ManageOrderEnvyAction(PlayerBase @base)
         {

@@ -55,13 +55,12 @@ namespace TacoVsBurrito
             if(parentPlayer == targetTypeContext.caster)
                 return;
             ToggleInteraction(false);
-            
+
             if(parentPlayer != targetTypeContext.victim)
                 DeactivateGlow();
         }
         void ManageActionResolved(ActionCardBase actionCard)
         {
-            Debug.Log("reached");
             if(actionCard is not OrderEnvyCard)
                 return;
             DeactivateGlow();

@@ -49,6 +49,7 @@ namespace TacoVsBurrito
                 return;
             }
 
+            GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT!");
             ActivateFoodFightDrawPile();
             BeginRound(GameManager.Instance.CurrentPlayer);
         }
@@ -97,7 +98,6 @@ namespace TacoVsBurrito
         {
             currentPlayerIndex = player.Index;
             playerCardInRound.Clear();
-            Debug.Log("playercards in round cleared ");
             await Task.Delay(DELAY_BETWEEN_TURNS_IN_MS);
             GameEvents.OnTurnChangedInFoodFight?.Invoke(player);
         }

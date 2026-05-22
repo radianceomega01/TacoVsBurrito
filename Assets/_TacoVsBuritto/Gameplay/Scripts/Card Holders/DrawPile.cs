@@ -167,7 +167,6 @@ namespace TacoVsBurrito
         }
         public void ResetBtnListener()
         {
-            Debug.Log("Click reset");
             drawBtn.onClick.RemoveAllListeners();
             drawBtn.onClick.AddListener(OnDrawBtnClicked);
         }
