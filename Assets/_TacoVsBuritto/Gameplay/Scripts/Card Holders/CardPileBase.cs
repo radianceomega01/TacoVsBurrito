@@ -27,5 +27,9 @@ namespace TacoVsBurrito
                 card.ChangeSiblingIndex(transform.parent.childCount - 1);
             }
         }
+        public void RemoveCard(CardBase card)
+        {
+            pileCards.Remove(card);
+        }
     }
 }

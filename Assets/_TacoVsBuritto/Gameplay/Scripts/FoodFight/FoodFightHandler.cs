@@ -10,7 +10,7 @@ namespace TacoVsBurrito
     public class FoodFightHandler : MonoBehaviour
     {
         const int DELAY_BETWEEN_TURNS_IN_MS = 1000;
-        const int DELAY_AFTER_FOOD_FIGHT_IN_MS = 2500;
+        const int DELAY_AFTER_FOOD_FIGHT_IN_MS = 1500;
         DrawPile drawPile;
         FoodFightDrawPile foodFightDrawPile;
 
@@ -63,7 +63,7 @@ namespace TacoVsBurrito
                 return;
             }
             PlayerBase nextPlayer = GetNextPlayer();
-            GameEvents.OnTurnChanged?.Invoke(nextPlayer);
+            GameEvents.OnTurnChangedInFoodFight?.Invoke(nextPlayer);
         }
 
         PlayerBase GetNextPlayer()
@@ -99,7 +99,7 @@ namespace TacoVsBurrito
             playerCardInRound.Clear();
             Debug.Log("playercards in round cleared ");
             await Task.Delay(DELAY_BETWEEN_TURNS_IN_MS);
-            GameEvents.OnTurnChanged?.Invoke(player);
+            GameEvents.OnTurnChangedInFoodFight?.Invoke(player);
         }
 
         void RoundEnd()
@@ -127,9 +127,9 @@ namespace TacoVsBurrito
             DeactivateFoodFightDrawPile();
             drawPile.AddCardsBack(cardsDrawn);
 
-            GameEvents.OnTurnChanged?.Invoke(winner);
             Dictionary<CardBase, int> uniqueCards = cardsDrawn.RetrieveUniqueCards();
             GameEvents.OnCardSelectionForFoodFightWinner?.Invoke(uniqueCards, winner);
+            GameEvents.OnPlayerAndTurnStateChanged?.Invoke(TurnState.ActionTargetPhase, winner);
 
             ResetParams();
         }

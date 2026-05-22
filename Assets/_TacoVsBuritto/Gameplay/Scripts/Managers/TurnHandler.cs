@@ -24,11 +24,12 @@ namespace TacoVsBurrito
             GameEvents.OnGameInit += DecidePlayers;
             GameEvents.OnGameStarted += StartGame;
             GameEvents.OnTurnEnded += ManageTurnEnded;
-            GameEvents.OnTurnChanged += ManageTurnChanged;
+            GameEvents.OnTurnChangedInFoodFight += ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
+            GameEvents.OnPlayerAndTurnStateChanged += ManagePlayerAndStateChanged;
 
             GameEvents.OnCraftyCrowActionTargeted += ManageTargetAction;
             GameEvents.OnOrderEnvyActionTargeted += ManageTargetAction;
@@ -40,11 +41,12 @@ namespace TacoVsBurrito
             GameEvents.OnGameInit -= DecidePlayers;
             GameEvents.OnGameStarted -= StartGame;
             GameEvents.OnTurnEnded -= ManageTurnEnded;
-            GameEvents.OnTurnChanged -= ManageTurnChanged;
+            GameEvents.OnTurnChangedInFoodFight -= ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
             GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
+            GameEvents.OnPlayerAndTurnStateChanged -= ManagePlayerAndStateChanged;
 
             GameEvents.OnCraftyCrowActionTargeted -= ManageTargetAction;
             GameEvents.OnOrderEnvyActionTargeted -= ManageTargetAction;
@@ -83,7 +85,6 @@ namespace TacoVsBurrito
             currentTurnState = turnState;
             Debug.Log($"State changed for player {CurrentPlayer.GetType()} to {turnState.ToString()}");
             GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
-            
         }
 
         void ManageActionCardTrashed(ActionCardBase card)
@@ -101,11 +102,16 @@ namespace TacoVsBurrito
             SwitchState(TurnState.DrawPhase);
             currentTrashedCard = null;
         }
-        void ManageTurnChanged(PlayerBase newPlayer)
+        void ManageTurnChangedInFoodFight(PlayerBase newPlayer)
         {
             currentPlayerIndex = newPlayer.Index;
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
             SwitchState(TurnState.DrawPhase);
+        }
+        void ManagePlayerAndStateChanged(TurnState state, PlayerBase player)
+        {
+            currentPlayerIndex = player.Index;
+            SwitchState(state);
         }
 
         void ManageDrawPhaseSkipped()

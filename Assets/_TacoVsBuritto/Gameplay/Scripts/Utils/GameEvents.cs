@@ -20,7 +20,8 @@ namespace TacoVsBurrito
         public static Action<PlayerBase>                OnTurnStarted;
         public static Action<TurnState, PlayerBase>     OnTurnStateChanged;
         public static Action<PlayerBase>                OnTurnEnded;
-        public static Action<PlayerBase>                OnTurnChanged;
+        public static Action<PlayerBase>                OnTurnChangedInFoodFight;
+        public static Action<TurnState, PlayerBase>     OnPlayerAndTurnStateChanged;
         public static Action<PlayerBase>                OnGameOver;         // winner
 
         // ---- Draw pile ----
@@ -32,11 +33,8 @@ namespace TacoVsBurrito
         public static Action<PlayerBase>                OnHandChanged;      // general refresh
 
         // ---- Meal changes ----
-        public static Action<PlayerBase, PlayerBase, CardBase>  OnCardPlacedInMeal; // (placer, destPlayer, card)
-        public static Action<PlayerBase>                        OnMealCleared;      // Health Inspector wipe
         public static Action                                    OnCraftyCrowAction;      
-        public static Action<TargetTypeContext>                 OnCraftyCrowActionTargeted;   // (caster, victim, card being targeted for steal)  
-        public static Action<PlayerBase, PlayerBase, CardBase>  OnCardStolenFromMeal; // (thief, victim, card)
+        public static Action<TargetTypeContext>                 OnCraftyCrowActionTargeted;   // (caster, victim, card being targeted for steal)
         public static Action<PlayerBase>                        OnOrderEnvyAction;  // (player)
         public static Action<TargetTypeContext>                 OnOrderEnvyActionTargeted;    // (swapper, swapTarget)
         public static Action<Dictionary<CardBase, int>>         OnTrashPandaAction; 

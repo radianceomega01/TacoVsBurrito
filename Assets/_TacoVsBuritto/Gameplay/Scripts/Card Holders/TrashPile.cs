@@ -43,11 +43,6 @@ namespace TacoVsBurrito
             card.ToggleBackFace(false);
         }
 
-        public void RemoveCard(CardBase card)
-        {
-            pileCards.Remove(card);
-        }
-
         public void TrashAll(IEnumerable<CardBase> cards)
         {
             foreach (var c in cards) SetCardOnPile(c);

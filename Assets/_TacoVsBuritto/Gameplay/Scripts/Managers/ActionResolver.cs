@@ -88,7 +88,6 @@ namespace TacoVsBurrito
             var mealContents = victim.Meal.TakeAll();
             _trashPile.TrashAll(mealContents);
 
-            GameEvents.OnMealCleared?.Invoke(victim);
             GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.Name}'s entire meal is trashed! " +
                    $"({mealContents.Count} card(s) discarded) Turn ends immediately.");
 
@@ -107,7 +106,6 @@ namespace TacoVsBurrito
             caster.Meal.AddCard(stealTarget);
             victim.Meal.RemoveCard(stealTarget);
 
-            GameEvents.OnCardStolenFromMeal?.Invoke(caster, victim, stealTarget);
             GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! {caster.Name} stole '{stealTarget.Name}' " +
                    $"from {victim.Name}'s meal into their own meal!");
 
@@ -172,7 +170,7 @@ namespace TacoVsBurrito
                 return;        
             }
             winner.Hand.AddCard(chosenCard);
-            GameEvents.OnTurnChanged?.Invoke(winner);
+            GameEvents.OnTurnChangedInFoodFight?.Invoke(winner);
         }
 
         private int ValueForFoodFight(CardBase card) =>

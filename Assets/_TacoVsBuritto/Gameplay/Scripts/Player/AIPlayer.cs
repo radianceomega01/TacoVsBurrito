@@ -15,7 +15,7 @@ namespace TacoVsBurrito
         private IReadOnlyList<PlayerBase> _players => GameManager.Instance.Players;
 
         const int CARD_DRAW_DELAY_IN_MS = 1000;
-        const int THINKING_DELAY_IN_MS = 2500;
+        const int THINKING_DELAY_IN_MS = 2000;
 
         bool isSelfTurnRunning = false;
         ActionCardBase currentActionCardPlayed = null;

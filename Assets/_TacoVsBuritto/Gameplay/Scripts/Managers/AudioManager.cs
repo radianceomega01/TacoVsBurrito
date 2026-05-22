@@ -37,16 +37,16 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStarted        += _        => Play(sfxTurnStart);
             GameEvents.OnHealthInspector    += ()        => Play(sfxHealthInspector);
             GameEvents.OnNoBuenoPlayed      += ()        => Play(sfxNoBueno);
-            GameEvents.OnCardStolenFromMeal += (_, __, ___) => Play(sfxCraftyCrow);
+            GameEvents.OnCraftyCrowActionTargeted += (TargetTypeContext ctx) => Play(sfxCraftyCrow);
             GameEvents.OnOrderEnvyAction         += _        => Play(sfxOrderEnvy);
             GameEvents.OnGameOver           += _        => Play(sfxWin);
 
-            GameEvents.OnCardPlacedInMeal += (_, _, card) =>
-            {
-                Play(card is TummyAcheCard  ? sfxPlaceTummyAche
-                   : card is HotSauceBossCard ? sfxHotSauceBoss
-                   :                                              sfxPlaceIngredient);
-            };
+            // GameEvents.OnCardPlacedInMeal += (_, _, card) =>
+            // {
+            //     Play(card is TummyAcheCard  ? sfxPlaceTummyAche
+            //        : card is HotSauceBossCard ? sfxHotSauceBoss
+            //        :                                              sfxPlaceIngredient);
+            // };
         }
 
         private void Play(AudioClip clip)
