@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace TacoVsBurrito
@@ -49,7 +50,7 @@ namespace TacoVsBurrito
         void Start()
         {
             parentPlayer = GetComponentInParent<PlayerBase>();
-            scoreTxt.SetText($"Score: 0");
+            UpdateScore();
         }
         // ---- Mutations ----
 
@@ -66,13 +67,14 @@ namespace TacoVsBurrito
             if (card is HotSauceBossCard) HotSauceBossCardCount++;
             if (card is IngredientCardBase) IngredientCardCount++;
 
-            scoreTxt.SetText($"Score: {CalculateScore()}");
+            UpdateScore();
         }
 
         /// Remove a specific card (used by Crafty Crow).
         public void RemoveCard(CardBase card)
         {
             _cards.Remove(card);
+            UpdateScore();
             ArrangeCardsAnimated();
         }
 
@@ -81,6 +83,7 @@ namespace TacoVsBurrito
         {
             var all = new List<CardBase>(_cards);
             _cards.Clear();
+            UpdateScore();
             return all;
         }
 
@@ -206,6 +209,7 @@ namespace TacoVsBurrito
             currentGlowingCard = null;    
         }
         
+        void UpdateScore() => scoreTxt.SetText($"Score: {CalculateScore()}");
     }
     public enum MealType
     {
