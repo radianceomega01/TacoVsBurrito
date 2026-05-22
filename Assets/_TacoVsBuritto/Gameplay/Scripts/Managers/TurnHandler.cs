@@ -154,6 +154,7 @@ namespace TacoVsBurrito
         {
             if (currentTrashedCard != null && currentTrashedCard is ITargetTypeAction targetTyeCard) //No bueno is immediately executed
             {
+                GameEvents.OnActionResolved?.Invoke(currentTrashedCard);
                 targetTyeCard.ResolveAction();
             }
         }

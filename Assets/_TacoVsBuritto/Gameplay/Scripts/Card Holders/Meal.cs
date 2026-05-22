@@ -20,6 +20,7 @@ namespace TacoVsBurrito
 
         public MealType Type { get; }
         private List<CardBase> _cards;
+        private CardBase currentGlowingCard;
 
         public IReadOnlyList<CardBase> Cards => _cards;
         public PlayerBase ParentPlayer => parentPlayer;
@@ -35,12 +36,14 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
             GameEvents.OnCraftyCrowAction += ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget += ManageCardClickedForCraftyCrow;
+            GameEvents.OnActionResolved += ManageActionResolved;
         }
         void OnDestroy()
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnCraftyCrowAction -= ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget -= ManageCardClickedForCraftyCrow;
+            GameEvents.OnActionResolved -= ManageActionResolved;
         }
 
         void Start()
@@ -165,6 +168,7 @@ namespace TacoVsBurrito
                 {
                     card.EnableInteraction();
                     card.ToggleInteractionType();
+                    card.ActivateGlow();
                 });
             }
         }
@@ -184,9 +188,22 @@ namespace TacoVsBurrito
         {
             if(!_cards.Contains(card))
                 return;
-                
+
+            currentGlowingCard = card;
+            _cards.ForEach(c => 
+            {
+                if(c != card) c.DeactivateGlow();
+            });    
             DisableCraftyCrowAction(GameManager.Instance.CurrentPlayer);
             GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
+        }
+
+        void ManageActionResolved(ActionCardBase actionCard)
+        {
+            if(actionCard is not CraftyCrowCard)
+                return;
+            currentGlowingCard?.DeactivateGlow();
+            currentGlowingCard = null;    
         }
         
     }

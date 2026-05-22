@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace TacoVsBurrito
 {
-    public abstract class CardBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler
+    public abstract class CardBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IGlowEntity
     {
         [Header("Identity")]
         [SerializeField] string cardName = "Unnamed Card";
@@ -18,6 +18,7 @@ namespace TacoVsBurrito
         [SerializeField] protected TextMeshProUGUI nameTxtField;
         [SerializeField] protected TextMeshProUGUI DescriptionTxtField;
         [SerializeField] protected Transform backFaceImage;
+        [SerializeField] protected GlowBGUI glowBG;
 
 
         private const float DRAG_SCALE = 1.2f;
@@ -200,6 +201,15 @@ namespace TacoVsBurrito
 
         public float GetWidth() => _rectTransform.sizeDelta.x;
 
+        public void ActivateGlow()
+        {
+            glowBG.ShowEffect();
+        }
+
+        public void DeactivateGlow()
+        {
+            glowBG.Reset();
+        }
     }
     public enum InteractionType
     {

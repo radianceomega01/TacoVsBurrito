@@ -61,6 +61,9 @@ namespace TacoVsBurrito
 
         void CardClickedForActionTarget(CardBase selectedCard)
         {
+            if(pileCards == null)
+                return;
+
             pileCards.ForEach(card => card.ToggleInteractionType());
             pileCards.Remove(selectedCard);
             cardPile.RemoveCard(selectedCard);

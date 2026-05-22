@@ -233,6 +233,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IngredientCardBase
       objectReference: {fileID: 0}
+    - target: {fileID: 8521596923630857022, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -263,13 +267,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.IngredientCardBase
   cardName: Unnamed Card
   DescriptionText: 
-  isPlaceableInMeal: 1
-  isBlockable: 0
   nameTxtField: {fileID: 4117807015978139650}
   DescriptionTxtField: {fileID: 9015011803136255482}
   backFaceImage: {fileID: 4782107970850321925}
+  glowBG: {fileID: 892895204565343670}
   cardValue: 1
   ValueTxtField: {fileID: 660552813068261590}
+--- !u!114 &892895204565343670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5043418965162024946, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}
+  m_PrefabInstance: {fileID: 5303518143282872900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07e22f9a1c64dc69e05c37b166e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlowBGUI
 --- !u!114 &4117807015978139650 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8123510829187990086, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}

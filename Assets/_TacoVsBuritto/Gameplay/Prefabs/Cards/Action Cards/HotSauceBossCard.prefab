@@ -244,6 +244,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -554377762850005300}
   m_SourcePrefab: {fileID: 100100000, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!114 &13449456739336901 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 7010228365118355540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07e22f9a1c64dc69e05c37b166e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlowBGUI
 --- !u!1 &382227636921733846 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -263,11 +274,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.HotSauceBossCard
   cardName: Hot Sauce Boss
   DescriptionText: 
-  isPlaceableInMeal: 1
-  isBlockable: 0
   nameTxtField: {fileID: 3850182859594112881}
   DescriptionTxtField: {fileID: 8165090137445333641}
   backFaceImage: {fileID: 5626841587167422838}
+  glowBG: {fileID: 13449456739336901}
   ValueTxtField: {fileID: 7118050974198936771}
 --- !u!114 &3850182859594112881 stripped
 MonoBehaviour:

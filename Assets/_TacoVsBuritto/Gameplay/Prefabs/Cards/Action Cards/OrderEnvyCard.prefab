@@ -134,11 +134,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.OrderEnvyCard
   cardName: Order Envy
   DescriptionText: 
-  isPlaceableInMeal: 0
-  isBlockable: 1
   nameTxtField: {fileID: 1737591910592304674}
   DescriptionTxtField: {fileID: 6639300305868338138}
   backFaceImage: {fileID: 7162197680470859813}
+  glowBG: {fileID: 3268622112126602134}
+--- !u!114 &3268622112126602134 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5492957532989878535}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07e22f9a1c64dc69e05c37b166e0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlowBGUI
 --- !u!114 &6639300305868338138 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
