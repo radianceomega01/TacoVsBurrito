@@ -30,17 +30,17 @@ namespace TacoVsBurrito
         void ManageTrashPandaAction(Dictionary<CardBase, int> cardMap)
         {
             cardPile = GameManager.Instance.GetTrashPile();
-            ArrageCardsToSelect(cardMap);
+            ArrageCardsToSelect(cardMap, GameManager.Instance.CurrentPlayer);
         }
 
-        void ManageCardSelectionForFoodFightWinner(Dictionary<CardBase, int> cardMap)
+        void ManageCardSelectionForFoodFightWinner(Dictionary<CardBase, int> cardMap, PlayerBase winner)
         {
             cardPile = GameManager.Instance.GetDrawPile();
-            ArrageCardsToSelect(cardMap);
+            ArrageCardsToSelect(cardMap, winner);
         }
 
 
-        void ArrageCardsToSelect(Dictionary<CardBase, int> cardMap)
+        void ArrageCardsToSelect(Dictionary<CardBase, int> cardMap, PlayerBase selectingPlayer)
         {
             rootTransform.gameObject.SetActive(true);
 
@@ -54,7 +54,7 @@ namespace TacoVsBurrito
                 pileCards[i].ChangePosition(positions[i]);
                 pileCards[i].transform.SetParent(cardsParent);
 
-                if(GameManager.Instance.CurrentPlayer is  SelfPlayer)
+                if(selectingPlayer is  SelfPlayer)
                     pileCards[i].EnableInteraction();
             }
         }

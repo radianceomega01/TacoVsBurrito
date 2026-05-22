@@ -196,6 +196,7 @@ namespace TacoVsBurrito
         {
             backFaceImage.gameObject.SetActive(showBack);
         }
+        public void SetAsLastSibbling() => transform.SetSiblingIndex(transform.parent.childCount - 1);
 
         public float GetWidth() => _rectTransform.sizeDelta.x;
 

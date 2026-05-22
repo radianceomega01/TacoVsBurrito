@@ -19,5 +19,13 @@ namespace TacoVsBurrito
                 card.DisableInteraction();
             }
         }
+        public virtual void AddCardsBack(List<CardBase> cards)
+        {
+            foreach (var card in cards)
+            {
+                pileCards.Add(card);
+                card.ChangeSiblingIndex(transform.parent.childCount - 1);
+            }
+        }
     }
 }

@@ -14,8 +14,8 @@ namespace TacoVsBurrito
         private TrashPile trashPile;
         private IReadOnlyList<PlayerBase> _players => GameManager.Instance.Players;
 
-        const int CARD_DRAW_DELAY_IN_MS = 1500;
-        const int THINKING_DELAY_IN_MS = 3000;
+        const int CARD_DRAW_DELAY_IN_MS = 1000;
+        const int THINKING_DELAY_IN_MS = 2500;
 
         bool isSelfTurnRunning = false;
         ActionCardBase currentActionCardPlayed = null;
@@ -26,9 +26,9 @@ namespace TacoVsBurrito
             base.Awake();
             aIBrain = transform.AddComponent<AIBrain>();
 
-            GameEvents.OnTurnStarted += ManageOnTurnStarted;
-            GameEvents.OnTurnChanged += ManageOnTurnChanged;
-            GameEvents.OnTurnStateChanged += ManageOnTurnStateChanged;
+            GameEvents.OnTurnStarted += ManageTurnStarted;
+            //GameEvents.OnTurnChanged += ManageTurnChanged;
+            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
 
@@ -40,9 +40,9 @@ namespace TacoVsBurrito
 
         void OnDestroy()
         {
-            GameEvents.OnTurnStarted -= ManageOnTurnStarted;
-            GameEvents.OnTurnChanged -= ManageOnTurnChanged;
-            GameEvents.OnTurnStateChanged -= ManageOnTurnStateChanged;
+            GameEvents.OnTurnStarted -= ManageTurnStarted;
+            //GameEvents.OnTurnChanged -= ManageTurnChanged;
+            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
 
@@ -63,19 +63,24 @@ namespace TacoVsBurrito
         }
 
         public AIBrain GetBrain() => aIBrain;
-        void ManageOnTurnStarted(PlayerBase player)
+        void ManageTurnStarted(PlayerBase player)
         {
+            
             noBuenoCounter = 0;
             currentActionCardPlayed = null;
-            isSelfTurnRunning = player == this;
+            isSelfTurnRunning = player is AIPlayer;
 
-            if (player is AIPlayer && !drawPile.IsDrawPileEmpty)
+            if (isSelfTurnRunning && !drawPile.IsDrawPileEmpty)
+            {
+                Debug.Log("Inside TurnStarted");
                 DrawACard();
+            }
         }
 
         async void DrawACard()
         {
             await Task.Delay(CARD_DRAW_DELAY_IN_MS);
+            Debug.Log("AI clicked draw btn");
             drawPile.TriggerDrawBtnClick();
         }
 
@@ -105,7 +110,7 @@ namespace TacoVsBurrito
             }
         }
 
-        void ManageOnTurnStateChanged(TurnState state, PlayerBase player)
+        void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {
             if (player is AIPlayer)
             {
@@ -115,12 +120,16 @@ namespace TacoVsBurrito
                 }
             }
         }
-        void ManageOnTurnChanged(PlayerBase player)
-        {
-            isSelfTurnRunning = player == this;
-            if (player is AIPlayer)
-                DrawACard();
-        }
+        // void ManageTurnChanged(PlayerBase player)
+        // {
+            
+        //     isSelfTurnRunning = player is AIPlayer;
+        //     if (isSelfTurnRunning)
+        //     {
+        //         Debug.Log("Inside Turnchanged");
+        //         DrawACard();
+        //     }
+        // }
 
         void ManageOrderEnvyAction(PlayerBase @base)
         {
@@ -142,11 +151,21 @@ namespace TacoVsBurrito
                 GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(this, victim, cardToSteal));
         }
 
-        void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary)
+        async void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary)
         {
             if(!isSelfTurnRunning)
                 return;
 
+            await Task.Delay(THINKING_DELAY_IN_MS);
+            CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
+            GameEvents.OnCardClickedForActionTargetByAI?.Invoke(cardPicked);
+        }
+        async void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary, PlayerBase winner)
+        {
+            if(winner is not AIPlayer)
+                return;
+
+            await Task.Delay(THINKING_DELAY_IN_MS);
             CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
             GameEvents.OnCardClickedForActionTargetByAI?.Invoke(cardPicked);
         }

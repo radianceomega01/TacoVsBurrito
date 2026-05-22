@@ -9,7 +9,7 @@ namespace TacoVsBurrito
     {
         DrawPile drawPile;
 
-        const float CARD_OFFSET_FROM_PILE = 14f;
+        const float CARD_OFFSET_FROM_PILE = 12f;
         List<CardBase> cardsDrawn = new();
 
         public Action<CardBase, PlayerBase> OnCardDrawn;
@@ -27,13 +27,15 @@ namespace TacoVsBurrito
         void OnDrawBtnClicked()
         {
             PlayerBase currentPlayer = GameManager.Instance.CurrentPlayer;
-            CardBase card = drawPile.Draw();
+            CardBase card = drawPile.FlipTop();
             card.ChangePosition(GetOffsetPositionForCard(currentPlayer.transform.position));
+            card.SetAsLastSibbling();
             card.ToggleBackFace(false);
             cardsDrawn.Add(card);
 
             OnCardDrawn?.Invoke(card, currentPlayer);
         }
+
         public Vector3 GetOffsetPositionForCard(Vector3 playerPosition)
         {
             Vector3 modifiedPilePosition = new Vector3(playerPosition.x, transform.position.y, transform.position.z);

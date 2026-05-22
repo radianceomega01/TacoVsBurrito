@@ -11,7 +11,7 @@ namespace TacoVsBurrito
             GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
         }
 
-        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
+        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
 
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
         {

@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -49,7 +50,7 @@ namespace TacoVsBurrito
             Shuffle(pileCards);
         }
 
-        public CardBase Draw()
+        CardBase Draw()
         {
             if (pileCards.Count == 0)
                 return null;
@@ -57,7 +58,7 @@ namespace TacoVsBurrito
             pileCards.RemoveAt(pileCards.Count - 1);
             return c;
         }
-        public List<CardBase> DrawMany(int count)
+        List<CardBase> DrawMany(int count)
         {
             var result = new List<CardBase>();
             for (int i = 0; i < count; i++)
@@ -105,7 +106,7 @@ namespace TacoVsBurrito
         }
 
         public void OnDrawBtnClicked()
-        {
+        {   
             CardBase drawnCard = Draw();
 
             if (IsDrawPileEmpty)
@@ -166,6 +167,7 @@ namespace TacoVsBurrito
         }
         public void ResetBtnListener()
         {
+            Debug.Log("Click reset");
             drawBtn.onClick.RemoveAllListeners();
             drawBtn.onClick.AddListener(OnDrawBtnClicked);
         }
