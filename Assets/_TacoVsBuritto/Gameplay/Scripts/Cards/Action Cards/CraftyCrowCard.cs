@@ -17,6 +17,7 @@ namespace TacoVsBurrito
                 return;
             }
             
+            GameEvents.OnLogMessage("Pick an Enemy Card from Meal!");
             GameEvents.OnCraftyCrowAction?.Invoke();
         }
 

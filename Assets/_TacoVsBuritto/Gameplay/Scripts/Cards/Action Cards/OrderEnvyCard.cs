@@ -8,6 +8,7 @@ namespace TacoVsBurrito
         TargetTypeContext targetTypeContext;
         public override void ExecuteAction()
         {
+            GameEvents.OnLogMessage("Pick an Enemy to swap Cards!");
             GameEvents.OnOrderEnvyAction?.Invoke(GameManager.Instance.CurrentPlayer);
         }
 
