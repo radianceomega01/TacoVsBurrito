@@ -13,6 +13,7 @@ namespace TacoVsBurrito
         List<CardBase> cardsDrawn = new();
 
         public Action<CardBase, PlayerBase> OnCardDrawn;
+        public List<CardBase> CardsDrawn => cardsDrawn;
 
         void Awake()
         {
@@ -51,7 +52,7 @@ namespace TacoVsBurrito
                 card.ChangePosition(drawPile.transform.position);
                 card.ToggleBackFace(true);
             });
-
+            //drawPile.AddCardsBack(cardsDrawn);
             drawPile.ResetBtnListener();
         }
     }

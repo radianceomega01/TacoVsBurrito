@@ -40,7 +40,7 @@ namespace TacoVsBurrito
             bool value = false;
             foreach(PlayerBase player in GameManager.Instance.Players)
             {
-                if(player is SelfPlayer)
+                if(player == GameManager.Instance.CurrentPlayer)
                     continue;
 
                 if(player.Meal.Cards.Count > 0)

@@ -140,6 +140,7 @@ namespace TacoVsBurrito
                 return;
             }
             
+            Debug.LogWarning(turnState+ ", "+ player.GetType()+ ", "+!IsDrawPileEmpty);
             if (turnState == TurnState.DrawPhase && player is SelfPlayer && !IsDrawPileEmpty)
             {
                 TogglePileInteraction(true);
