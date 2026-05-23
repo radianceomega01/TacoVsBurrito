@@ -162,7 +162,15 @@ namespace TacoVsBurrito
             }
         }
 
-        void ManageTurnStateChanged(TurnState turnState, PlayerBase player){}
+        void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
+        {
+            //Deactivate glow if action on card was canceled due to no bueno
+            if(turnState == TurnState.DrawPhase && currentGlowingCard != null)
+            {
+                currentGlowingCard?.DeactivateGlow();
+                currentGlowingCard = null;
+            }
+        }
         void ManageCraftyCrowAction()
         {
             if(GameManager.Instance.CurrentPlayer != parentPlayer)
@@ -189,16 +197,15 @@ namespace TacoVsBurrito
 
         private void ManageCardClickedForCraftyCrow(CardBase card)
         {
-            if(!_cards.Contains(card))
-                return;
-
             currentGlowingCard = card;
             _cards.ForEach(c => 
             {
                 if(c != card) c.DeactivateGlow();
             });    
             DisableCraftyCrowAction(GameManager.Instance.CurrentPlayer);
-            GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
+
+            if(_cards.Contains(card))
+                GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
         }
 
         void ManageActionResolved(ActionCardBase actionCard)

@@ -120,6 +120,7 @@ namespace TacoVsBurrito
         }
         void ManageStartNoBuenoInterruptWindow(ActionCardBase card)
         {
+            SwitchState(TurnState.NoBuenoWindowPhase);
             StartNoBuenoTimer();
         }
         async void StartNoBuenoTimer()

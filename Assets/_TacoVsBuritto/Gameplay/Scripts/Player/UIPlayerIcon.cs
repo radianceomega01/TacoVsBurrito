@@ -16,6 +16,7 @@ namespace TacoVsBurrito
             GameEvents.OnOrderEnvyAction += ManageOrderEnvyAction;
             GameEvents.OnOrderEnvyActionTargeted += ManageOrderEnvyActionTargeted;
             GameEvents.OnActionResolved += ManageActionResolved;
+            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
         void OnDestroy()
@@ -23,6 +24,7 @@ namespace TacoVsBurrito
             GameEvents.OnOrderEnvyAction -= ManageOrderEnvyAction;
             GameEvents.OnOrderEnvyActionTargeted -= ManageOrderEnvyActionTargeted;
             GameEvents.OnActionResolved -= ManageActionResolved;
+            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
         void Start()
@@ -59,6 +61,14 @@ namespace TacoVsBurrito
             if(parentPlayer != targetTypeContext.victim)
                 DeactivateGlow();
         }
+        void ManageTurnStateChanged(TurnState state, PlayerBase player)
+        {
+            if(state == TurnState.DrawPhase && glowBG.IsGlowActive)
+            {
+                DeactivateGlow();
+            }
+        }
+
         void ManageActionResolved(ActionCardBase actionCard)
         {
             if(actionCard is not OrderEnvyCard)

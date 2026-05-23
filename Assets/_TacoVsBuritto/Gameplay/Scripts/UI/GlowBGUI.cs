@@ -9,6 +9,8 @@ namespace TacoVsBurrito
         [SerializeField] Image glowImage;
         const float fadeDuration = 1f;
 
+        public bool IsGlowActive{get; private set;}
+
         private void Start()
         {
             ResetColor();
@@ -19,12 +21,15 @@ namespace TacoVsBurrito
             glowImage.DOFade(1f, fadeDuration)
                    .SetLoops(-1, LoopType.Yoyo)
                    .SetEase(Ease.Linear);
+
+            IsGlowActive = true;       
         }
 
         public void Reset()
         {
             glowImage.DOKill();
             ResetColor();
+            IsGlowActive = false;
         }
         void ResetColor()
         {

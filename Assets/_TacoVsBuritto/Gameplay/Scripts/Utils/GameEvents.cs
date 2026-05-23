@@ -48,7 +48,6 @@ namespace TacoVsBurrito
         public static Action           OnCardDragBegin;
         public static Action           OnCardDragEnd;
         public static Action<CardBase> OnCardClickedForActionTarget;
-        public static Action<CardBase> OnCardClickedForActionTargetByAI;
 
         // ---- Action cards ----
         public static Action<ActionCardBase>                      OnActionCardTrashed;   // (card trashed)

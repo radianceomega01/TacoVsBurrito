@@ -135,7 +135,8 @@ namespace TacoVsBurrito
 
             aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
             if (victim != null)
-                GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(this, victim, cardToSteal));
+                GameEvents.OnCardClickedForActionTarget?.Invoke(cardToSteal);
+                //GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(this, victim, cardToSteal));
         }
 
         async void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary)
@@ -145,7 +146,7 @@ namespace TacoVsBurrito
 
             await Task.Delay(THINKING_DELAY_IN_MS);
             CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
-            GameEvents.OnCardClickedForActionTargetByAI?.Invoke(cardPicked);
+            GameEvents.OnCardClickedForActionTarget?.Invoke(cardPicked);
         }
         async void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary, PlayerBase winner)
         {
@@ -154,7 +155,7 @@ namespace TacoVsBurrito
 
             await Task.Delay(THINKING_DELAY_IN_MS);
             CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
-            GameEvents.OnCardClickedForActionTargetByAI?.Invoke(cardPicked);
+            GameEvents.OnCardClickedForActionTarget?.Invoke(cardPicked);
         }
 
         void ManageNoBuenoInterruptWindow(ActionCardBase card)

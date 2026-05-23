@@ -17,14 +17,12 @@ namespace TacoVsBurrito
             GameEvents.OnTrashPandaAction += ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget += CardClickedForActionTarget;
             GameEvents.OnCardSelectionForFoodFightWinner += ManageCardSelectionForFoodFightWinner;
-            GameEvents.OnCardClickedForActionTargetByAI += CardClickedForActionTargetByAI;
         }
         void OnDestroy()
         {
             GameEvents.OnTrashPandaAction -= ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget -= CardClickedForActionTarget;
             GameEvents.OnCardSelectionForFoodFightWinner -= ManageCardSelectionForFoodFightWinner;
-            GameEvents.OnCardClickedForActionTargetByAI -= CardClickedForActionTargetByAI;
         }
 
         void ManageTrashPandaAction(Dictionary<CardBase, int> cardMap)
@@ -71,7 +69,6 @@ namespace TacoVsBurrito
 
             ResetParams();  
         }
-        void CardClickedForActionTargetByAI(CardBase card) => CardClickedForActionTarget(card);
         
         void ResetParams()
         {

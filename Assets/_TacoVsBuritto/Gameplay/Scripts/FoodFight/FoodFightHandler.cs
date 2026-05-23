@@ -143,6 +143,7 @@ namespace TacoVsBurrito
                 if(foodFightDrawPile != null)
                 {
                     DeactivateFoodFightDrawPile();
+                    drawPile.AddCardsBack(cardsDrawn);
                 }
                 return true;
             }
