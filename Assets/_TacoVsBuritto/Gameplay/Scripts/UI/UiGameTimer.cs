@@ -8,6 +8,7 @@ namespace TacoVsBurrito
     {
         [SerializeField] TextMeshProUGUI timerText;
 
+        Coroutine currentCoroutine;
         const int TIMER_INTERVAL_IN_SECS = 1;
         void Awake()
         {
@@ -24,7 +25,8 @@ namespace TacoVsBurrito
         }
         private void ManageTimerEvent(int value)
         {
-            StartCoroutine(StartTimer(value));
+            if(currentCoroutine != null) StopCoroutine(currentCoroutine);
+            currentCoroutine = StartCoroutine(StartTimer(value));
         }
 
         IEnumerator StartTimer(int value)

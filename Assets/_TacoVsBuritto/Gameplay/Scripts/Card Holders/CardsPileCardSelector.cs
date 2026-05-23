@@ -65,8 +65,6 @@ namespace TacoVsBurrito
                 return;
 
             pileCards.ForEach(card => card.ToggleInteractionType());
-            pileCards.Remove(selectedCard);
-            cardPile.RemoveCard(selectedCard);
             cardPile.PutCardsBack(pileCards);
 
             GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, null, selectedCard));

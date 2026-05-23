@@ -85,8 +85,7 @@ namespace TacoVsBurrito
                                         typeof(TrashPandaCard),
                                         typeof(FoodFightCard));                              
             if (act >= 0)
-                return new AIDecision { cardIndex = act,
-                    destIndex = GetLeaderIndex(ai, allPlayers) };
+                return new AIDecision { cardIndex = act, destIndex = -1};
 
             // // Fallback: discard first card
              return new AIDecision { cardIndex = 0, destIndex = -1 };
@@ -109,7 +108,7 @@ namespace TacoVsBurrito
             {
                 var leader = GetLeader(ai, allPlayers);
                 if (leader != null && leader.Meal.HotSauceBossCardCount > 0)
-                    return new AIDecision { cardIndex = cc, destIndex = leader.Index };
+                    return new AIDecision { cardIndex = cc, destIndex = -1};
             }
 
             // 3. Order Envy if leader has way more points
@@ -150,7 +149,7 @@ namespace TacoVsBurrito
                 var victim = allPlayers.Where(p => p != ai && p.Meal.Cards.Count > 0)
                                        .OrderByDescending(p => p.Score).FirstOrDefault();
                 if (victim != null)
-                    return new AIDecision { cardIndex = cc, destIndex = victim.Index };
+                    return new AIDecision { cardIndex = cc, destIndex = -1};
             }
 
             return new AIDecision { cardIndex = 0, destIndex = -1 };
