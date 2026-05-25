@@ -54,17 +54,19 @@ namespace TacoVsBurrito
 
                 if(selectingPlayer is  SelfPlayer)
                     pileCards[i].EnableInteraction();
+                else
+                    pileCards[i].DisableInteraction();
             }
         }
 
         void CardClickedForActionTarget(CardBase selectedCard)
         {
-            if(pileCards == null)
+            if(pileCards == null || !rootTransform.gameObject.activeInHierarchy)
                 return;
 
             pileCards.ForEach(card => card.ToggleInteractionType());
             cardPile.PutCardsBack(pileCards);
-
+            cardPile.RemoveCard(selectedCard);
             GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, null, selectedCard));
 
             ResetParams();  
