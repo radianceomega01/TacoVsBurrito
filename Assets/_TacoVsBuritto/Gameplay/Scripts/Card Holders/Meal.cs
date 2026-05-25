@@ -183,14 +183,23 @@ namespace TacoVsBurrito
                 });
             }
         }
-        private void DisableCraftyCrowAction(PlayerBase player)
+        private void ToggleInteractionType(PlayerBase player)
+        {
+            if(player != parentPlayer)
+            {
+                _cards.ForEach(card =>
+                {
+                    card.ToggleInteractionType();
+                });
+            }
+        }
+        private void DisableInteraction(PlayerBase player)
         {
             if(player != parentPlayer)
             {
                 _cards.ForEach(card =>
                 {
                     card.DisableInteraction();
-                    card.ToggleInteractionType();
                 });
             }
         }
@@ -201,8 +210,8 @@ namespace TacoVsBurrito
             _cards.ForEach(c => 
             {
                 if(c != card) c.DeactivateGlow();
-            });    
-            DisableCraftyCrowAction(GameManager.Instance.CurrentPlayer);
+            });
+            DisableInteraction(GameManager.Instance.CurrentPlayer); 
 
             if(_cards.Contains(card))
                 GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
@@ -212,6 +221,7 @@ namespace TacoVsBurrito
         {
             if(actionCard is not CraftyCrowCard)
                 return;
+            ToggleInteractionType(GameManager.Instance.CurrentPlayer);
             currentGlowingCard?.DeactivateGlow();
             currentGlowingCard = null;    
         }

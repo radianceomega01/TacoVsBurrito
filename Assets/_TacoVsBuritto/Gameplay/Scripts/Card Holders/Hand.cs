@@ -68,14 +68,6 @@ namespace TacoVsBurrito
         }
 
 
-        /// Replace entire hand with a new set of cards (used by Order Envy).
-        public void ReplaceWith(List<CardBase> newCards)
-        {
-            _cards.Clear();
-            _cards.AddRange(newCards);
-            ArrangeCardsAnimated();
-        }
-
         public List<CardBase> GetAll() => new List<CardBase>(_cards);
 
         public override string ToString()

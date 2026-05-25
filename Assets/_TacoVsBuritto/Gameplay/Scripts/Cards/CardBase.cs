@@ -25,11 +25,6 @@ namespace TacoVsBurrito
         private RectTransform _rectTransform;
         private Canvas canvas;
         private CanvasGroup _canvasGroup;
-
-        private Transform _originalParent;
-        private int _originalSiblingIndex;
-
-        private Vector2 _originalAnchoredPosition;
         private Vector3 _originalScale;
 
         private ICardPickupTarget tempPickupTarget;
