@@ -20,7 +20,9 @@ namespace TacoVsBurrito
         [SerializeField] protected GlowBGUI glowBG;
 
 
-        private const float DRAG_SCALE = 1.2f;
+        private const float DRAG_SCALE = 1.5f;
+        private const float TIME_TO_MOVE_IN_SECS = 0.35f;
+        private const float TIME_TO_SCALE_IN_SECS = 0.25f;
 
         private RectTransform _rectTransform;
         private Canvas canvas;
@@ -59,7 +61,11 @@ namespace TacoVsBurrito
 
         public void ChangePosition(Vector3 newPos)
         {
-            transform.DOMove(newPos, 0.5f);
+            transform.DOMove(newPos, TIME_TO_MOVE_IN_SECS);
+        }
+        public void ChangeRotation(Quaternion angle)
+        {
+            transform.DORotateQuaternion(angle, TIME_TO_MOVE_IN_SECS);
         }
         public void ChangeParent(Transform newParent)
         {
@@ -90,6 +96,7 @@ namespace TacoVsBurrito
             GameEvents.OnCardDragBegin?.Invoke();
 
             _originalScale = transform.localScale;
+            _rectTransform.rotation = Quaternion.Euler(0, 0, 0);
 
             // Allow raycasts to pass through while dragging
             _canvasGroup.blocksRaycasts = false;
@@ -191,6 +198,7 @@ namespace TacoVsBurrito
         {
             backFaceImage.gameObject.SetActive(showBack);
         }
+        public void ScaleTo(float value) => _rectTransform.DOScale(value, TIME_TO_SCALE_IN_SECS);
         public void SetAsLastSibbling() => transform.SetSiblingIndex(transform.parent.childCount - 1);
 
         public float GetWidth() => _rectTransform.sizeDelta.x;

@@ -11,24 +11,16 @@ namespace TacoVsBurrito
     public class SelfHand : HandBase, ICardPickupTarget
     {
         private RectTransform _rectTransform;
-        private PlayerBase parentPlayer;
 
-        private const float CARD_SPACING = 4f;
+        private const float CARD_SPACING = 7f;
+        private const float CARD_SCALE = 1.4f;
+        private const float ARC_RADIUS = 50f;
+        private const float ARC_ANGLE = 30f;
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _rectTransform = GetComponent<RectTransform>();
-            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
-        }
-
-        void OnDestroy()
-        {
-            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
-        }
-
-        void Start()
-        {
-            parentPlayer = GetComponentInParent<PlayerBase>();
         }
 
         public override void RemoveCard(CardBase c)
@@ -39,9 +31,9 @@ namespace TacoVsBurrito
 
         public override void AddCard(CardBase c)
         {
-            base.AddCard(c);
-            c.DisableInteraction();
-            c.ToggleBackFace(true);
+            _cards.Add(c);
+            c.ScaleTo(CARD_SCALE);
+            c.ToggleBackFace(false);
             ArrangeCardsAnimated();
         }
 
@@ -61,17 +53,42 @@ namespace TacoVsBurrito
             int count = _cards.Count;
             if (count == 0) return;
 
-            float totalWidth = (count - 1) * CARD_SPACING;
-            float startOffset = -totalWidth / 2f;
+            // If only one card, keep centered
+            if (count == 1)
+            {
+                _cards[0].ChangePosition(transform.position);
+                _cards[0].ChangeRotation(Quaternion.identity);
+                _cards[0].ChangeParent(transform);
+                return;
+            }
+
+            float angleStep = ARC_ANGLE / (count - 1);
+            float startAngle = -ARC_ANGLE / 2f;
 
             for (int i = 0; i < count; i++)
             {
-                float offset = startOffset + i * CARD_SPACING;
-                Vector3 targetPos = transform.position + transform.right * offset;
+                float angle = startAngle + angleStep * i;
+
+                // Convert angle to radians
+                float rad = angle * Mathf.Deg2Rad;
+
+                // Arc position
+                Vector3 offset = new Vector3(
+                    Mathf.Sin(rad) * ARC_RADIUS,
+                    Mathf.Cos(rad) * ARC_RADIUS - ARC_RADIUS,
+                    0f
+                );
+
+                Vector3 targetPos = transform.position + offset;
+
+                // Card rotation
+                Quaternion targetRot = Quaternion.Euler(0f, 0f, -angle);
 
                 _cards[i].ChangePosition(targetPos);
+                _cards[i].ChangeRotation(targetRot);
                 _cards[i].ChangeParent(transform);
             }
+
             ModifyWidthOfRect();
         }
 
@@ -86,14 +103,13 @@ namespace TacoVsBurrito
             _rectTransform.sizeDelta = new Vector2(newWidth, _rectTransform.sizeDelta.y); // Base width plus spacing
         }
 
-        void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
+        protected override void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
             if (turnState == TurnState.PlayPhase || turnState == TurnState.NoBuenoWindowPhase)
             {
                 _cards.ForEach(card => card.EnableInteraction());
                 return;
             }
-            _cards.ForEach(card => card.DisableInteraction());
         }
 
         public void PickCardBeforeDrag(CardBase card)

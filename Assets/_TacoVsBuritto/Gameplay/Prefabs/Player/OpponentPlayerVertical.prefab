@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5439731325108672380, guid: e241e0d12e61245768160637147cedaf, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5439731325108672380, guid: e241e0d12e61245768160637147cedaf, type: 3}
       propertyPath: m_AnchorMin.x
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5439731325108672380, guid: e241e0d12e61245768160637147cedaf, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5439731325108672380, guid: e241e0d12e61245768160637147cedaf, type: 3}
       propertyPath: m_SizeDelta.x
@@ -74,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5439731325108672380, guid: e241e0d12e61245768160637147cedaf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 200
+      value: -1144
       objectReference: {fileID: 0}
     - target: {fileID: 5439731325108672380, guid: e241e0d12e61245768160637147cedaf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7887847195910679844, guid: e241e0d12e61245768160637147cedaf, type: 3}
       propertyPath: m_Name
-      value: PlayerBaseVertical
+      value: OpponentPlayerVertical
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
