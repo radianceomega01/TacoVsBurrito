@@ -26,7 +26,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded += ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight += ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
-            GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
+            GameEvents.OnActionCardPlayed += ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
             GameEvents.OnPlayerAndTurnStateChanged += ManagePlayerAndStateChanged;
@@ -43,7 +43,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded -= ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight -= ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
-            GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
+            GameEvents.OnActionCardPlayed -= ManageActionCardTrashed;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
             GameEvents.OnPlayerAndTurnStateChanged -= ManagePlayerAndStateChanged;

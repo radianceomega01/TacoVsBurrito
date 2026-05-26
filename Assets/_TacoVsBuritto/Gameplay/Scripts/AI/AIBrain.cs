@@ -23,13 +23,12 @@ namespace TacoVsBurrito
         {
             this.difficulty = difficulty;
         }
-        public AIDecision Decide(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers,
-                                         TrashPile trashPile)
+        public AIDecision Decide(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
         {
             return difficulty switch
             {
                 AIDifficulty.Easy  => DecideEasy(ai, allPlayers),
-                AIDifficulty.Hard  => DecideHard(ai, allPlayers, trashPile),
+                AIDifficulty.Hard  => DecideHard(ai, allPlayers),
                 _                  => DecideNormal(ai, allPlayers)
             };
         }
@@ -94,8 +93,7 @@ namespace TacoVsBurrito
         // ===========================================================
         //  HARD  –  look-ahead strategic
         // ===========================================================
-        private AIDecision DecideHard(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers,
-                                              TrashPile trashPile)
+        private AIDecision DecideHard(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
         {
             //1. If we have Hot Sauce Boss AND at least 3 ingredients in meal → play it
             int hsb = FindFirstInHand<HotSauceBossCard>(ai);
@@ -136,7 +134,7 @@ namespace TacoVsBurrito
 
             // 7. Trash Panda
             int tp = FindFirstAction(ai, typeof(TrashPandaCard));
-            if (tp >= 0 && trashPile.TrashCount > 0)
+            if (tp >= 0 && GameManager.Instance.GetTrashPile().TrashCount > 0)
                 return new AIDecision { cardIndex = tp, destIndex = -1 };
 
             // 8. Food Fight
@@ -271,6 +269,6 @@ namespace TacoVsBurrito
     public struct AIDecision
     {
         public int cardIndex;         // index in AI's hand
-        public int destIndex;   // -1 for trash, otherwise player index to target
+        public int destIndex;   // -1 for playArea, otherwise player index to target
     }
 }

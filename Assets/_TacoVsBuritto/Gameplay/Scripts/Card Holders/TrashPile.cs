@@ -25,14 +25,6 @@ namespace TacoVsBurrito
         public void Trash(CardBase card)
         {
             SetCardOnPile(card);
-            if (card is ActionCardBase @actionCard)
-            {
-                GameEvents.OnActionCardTrashed?.Invoke(@actionCard);
-            }
-            else
-            {
-                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
-            }
         }
         void SetCardOnPile(CardBase card)
         {
@@ -56,7 +48,7 @@ namespace TacoVsBurrito
 
         public bool CanDrop(CardBase card)
         {
-            if (currentTurnState == TurnState.NoBuenoWindowPhase && card is not NoBuenoCard)
+            if (currentTurnState == TurnState.NoBuenoWindowPhase)
                 return false;
 
             return true;
@@ -64,6 +56,7 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             Trash(card);
+            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }
 
         public override void PutCardsBack(List<CardBase> cards)
