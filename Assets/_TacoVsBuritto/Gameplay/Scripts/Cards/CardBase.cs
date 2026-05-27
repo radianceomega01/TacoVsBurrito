@@ -4,6 +4,9 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using MoreMountains.Tools;
+using MoreMountains.Feedbacks;
+using UnityEngine.Events;
 
 namespace TacoVsBurrito
 {
@@ -18,7 +21,7 @@ namespace TacoVsBurrito
         [SerializeField] protected TextMeshProUGUI DescriptionTxtField;
         [SerializeField] protected Transform backFaceImage;
         [SerializeField] protected GlowBGUI glowBG;
-
+        public UnityEvent OnFlip;
 
         private const float DRAG_SCALE = 1.2f;
 

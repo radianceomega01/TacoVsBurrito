@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using DG.Tweening;
 using System;
 
@@ -62,9 +63,12 @@ namespace TacoVsBurrito
             }
             else
             {
-                c.ToggleBackFace(false);
+                 c.OnFlip?.Invoke();
+              // c.ToggleBackFace(false);
             }
-            ArrangeCardsAnimated();
+           
+           StartCoroutine(MovingCardsAnimatedCor());
+           // ArrangeCardsAnimated();
         }
 
 
@@ -78,6 +82,23 @@ namespace TacoVsBurrito
             return sb.ToString();
         }
 
+        IEnumerator MovingCardsAnimatedCor()
+        {
+            int count = _cards.Count;
+
+            float totalWidth = (count - 1) * CARD_SPACING;
+            float startOffset = -totalWidth / 2f;
+
+            for (int i = 0; i < count; i++)
+            {
+                _cards[i].ChangePosition(transform.position);
+            }
+
+            yield return new WaitForSeconds(.2f);
+
+            ArrangeCardsAnimated();
+        }
+        
         private void ArrangeCardsAnimated()
         {
             int count = _cards.Count;
@@ -92,7 +113,6 @@ namespace TacoVsBurrito
                 Vector3 targetPos = transform.position + transform.right * offset;
 
                 _cards[i].ChangePosition(targetPos);
-                _cards[i].ChangeParent(transform);
             }
             ModifyWidthOfRect();
         }

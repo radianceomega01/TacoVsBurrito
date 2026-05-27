@@ -12,7 +12,7 @@ namespace TacoVsBurrito
         [SerializeField] Button drawBtn;
         private const int STARTING_HAND_SIZE = 5;
         public bool IsDrawPileEmpty => pileCards.Count == 0;
-
+        [SerializeField] private float cardDrawDelay = 0.2f; // delay before disabling draw button when pile is empty
 
         void Awake()
         {
@@ -71,6 +71,29 @@ namespace TacoVsBurrito
 
         void DealStartingHand(List<PlayerBase> players)
         {
+            // int cardsDistributed = 0;
+            // int playerIndex = 0;
+            // while (cardsDistributed < players.Count * STARTING_HAND_SIZE)
+            // {
+            //     var card = Draw();
+
+            //     if (card is HealthInspectorCard)
+            //     {
+            //         // Move to bottom of deck
+            //         pileCards.Insert(0, card);
+            //         card.ChangeSiblingIndex(0);
+            //         continue;                               // draw again
+            //     }
+            //     players[playerIndex % players.Count].Hand.AddCard(card);
+            //     cardsDistributed++;
+            //     playerIndex++;
+            // }
+
+            StartCoroutine(DealStartingHandCoroutine(players));
+        }
+
+IEnumerator DealStartingHandCoroutine(List<PlayerBase> players)
+        {
             int cardsDistributed = 0;
             int playerIndex = 0;
             while (cardsDistributed < players.Count * STARTING_HAND_SIZE)
@@ -87,8 +110,10 @@ namespace TacoVsBurrito
                 players[playerIndex % players.Count].Hand.AddCard(card);
                 cardsDistributed++;
                 playerIndex++;
+                yield return new WaitForSeconds(cardDrawDelay); // slight delay for visual effect
             }
         }
+
 
         void Shuffle(List<CardBase> list)
         {

@@ -104,6 +104,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -4696241678634310917}
   m_SourcePrefab: {fileID: 100100000, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!114 &1148403170007618944 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4887836458801849479, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5492957532989878535}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!114 &1737591910592304674 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6064041265733347109, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -138,6 +149,21 @@ MonoBehaviour:
   DescriptionTxtField: {fileID: 6639300305868338138}
   backFaceImage: {fileID: 7162197680470859813}
   glowBG: {fileID: 3268622112126602134}
+  OnFlip:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1148403170007618944}
+        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
+        m_MethodName: PlayFeedbacks
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3268622112126602134 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
