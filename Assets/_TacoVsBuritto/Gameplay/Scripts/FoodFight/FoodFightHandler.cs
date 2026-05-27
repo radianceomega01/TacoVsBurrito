@@ -12,7 +12,9 @@ namespace TacoVsBurrito
         const int DELAY_BETWEEN_TURNS_IN_MS = 1000;
         const int DELAY_AFTER_FOOD_FIGHT_IN_MS = 1500;
         DrawPile drawPile;
+        TrashPile trashPile;
         FoodFightDrawPile foodFightDrawPile;
+        FoodFightCard foodFightCard;
 
         List<PlayerBase> allPlayers;
         List<PlayerBase> activePlayersInRound;
@@ -38,9 +40,11 @@ namespace TacoVsBurrito
         {
             foodFightDrawPile.OnCardDrawn -= OnCardDrawn;
         }
-        void BeginFoodFight()
+        void BeginFoodFight(FoodFightCard foodFightCard)
         {
+            this.foodFightCard = foodFightCard;
             drawPile = GameManager.Instance.GetDrawPile();
+            trashPile = GameManager.Instance.GetTrashPile();
             allPlayers = new(GameManager.Instance.Players);
             activePlayersInRound = new(GameManager.Instance.Players);
 
@@ -145,6 +149,7 @@ namespace TacoVsBurrito
                     DeactivateFoodFightDrawPile();
                     drawPile.AddCardsBack(cardsDrawn);
                 }
+                trashPile.Trash(foodFightCard);
                 return true;
             }
             return false;

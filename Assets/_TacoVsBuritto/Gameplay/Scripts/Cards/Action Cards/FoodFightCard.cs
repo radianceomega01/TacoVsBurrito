@@ -9,7 +9,7 @@ namespace TacoVsBurrito
         public override void ExecuteAction()
         {
             //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
-            GameEvents.OnFoodFightAction?.Invoke();
+            GameEvents.OnFoodFightAction?.Invoke(this);
         }
 
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
@@ -21,7 +21,7 @@ namespace TacoVsBurrito
         public void ResolveAction()
         {
             GameManager.Instance.GetTrashPile().Trash(this);
-            GameEvents.OnFoodFightAction?.Invoke();
+            GameEvents.OnFoodFightAction?.Invoke(this);
         }
         
         public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
