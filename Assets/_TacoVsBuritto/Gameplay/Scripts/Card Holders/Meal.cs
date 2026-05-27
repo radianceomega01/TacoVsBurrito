@@ -27,10 +27,8 @@ namespace TacoVsBurrito
         public IReadOnlyList<CardBase> Cards => _cards;
         public PlayerBase ParentPlayer => parentPlayer;
 
-        public Meal(MealType type) { Type = type; }
         public int HotSauceBossCardCount { get; private set; }
         public int IngredientCardCount { get; private set; }
-        public Transform ParentTransform => transform.parent;
 
         void Awake()
         {

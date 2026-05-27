@@ -12,6 +12,7 @@ namespace TacoVsBurrito
     public class SelfHand : PlayerHand, ICardPickupTarget
     {
         private RectTransform _rectTransform;
+        private SelfPlayer _parentSelfPlayer;
 
         private const float CARD_SPACING = 7f;
         private const float CARD_SCALE = 1.4f;
@@ -25,6 +26,7 @@ namespace TacoVsBurrito
         {
             base.Awake();
             _rectTransform = GetComponent<RectTransform>();
+            _parentSelfPlayer = GetComponentInParent<SelfPlayer>();
             GameEvents.OnCardsDistributed += ArrangeCardsAfterDistribution;
         }
 
@@ -45,6 +47,10 @@ namespace TacoVsBurrito
         {
             base.RemoveCard(c);
             ArrangeCardsAnimated();
+            if(_cards.Count == 0)
+            {
+                GameEvents.OnGameOver?.Invoke(_parentSelfPlayer);
+            }
         }
 
         public override void AddCard(CardBase c)

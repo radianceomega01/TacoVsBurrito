@@ -45,8 +45,5 @@ namespace TacoVsBurrito
             otherMealCards.ForEach(c => meal.AddCard(c));
         }
 
-        public override string ToString() =>
-            $"Player {Index}: {Name} | Score: {Score} | Hand: {Hand.Count}";
-
     }
 }

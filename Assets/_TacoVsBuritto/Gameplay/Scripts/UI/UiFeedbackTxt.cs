@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -8,12 +10,13 @@ namespace TacoVsBurrito
     {
         [SerializeField] TextMeshProUGUI feedbackText;
 
-        const int FEEDBACK_DISPLAY_DURATION_IN_SECS = 3;
+        const int FEEDBACK_DISPLAY_DURATION_IN_MS = 3000;
 
         void Awake()
         {
             GameEvents.OnLogMessage += UpdateTxt;
         }
+
         void OnDestroy()
         {
             GameEvents.OnLogMessage -= UpdateTxt;
@@ -24,12 +27,12 @@ namespace TacoVsBurrito
         }
         void UpdateTxt(string text)
         {
-            StartCoroutine(DisplayFeedback(text));
+            DisplayFeedback(text);
         }
-        IEnumerator DisplayFeedback(string text)
+        async void DisplayFeedback(string text)
         {
             feedbackText.text = text;
-            yield return new WaitForSeconds(FEEDBACK_DISPLAY_DURATION_IN_SECS);
+            await Task.Delay(FEEDBACK_DISPLAY_DURATION_IN_MS);
             feedbackText.text = "";
         }
     }

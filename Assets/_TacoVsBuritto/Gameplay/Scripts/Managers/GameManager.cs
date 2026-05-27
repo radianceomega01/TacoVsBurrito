@@ -33,6 +33,7 @@
 //    - TIE: tied playerBasePlayerBases do a Food Fight tiebreaker
 // ============================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,13 @@ namespace TacoVsBurrito
             //DontDestroyOnLoad(gameObject);
             _resolver = new ActionResolver(drawPile, trashPile, _players);
             _turnHandler = new TurnHandler(trashPile);
+
+            GameEvents.OnGameOver += ManageGameOver;
+        }
+
+        private void OnDestroy()
+        {
+            GameEvents.OnGameOver -= ManageGameOver;
         }
 
         // -------------------------------------------------------
@@ -114,12 +122,6 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  End of game
         // -------------------------------------------------------
-        // private void TriggerGameEnd()
-        // {
-        //     _gameRunning = false;
-        //     GameEvents.OnLogMessage?.Invoke("\n🎴 A player played their last card — GAME OVER!");
-        //     StartCoroutine(FinalScoring());
-        // }
 
         private IEnumerator FinalScoring()
         {
@@ -178,6 +180,19 @@ namespace TacoVsBurrito
 
             GameEvents.OnLogMessage?.Invoke($"\n🎉 TIEBREAKER WINNER: {winner?.Name ?? tiedPlayerBases[0].Name}!");
             GameEvents.OnGameOver?.Invoke(winner ?? tiedPlayerBases[0]);
+        }
+
+        void ManageGameOver(PlayerBase finishingPlayer)
+        {
+            Tuple<PlayerBase, int> winnerWithScore = Tuple.Create<PlayerBase, int>(null, 0);
+            foreach(PlayerBase player in _players)
+            {
+                if(player.Score > winnerWithScore.Item2)
+                {
+                    winnerWithScore = Tuple.Create(player, player.Score);
+                }
+            }
+            GameEvents.OnLogMessage?.Invoke("Player: "+winnerWithScore.Item1+ " won the game with "+ winnerWithScore.Item2 + " score!");
         }
 
         private List<PlayerBase> GetClockwiseOrderFrom(PlayerBase start)
