@@ -7,6 +7,7 @@ namespace TacoVsBurrito
     {
         [SerializeField] protected Transform cardsParent;
 
+        protected const float CARD_SCALE = 1f;
         protected List<CardBase> pileCards = new();
         public IReadOnlyList<CardBase> PileCards => pileCards;
 
@@ -24,6 +25,7 @@ namespace TacoVsBurrito
             foreach (var card in cards)
             {
                 pileCards.Add(card);
+                card.ScaleTo(CARD_SCALE);
                 card.ChangeSiblingIndex(transform.parent.childCount - 1);
             }
         }

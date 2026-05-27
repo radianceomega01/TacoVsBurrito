@@ -25,7 +25,8 @@ namespace TacoVsBurrito
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
         {
             this.targetTypeContext = targetTypeContext;
-            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
+            //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
+            ResolveAction();
         }
 
         public void ResolveAction()

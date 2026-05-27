@@ -50,7 +50,7 @@ namespace TacoVsBurrito
         public static Action<CardBase> OnCardClickedForActionTarget;
 
         // ---- Action cards ----
-        public static Action<ActionCardBase>                      OnActionCardTrashed;   // (card trashed)
+        public static Action<ActionCardBase>                      OnActionCardPlayed;   // (card trashed)
         public static Action<ActionCardBase>                      OnStartNoBuenoInterruptWindow;
         public static Action                                OnNoBuenoPlayed;  
         public static Action                                OnHealthInspector;  // (victim)

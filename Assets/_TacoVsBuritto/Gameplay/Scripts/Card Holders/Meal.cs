@@ -16,7 +16,8 @@ namespace TacoVsBurrito
         [SerializeField] Transform cardsTransform;
         [SerializeField] TextMeshProUGUI scoreTxt;
 
-        private const float CARD_SPACING = 4f;
+        private const float CARD_SPACING = 5f;
+        private const float CARD_SCALE = 0.8f;
         private PlayerBase parentPlayer;
 
         public MealType Type { get; }
@@ -60,6 +61,7 @@ namespace TacoVsBurrito
             if (card is not IMealTypeAction)
                 return;
             _cards.Add(card);
+            card.ScaleTo(CARD_SCALE);
             card.DisableInteraction();
             card.ToggleBackFace(false);
             ArrangeCardsAnimated();
@@ -226,7 +228,7 @@ namespace TacoVsBurrito
             currentGlowingCard = null;    
         }
         
-        void UpdateScore() => scoreTxt.SetText($"Score: {CalculateScore()}");
+        void UpdateScore() => scoreTxt.SetText(CalculateScore().ToString());
     }
     public enum MealType
     {

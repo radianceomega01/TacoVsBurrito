@@ -8,7 +8,8 @@ namespace TacoVsBurrito
     {
         public override void ExecuteAction()
         {
-            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
+            //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
+            GameEvents.OnFoodFightAction?.Invoke();
         }
 
         public void OnActionTargeted(TargetTypeContext targetTypeContext)

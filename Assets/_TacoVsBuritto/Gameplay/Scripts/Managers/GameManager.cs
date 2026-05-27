@@ -44,6 +44,7 @@ namespace TacoVsBurrito
     {
         [SerializeField] DrawPile drawPile;
         [SerializeField] TrashPile trashPile;
+        [SerializeField] PlayArea playArea;
 
         // -------------------------------------------------------
         //  Singleton
@@ -92,7 +93,7 @@ namespace TacoVsBurrito
             // Health Inspector triggers IMMEDIATELY on draw – unblockable
             if (card is HealthInspectorCard)
             {
-                trashPile.Trash(card);
+                playArea.PlayAction(card);
                 return;
             }
             else
@@ -190,6 +191,7 @@ namespace TacoVsBurrito
         
         public TrashPile GetTrashPile() => trashPile;
         public DrawPile GetDrawPile() => drawPile;
+        public PlayArea GetPlayArea() => playArea;
     }
     public enum GameState
     {

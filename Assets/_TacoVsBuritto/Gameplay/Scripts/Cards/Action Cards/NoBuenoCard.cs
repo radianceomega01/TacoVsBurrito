@@ -5,7 +5,6 @@ namespace TacoVsBurrito
 {
     public class NoBuenoCard : ActionCardBase
     {
-        
         public override void ExecuteAction()
         {
             GameEvents.OnNoBuenoPlayed?.Invoke();

@@ -26,7 +26,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded += ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight += ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
-            GameEvents.OnActionCardTrashed += ManageActionCardTrashed;
+            GameEvents.OnActionCardPlayed += ManageActionCardPlayed;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
             GameEvents.OnPlayerAndTurnStateChanged += ManagePlayerAndStateChanged;
@@ -43,7 +43,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded -= ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight -= ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
-            GameEvents.OnActionCardTrashed -= ManageActionCardTrashed;
+            GameEvents.OnActionCardPlayed -= ManageActionCardPlayed;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
             GameEvents.OnPlayerAndTurnStateChanged -= ManagePlayerAndStateChanged;
@@ -87,12 +87,19 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
         }
 
-        void ManageActionCardTrashed(ActionCardBase card)
+        void ManageActionCardPlayed(ActionCardBase card)
         {
+            Debug.LogWarning("reached turn handler with card: "+ card.GetType());
             if(card is not NoBuenoCard) currentTrashedCard = card;
-
-            SwitchState(card.GetStateOnTrashed());
-            card.ExecuteAction();    
+            
+            //SwitchState(card.GetStateOnTrashed());
+            //card.ExecuteAction();    
+            if(card is HealthInspectorCard )
+            {
+                card.ExecuteAction();
+                return;
+            }
+            ManageStartNoBuenoInterruptWindow(card);
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)
@@ -139,7 +146,8 @@ namespace TacoVsBurrito
                 if(noBuenoCounter%2 == 0)
                 {
                     SwitchState(TurnState.ActionResolvePhase);
-                    CheckAndResolveAction();
+                    //CheckAndResolveAction();
+                    CheckAndExecuteAction();
                 }
                 else
                     ManageTurnEnded(GameManager.Instance.CurrentPlayer);
@@ -157,6 +165,17 @@ namespace TacoVsBurrito
             {
                 GameEvents.OnActionResolved?.Invoke(currentTrashedCard);
                 targetTyeCard.ResolveAction();
+            }
+        }
+        void CheckAndExecuteAction()
+        {
+            if (currentTrashedCard != null && currentTrashedCard is not NoBuenoCard) //No bueno is immediately executed
+            {
+                currentTrashedCard.ExecuteAction();
+                if(currentTrashedCard is ITargetTypeAction)
+                {
+                    SwitchState(TurnState.ActionTargetPhase);
+                }
             }
         }
 

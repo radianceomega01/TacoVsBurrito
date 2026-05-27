@@ -11,7 +11,7 @@ namespace TacoVsBurrito
         [SerializeField] AIDifficulty difficulty = AIDifficulty.Hard;
         private AIBrain aIBrain;
         private DrawPile drawPile;
-        private TrashPile trashPile;
+        private PlayArea playArea;
         private IReadOnlyList<PlayerBase> _players => GameManager.Instance.Players;
 
         const int CARD_DRAW_DELAY_IN_MS = 1000;
@@ -54,7 +54,7 @@ namespace TacoVsBurrito
         void Start()
         {
             drawPile = GameManager.Instance.GetDrawPile();
-            trashPile = GameManager.Instance.GetTrashPile();
+            playArea = GameManager.Instance.GetPlayArea();
 
             //aIBrain.SetDifficulty(difficulty);
             aIBrain.SetDifficulty(AIDifficulty.Hard);
@@ -83,7 +83,7 @@ namespace TacoVsBurrito
         async void PlayACard()
         {
             await Task.Delay(THINKING_DELAY_IN_MS);
-            AIDecision decision = aIBrain.Decide(this, GameManager.Instance.Players, trashPile);
+            AIDecision decision = aIBrain.Decide(this, GameManager.Instance.Players);
 
             var card = Hand.GetAt(decision.cardIndex);
             bool isLastCard = Hand.Count == 1;
@@ -93,7 +93,7 @@ namespace TacoVsBurrito
             Hand.RemoveCard(card);
             if (decision.destIndex == -1)
             {
-                trashPile.DropCardAfterDrag(card);
+                playArea.DropCardAfterDrag(card);
             }
             else
             {
@@ -195,7 +195,7 @@ namespace TacoVsBurrito
             else
             {
                 Hand.RemoveCard(Hand.GetAt(index));
-                trashPile.Trash(Hand.GetAt(index));
+                playArea.PlayAction(Hand.GetAt(index));
             }
         }
     }
