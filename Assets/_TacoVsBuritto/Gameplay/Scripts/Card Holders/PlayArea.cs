@@ -48,7 +48,7 @@ namespace TacoVsBurrito
         void SetCardOnPile(CardBase card)
         {
             currentPlayedCard = card;
-            card.ScaleTo(CARD_SCALE);
+            card.ChangeScale(CARD_SCALE);
             card.ChangePosition(cardsParent.position);
             card.ChangeParent(cardsParent);
             card.DisableInteraction();
@@ -72,7 +72,6 @@ namespace TacoVsBurrito
             currentTurnState = state;
             if(state == TurnState.ActionResolvePhase)
             {
-                trashPile.Trash(currentPlayedCard);
                 currentPlayedCard = null;
             }
         }

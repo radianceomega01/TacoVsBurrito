@@ -57,6 +57,7 @@ namespace TacoVsBurrito
         {
             nameTxtField.text = cardName;
             DescriptionTxtField.text = DescriptionText;
+            DisableInteraction();
         }
 
         public void ChangePosition(Vector3 newPos)
@@ -198,7 +199,7 @@ namespace TacoVsBurrito
         {
             backFaceImage.gameObject.SetActive(showBack);
         }
-        public void ScaleTo(float value) => _rectTransform.DOScale(value, TIME_TO_SCALE_IN_SECS);
+        public void ChangeScale(float value) => _rectTransform.DOScale(value, TIME_TO_SCALE_IN_SECS);
         public void SetAsLastSibbling() => transform.SetSiblingIndex(transform.parent.childCount - 1);
 
         public float GetWidth() => _rectTransform.sizeDelta.x;

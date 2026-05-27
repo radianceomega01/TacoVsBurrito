@@ -74,7 +74,7 @@ namespace TacoVsBurrito
             Instance = this;
             //DontDestroyOnLoad(gameObject);
             _resolver = new ActionResolver(drawPile, trashPile, _players);
-            _turnHandler = new TurnHandler();
+            _turnHandler = new TurnHandler(trashPile);
         }
 
         // -------------------------------------------------------

@@ -83,7 +83,7 @@ namespace TacoVsBurrito
             //drawPile.enabled = false;
             foodFightDrawPile = drawPile.AddComponent<FoodFightDrawPile>();
             SubscribeLocalEvents();
-            foodFightDrawPile.Init();
+            foodFightDrawPile.Init(drawPile);
         }
         void DeactivateFoodFightDrawPile()
         {

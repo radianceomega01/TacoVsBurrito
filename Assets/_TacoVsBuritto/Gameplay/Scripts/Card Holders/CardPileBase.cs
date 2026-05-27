@@ -25,7 +25,7 @@ namespace TacoVsBurrito
             foreach (var card in cards)
             {
                 pileCards.Add(card);
-                card.ScaleTo(CARD_SCALE);
+                card.ChangeScale(CARD_SCALE);
                 card.ChangeSiblingIndex(transform.parent.childCount - 1);
             }
         }

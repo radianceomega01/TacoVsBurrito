@@ -31,6 +31,7 @@ namespace TacoVsBurrito
 
         public void ResolveAction()
         {
+            GameManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveCraftyCrow(targetTypeContext.caster, targetTypeContext.victim, targetTypeContext.cardTargeted);
             targetTypeContext = default;
         }

@@ -29,7 +29,7 @@ namespace TacoVsBurrito
         void SetCardOnPile(CardBase card)
         {
             pileCards.Add(card);
-            card.ScaleTo(CARD_SCALE);
+            card.ChangeScale(CARD_SCALE);
             card.ChangePosition(cardsParent.position);
             card.ChangeParent(cardsParent);
             card.DisableInteraction();

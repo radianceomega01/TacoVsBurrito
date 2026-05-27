@@ -14,11 +14,13 @@ namespace TacoVsBurrito
 
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
         {
+            GameManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveFoodFight(targetTypeContext.caster, targetTypeContext.cardTargeted);
         }
 
         public void ResolveAction()
         {
+            GameManager.Instance.GetTrashPile().Trash(this);
             GameEvents.OnFoodFightAction?.Invoke();
         }
         

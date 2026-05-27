@@ -14,8 +14,9 @@ namespace TacoVsBurrito
         private PlayArea playArea;
         private IReadOnlyList<PlayerBase> _players => GameManager.Instance.Players;
 
-        const int CARD_DRAW_DELAY_IN_MS = 1000;
-        const int THINKING_DELAY_IN_MS = 2000;
+        const int CARD_DRAW_DELAY_IN_MS = 750;
+        const int THINKING_DELAY_IN_MS = 1500;
+        const int PLAY_NO_BUENO_DELAY_IN_MS = 1500;
 
         bool isSelfTurnRunning = false;
         ActionCardBase currentActionCardPlayed = null;
@@ -174,7 +175,7 @@ namespace TacoVsBurrito
                 currentActionCardPlayed = card;
             }
         }
-        void ManageNoBuenoPlayed()
+        void ManageNoBuenoPlayed(NoBuenoCard card)
         {
             noBuenoCounter++;
         }
@@ -188,7 +189,7 @@ namespace TacoVsBurrito
         }
         async void PlayNoBueno()
         {
-            await Task.Delay(1500);
+            await Task.Delay(PLAY_NO_BUENO_DELAY_IN_MS);
             int index = aIBrain.FindFirstInHand<NoBuenoCard>(this);
             if (index == -1)
                 return;

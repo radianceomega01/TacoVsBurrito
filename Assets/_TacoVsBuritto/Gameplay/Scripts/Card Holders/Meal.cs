@@ -61,7 +61,7 @@ namespace TacoVsBurrito
             if (card is not IMealTypeAction)
                 return;
             _cards.Add(card);
-            card.ScaleTo(CARD_SCALE);
+            card.ChangeScale(CARD_SCALE);
             card.DisableInteraction();
             card.ToggleBackFace(false);
             ArrangeCardsAnimated();

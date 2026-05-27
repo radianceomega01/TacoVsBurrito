@@ -11,6 +11,7 @@ namespace TacoVsBurrito
     {
         [SerializeField] Button drawBtn;
         private const int STARTING_HAND_SIZE = 5;
+        private const int DEALING_DELAY_IN_MS = 50;
         public bool IsDrawPileEmpty => pileCards.Count == 0;
 
 
@@ -69,7 +70,7 @@ namespace TacoVsBurrito
             return result;
         }
 
-        void DealStartingHand(List<PlayerBase> players)
+        async void DealStartingHand(List<PlayerBase> players)
         {
             int cardsDistributed = 0;
             int playerIndex = 0;
@@ -84,10 +85,13 @@ namespace TacoVsBurrito
                     card.ChangeSiblingIndex(0);
                     continue;                               // draw again
                 }
-                players[playerIndex % players.Count].Hand.AddCard(card);
+
+                await Task.Delay(DEALING_DELAY_IN_MS);
+                players[playerIndex % players.Count].Hand.AddCardWithoutArranging(card);
                 cardsDistributed++;
                 playerIndex++;
             }
+            GameEvents.OnCardsDistributed?.Invoke();
         }
 
         void Shuffle(List<CardBase> list)

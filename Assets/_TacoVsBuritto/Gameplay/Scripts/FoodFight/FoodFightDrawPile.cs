@@ -15,13 +15,9 @@ namespace TacoVsBurrito
         public Action<CardBase, PlayerBase> OnCardDrawn;
         public List<CardBase> CardsDrawn => cardsDrawn;
 
-        void Awake()
+        public void Init(DrawPile drawPile)
         {
-            drawPile = GetComponent<DrawPile>();
-        }
-
-        public void Init()
-        {
+            this.drawPile = drawPile;
             drawPile.ChangeBtnListener(OnDrawBtnClicked);
         }
 

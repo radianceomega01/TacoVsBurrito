@@ -15,6 +15,9 @@ namespace TacoVsBurrito {
         [SerializeField] GameObject opponentPlayerPrefab;
         [SerializeField] List<Transform> playerPositions;
 
+        private const int SHUFFLE_DELAY_IN_MS = 1500;
+        private const int DISTRIBUTION_DELAY_IN_MS = 1500;
+
         List<PlayerBase> activePlayers = new();
 
         void Start()
@@ -56,13 +59,13 @@ namespace TacoVsBurrito {
 
         async Task InitCardShuffle()
         {
-            await Task.Delay(1500);
+            await Task.Delay(SHUFFLE_DELAY_IN_MS);
             GameEvents.OnShuffleCards?.Invoke();
         }
 
         async Task InitDistributeInitialHands()
         {
-            await Task.Delay(1500);
+            await Task.Delay(DISTRIBUTION_DELAY_IN_MS);
             GameEvents.OnDistributeCards?.Invoke(activePlayers);
         }
     }

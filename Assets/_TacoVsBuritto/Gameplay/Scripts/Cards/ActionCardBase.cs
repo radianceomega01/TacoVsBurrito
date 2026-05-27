@@ -7,6 +7,7 @@ namespace TacoVsBurrito
 {
     public abstract class ActionCardBase : CardBase
     {
+        protected const int EXECUTION_DEALY_IN_MS = 500;
         public bool IsTargetTypeAction => GetStateOnTrashed() == TurnState.ActionTargetPhase;
         protected ActionResolver resolver;
 

@@ -13,13 +13,15 @@ namespace TacoVsBurrito
 
         int currentPlayerIndex = 0;
         CancellationTokenSource noBuenoTimerCts;
-        private int noBuenoCounter = 0;
+        private List<NoBuenoCard> noBuenoCardsPlayed = new();
         private ActionCardBase currentTrashedCard;
+        private TrashPile trashPile;
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
 
-        public TurnHandler()
+        public TurnHandler(TrashPile trashPile)
         {
+            this.trashPile = trashPile;
             activePlayers = new();
             GameEvents.OnGameInit += DecidePlayers;
             GameEvents.OnGameStarted += StartGame;
@@ -94,7 +96,7 @@ namespace TacoVsBurrito
             
             //SwitchState(card.GetStateOnTrashed());
             //card.ExecuteAction();    
-            if(card is HealthInspectorCard )
+            if(card is IImmediateTypeAction)
             {
                 card.ExecuteAction();
                 return;
@@ -143,15 +145,19 @@ namespace TacoVsBurrito
 
                 Debug.Log("No Bueno window expired");
                 GameEvents.OnLogMessage?.Invoke("⏰ No Bueno window expired!");
-                if(noBuenoCounter%2 == 0)
+                if(noBuenoCardsPlayed.Count % 2 == 0)
                 {
                     SwitchState(TurnState.ActionResolvePhase);
                     //CheckAndResolveAction();
                     CheckAndExecuteAction();
                 }
                 else
+                {
+                    trashPile.Trash(currentTrashedCard);
                     ManageTurnEnded(GameManager.Instance.CurrentPlayer);
-                noBuenoCounter = 0;    
+                }
+                noBuenoCardsPlayed.ForEach(card => trashPile.Trash(card));
+                noBuenoCardsPlayed.Clear();    
             }
             catch (TaskCanceledException)
             {
@@ -179,15 +185,16 @@ namespace TacoVsBurrito
             }
         }
 
-        void ManageNoBuenoPlayed()
+        void ManageNoBuenoPlayed(NoBuenoCard noBuenoCard)
         {
+            //PLayer played no bueno as a regular action card in play area
             if(currentTrashedCard == null)
             {
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
                 return;
             }
 
-            noBuenoCounter++;
+            noBuenoCardsPlayed.Add(noBuenoCard);
             SwitchState(TurnState.NoBuenoWindowPhase);
             StartNoBuenoTimer();
         }

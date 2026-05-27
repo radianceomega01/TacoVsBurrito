@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class NoBuenoCard : ActionCardBase
+    public class NoBuenoCard : ActionCardBase, IImmediateTypeAction
     {
         public override void ExecuteAction()
         {
-            GameEvents.OnNoBuenoPlayed?.Invoke();
+            GameEvents.OnNoBuenoPlayed?.Invoke(this);
         }
         public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
     }

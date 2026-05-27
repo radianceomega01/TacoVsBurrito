@@ -5,12 +5,12 @@ namespace TacoVsBurrito
 {
     public abstract class PlayerBase : MonoBehaviour
     {
-        private HandBase hand;
+        private PlayerHand hand;
         private Meal meal;
         public int Index { get; private set; }
         public string Name { get; private set; }
 
-        public HandBase Hand { get { return hand; } }
+        public PlayerHand Hand { get { return hand; } }
         public Meal Meal { get { return meal; } }
 
         // Turn-state flags
@@ -22,7 +22,7 @@ namespace TacoVsBurrito
 
         protected virtual void Awake()
         {
-            hand = GetComponentInChildren<HandBase>();
+            hand = GetComponentInChildren<PlayerHand>();
             meal = GetComponentInChildren<Meal>();
         }
         public void InitIndex(int index)

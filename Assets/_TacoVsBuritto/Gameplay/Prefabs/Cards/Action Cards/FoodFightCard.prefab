@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: bd8670998815fa748afe6d474ab97a23, type: 3}
+    - target: {fileID: 4994793293924348163, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_Name
       value: FoodFightCard

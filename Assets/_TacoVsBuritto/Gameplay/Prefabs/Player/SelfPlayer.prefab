@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d30fa990e80c4e9ea432ebbefcabeb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.SelfHand
+  cardCountTxt: {fileID: 977893601906901252}
 --- !u!1001 &219986553760073304
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -214,6 +215,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a07e22f9a1c64dc69e05c37b166e0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GlowBGUI
+--- !u!114 &977893601906901252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1053738504148911964, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
+  m_PrefabInstance: {fileID: 219986553760073304}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &5219744859397656868 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5439731325108672380, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}

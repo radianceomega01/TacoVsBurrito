@@ -21,6 +21,7 @@ namespace TacoVsBurrito
 
         public void ResolveAction()
         {
+            GameManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveOrderEnvy(targetTypeContext.caster, targetTypeContext.victim);
             targetTypeContext = default;
         }

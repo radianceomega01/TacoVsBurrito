@@ -12,7 +12,7 @@ namespace TacoVsBurrito
 
         public override async void ExecuteAction()
         {
-            await Task.Delay(500);
+            await Task.Delay(EXECUTION_DEALY_IN_MS);
             Dictionary<CardBase, int> pileCards = GameManager.Instance.GetTrashPile().RetrieveFromTrash();
 
             if(pileCards.Count == 0)
@@ -33,6 +33,7 @@ namespace TacoVsBurrito
 
         public void ResolveAction()
         {
+            GameManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveTrashPanda(targetTypeContext.caster, targetTypeContext.cardTargeted);
             targetTypeContext = default;
         }
