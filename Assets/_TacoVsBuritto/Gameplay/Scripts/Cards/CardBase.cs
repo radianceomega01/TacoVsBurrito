@@ -18,6 +18,7 @@ namespace TacoVsBurrito
         [SerializeField] protected TextMeshProUGUI DescriptionTxtField;
         [SerializeField] protected Transform backFaceImage;
         [SerializeField] protected GlowBGUI glowBG;
+        [SerializeField] protected CardsCount cardsCount;
 
 
         private const float DRAG_SCALE = 1.5f;
@@ -213,6 +214,8 @@ namespace TacoVsBurrito
         {
             glowBG.Reset();
         }
+        public void IncrementCountOnSimilarCards() => cardsCount.IncrementCount();
+        public void DecrementCountOnSimilarCards() => cardsCount.DecrementCount();
     }
     public enum InteractionType
     {

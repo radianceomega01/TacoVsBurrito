@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class TummyAcheCard : ActionCardBase, IMealTypeAction
+    public class TummyAcheCard : ActionCardBase, IMealTypeAction, IValueTypeCard
     {
         [SerializeField] int cardValue = -1;
         
@@ -25,5 +25,7 @@ namespace TacoVsBurrito
 
         public int GetModifiedMealScore(int currentScore) => currentScore + cardValue;
         public override TurnState GetStateOnTrashed() => TurnState.SkipPhase;
+
+        public int GetValue() => cardValue;
     }
 }

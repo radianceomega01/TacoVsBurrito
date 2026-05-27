@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class IngredientCardBase : CardBase, IMealTypeAction
+    public class IngredientCardBase : CardBase, IMealTypeAction, IValueTypeCard
     {
         [Header("Scoring")]
         [SerializeField] int cardValue = 1;
@@ -22,5 +22,7 @@ namespace TacoVsBurrito
         {
             return currentScore + cardValue;
         }
+
+        public int GetValue() => cardValue;
     }
 }

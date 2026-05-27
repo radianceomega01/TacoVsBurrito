@@ -16,7 +16,7 @@ namespace TacoVsBurrito
         [SerializeField] Transform cardsTransform;
         [SerializeField] TextMeshProUGUI scoreTxt;
 
-        private const float CARD_SPACING = 5f;
+        private const float CARD_SPACING = 6.3f;
         private const float CARD_SCALE = 0.8f;
         private PlayerBase parentPlayer;
 
