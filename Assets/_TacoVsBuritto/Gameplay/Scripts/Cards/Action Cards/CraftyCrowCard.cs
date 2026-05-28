@@ -13,6 +13,7 @@ namespace TacoVsBurrito
             if(! IsSufficientCardForCraftyCrow())
             {
                 GameEvents.OnLogMessage("CraftyCrow cancelled due to insufficient cards!");
+                GameManager.Instance.GetTrashPile().Trash(this);
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
                 return;
             }

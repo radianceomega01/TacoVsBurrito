@@ -18,6 +18,7 @@ namespace TacoVsBurrito
             if(pileCards.Count == 0)
             {
                 GameEvents.OnLogMessage("TrashPanda cancelled due to insufficient cards!");
+                GameManager.Instance.GetTrashPile().Trash(this);
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
                 return;
             }
