@@ -89,8 +89,8 @@ namespace TacoVsBurrito
 
         void Start()
         {
-            // Application.targetFrameRate = FRAME_RATE;
-            // Screen.sleepTimeout = SleepTimeout.NeverSleep;
+            Application.targetFrameRate = FRAME_RATE;
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
 
         // -------------------------------------------------------

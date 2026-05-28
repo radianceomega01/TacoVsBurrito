@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,8 +6,11 @@ namespace TacoVsBurrito
 {
     public abstract class PlayerBase : MonoBehaviour
     {
+
         private PlayerHand hand;
         private Meal meal;
+        FullScalePlayerView fullScaleView;
+        MinifiedPlayerView minifiedView;
         public int Index { get; private set; }
         public string Name { get; private set; }
 
@@ -24,7 +28,18 @@ namespace TacoVsBurrito
         {
             hand = GetComponentInChildren<PlayerHand>();
             meal = GetComponentInChildren<Meal>();
+            fullScaleView = GetComponentInChildren<FullScalePlayerView>();
+            minifiedView = GetComponentInChildren<MinifiedPlayerView>(true);
+
+            GameEvents.OnFoodFightAction += ManagePlayerOnFoodFight;
+            GameEvents.OnFoodFightOver += ManagePlayerOnFoodFightOver;
         }
+        protected virtual void OnDestroy() 
+        {
+            GameEvents.OnFoodFightAction -= ManagePlayerOnFoodFight;
+            GameEvents.OnFoodFightOver -= ManagePlayerOnFoodFightOver;
+        }
+
         public void InitIndex(int index)
         {
             Index = index;
@@ -43,6 +58,17 @@ namespace TacoVsBurrito
             List<CardBase> otherMealCards = other.meal.TakeAll();
             currentMealCards.ForEach(c => other.meal.AddCard(c));
             otherMealCards.ForEach(c => meal.AddCard(c));
+        }
+        protected void ManagePlayerOnFoodFightOver()
+        {
+            fullScaleView.gameObject.SetActive(true);
+            minifiedView.DisableView();
+        }
+
+        protected void ManagePlayerOnFoodFight(FoodFightCard card)
+        {
+            fullScaleView.gameObject.SetActive(false);
+            minifiedView.EnableView(Score, hand.Count);
         }
 
     }

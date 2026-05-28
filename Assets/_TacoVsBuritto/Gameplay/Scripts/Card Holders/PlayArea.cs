@@ -16,13 +16,15 @@ namespace TacoVsBurrito
 
         private const int TRASH_DEALY_IN_MS = 500;
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
-        void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 

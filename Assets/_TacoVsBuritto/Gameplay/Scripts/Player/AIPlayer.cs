@@ -38,8 +38,9 @@ namespace TacoVsBurrito
             GameEvents.OnCardSelectionForFoodFightWinner += ManageCardSelectionAction;
         }
 
-        void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             GameEvents.OnTurnStarted -= ManageTurnStarted;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;

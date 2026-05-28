@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -14,21 +15,32 @@ namespace TacoVsBurrito
         private const int DEALING_DELAY_IN_MS = 50;
         public bool IsDrawPileEmpty => pileCards.Count == 0;
 
+        private const float PILE_POS_ON_FOOD_FIGHT = 0f;
+        private float originalPilePosX;
+        private RectTransform rectTransform;
+        private const float MOVE_TIME_IN_IN_SECS = 0.2f;
+        private const int REPOSITIONING_DELAY_IN_MS = 500;
 
-        void Awake()
+
+        protected override void Awake()
         {
+            base.Awake();
             GameEvents.OnShuffleCards += ManageCardShuffle;
             GameEvents.OnDistributeCards += DealStartingHand;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
+            GameEvents.OnCardSelectionForFoodFightWinner += ManagePileOnFoodFightCardSelection;
 
             drawBtn.onClick.AddListener(OnDrawBtnClicked);
+            rectTransform = GetComponent<RectTransform>();
         }
 
-        void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             GameEvents.OnShuffleCards -= ManageCardShuffle;
             GameEvents.OnDistributeCards -= DealStartingHand;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
+            GameEvents.OnCardSelectionForFoodFightWinner -= ManagePileOnFoodFightCardSelection;
         }
 
         void Start()
@@ -151,6 +163,22 @@ namespace TacoVsBurrito
             }
             else
                 TogglePileInteraction(false);
+        }
+
+        protected override void ManagePileOnFoodFight(FoodFightCard card)
+        {
+            originalPilePosX = rectTransform.localPosition.x;
+            rectTransform.DOAnchorPosX(PILE_POS_ON_FOOD_FIGHT, MOVE_TIME_IN_IN_SECS);
+        }
+        protected async override void ManagePileOnFoodFightOver()
+        {
+            await Task.Delay(REPOSITIONING_DELAY_IN_MS);
+            rectTransform.DOAnchorPosX(originalPilePosX, MOVE_TIME_IN_IN_SECS);
+        }
+        private async void ManagePileOnFoodFightCardSelection(Dictionary<CardBase, int> dictionary, PlayerBase @base)
+        {
+            await Task.Delay(REPOSITIONING_DELAY_IN_MS);
+            rectTransform.DOAnchorPosX(originalPilePosX, MOVE_TIME_IN_IN_SECS);
         }
 
         /// Flip the top card from the draw pile (Food Fight).

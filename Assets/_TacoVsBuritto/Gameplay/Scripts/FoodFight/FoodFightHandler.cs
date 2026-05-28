@@ -150,6 +150,7 @@ namespace TacoVsBurrito
                     drawPile.AddCardsBack(cardsDrawn);
                 }
                 trashPile.Trash(foodFightCard);
+                GameEvents.OnFoodFightOver?.Invoke();
                 return true;
             }
             return false;

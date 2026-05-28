@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,18 @@ namespace TacoVsBurrito
         protected const float CARD_SCALE = 1f;
         protected List<CardBase> pileCards = new();
         public IReadOnlyList<CardBase> PileCards => pileCards;
+
+        protected virtual void Awake()
+        {
+            GameEvents.OnFoodFightAction += ManagePileOnFoodFight;
+            GameEvents.OnFoodFightOver += ManagePileOnFoodFightOver;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            GameEvents.OnFoodFightAction -= ManagePileOnFoodFight;
+            GameEvents.OnFoodFightOver -= ManagePileOnFoodFightOver;
+        }
 
         public virtual void PutCardsBack(List<CardBase> cards)
         {
@@ -32,6 +45,14 @@ namespace TacoVsBurrito
         public void RemoveCard(CardBase card)
         {
             pileCards.Remove(card);
+        }
+        protected virtual void ManagePileOnFoodFight(FoodFightCard card)
+        {
+            gameObject.SetActive(false);
+        }
+        protected virtual void ManagePileOnFoodFightOver()
+        {
+            gameObject.SetActive(true);
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,10 +12,13 @@ namespace TacoVsBurrito
         void Awake()
         {
             GameEvents.OnTurnStarted += UpdateTxt;
+            GameEvents.OnCardSelectionForFoodFightWinner += UpdateTxtForFoodFightWinner;
         }
+
         void OnDestroy()
         {
             GameEvents.OnTurnStarted -= UpdateTxt;
+            GameEvents.OnCardSelectionForFoodFightWinner -= UpdateTxtForFoodFightWinner;
         }
         void Start()
         {
@@ -23,5 +28,7 @@ namespace TacoVsBurrito
         {
             turnTxt.text = player is SelfPlayer ? "Your Turn!" : "Opponent's Turn!";
         }
+        void UpdateTxtForFoodFightWinner(Dictionary<CardBase, int> dictionary, PlayerBase winner) => UpdateTxt(winner);
+
     }
 }
