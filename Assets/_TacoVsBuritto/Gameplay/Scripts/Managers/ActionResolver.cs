@@ -88,8 +88,7 @@ namespace TacoVsBurrito
             var mealContents = victim.Meal.TakeAll();
             _trashPile.TrashAll(mealContents);
 
-            GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.Name}'s entire meal is trashed! " +
-                   $"({mealContents.Count} card(s) discarded) Turn ends immediately.");
+            GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.GetType()}'s entire meal is trashed!");
 
             GameEvents.OnHealthInspector?.Invoke();
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer); // skip play phase       
@@ -106,8 +105,7 @@ namespace TacoVsBurrito
             caster.Meal.AddCard(stealTarget);
             victim.Meal.RemoveCard(stealTarget);
 
-            GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! {caster.Name} stole '{stealTarget.Name}' " +
-                   $"from {victim.Name}'s meal into their own meal!");
+            GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! card stolen from {victim.GetType()} meal");
 
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);       
         }
@@ -140,8 +138,7 @@ namespace TacoVsBurrito
             {
                 // Health Inspector triggers IMMEDIATELY when taken from trash
                 ResolveHealthInspector(caster);
-                GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved a Health Inspector from the Trash pile! " +
-                        $"It triggers immediately!");
+                GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.GetType()} retrieved a Health Inspector from the Trash");
                 return;        
             }
 
@@ -165,8 +162,7 @@ namespace TacoVsBurrito
             {
                 // Health Inspector triggers IMMEDIATELY when taken from trash
                 ResolveHealthInspector(winner);
-                GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT! {winner.Name} selected a Health Inspector from the FoodFight! " +
-                        $"It triggers immediately!");
+                GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT! {winner.GetType()} selected a Health Inspector");
                 return;        
             }
             winner.Hand.AddCard(chosenCard);
@@ -186,7 +182,7 @@ namespace TacoVsBurrito
         {
             caster.SwapMeal(target);
 
-            GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.Name} swapped their hand and meal with {target.Name}!");
+            GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.GetType()} swapped their hand and meal with {target.GetType()}!");
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }
     }
