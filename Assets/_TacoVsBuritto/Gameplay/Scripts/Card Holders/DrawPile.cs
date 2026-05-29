@@ -15,12 +15,6 @@ namespace TacoVsBurrito
         private const int DEALING_DELAY_IN_MS = 50;
         public bool IsDrawPileEmpty => pileCards.Count == 0;
 
-        private const float PILE_POS_ON_FOOD_FIGHT = 0f;
-        private float originalPilePosX;
-        private RectTransform rectTransform;
-        private const float MOVE_TIME_IN_IN_SECS = 0.2f;
-        private const int REPOSITIONING_DELAY_IN_MS = 500;
-
 
         protected override void Awake()
         {
@@ -28,10 +22,8 @@ namespace TacoVsBurrito
             GameEvents.OnShuffleCards += ManageCardShuffle;
             GameEvents.OnDistributeCards += DealStartingHand;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
-            GameEvents.OnCardSelectionForFoodFightWinner += ManagePileOnFoodFightCardSelection;
 
             drawBtn.onClick.AddListener(OnDrawBtnClicked);
-            rectTransform = GetComponent<RectTransform>();
         }
 
         protected override void OnDestroy()
@@ -40,7 +32,6 @@ namespace TacoVsBurrito
             GameEvents.OnShuffleCards -= ManageCardShuffle;
             GameEvents.OnDistributeCards -= DealStartingHand;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
-            GameEvents.OnCardSelectionForFoodFightWinner -= ManagePileOnFoodFightCardSelection;
         }
 
         void Start()
@@ -165,21 +156,18 @@ namespace TacoVsBurrito
                 TogglePileInteraction(false);
         }
 
-        protected override void ManagePileOnFoodFight(FoodFightCard card)
-        {
-            originalPilePosX = rectTransform.localPosition.x;
-            rectTransform.DOAnchorPosX(PILE_POS_ON_FOOD_FIGHT, MOVE_TIME_IN_IN_SECS);
-        }
-        protected async override void ManagePileOnFoodFightOver()
-        {
-            await Task.Delay(REPOSITIONING_DELAY_IN_MS);
-            rectTransform.DOAnchorPosX(originalPilePosX, MOVE_TIME_IN_IN_SECS);
-        }
-        private async void ManagePileOnFoodFightCardSelection(Dictionary<CardBase, int> dictionary, PlayerBase @base)
-        {
-            await Task.Delay(REPOSITIONING_DELAY_IN_MS);
-            rectTransform.DOAnchorPosX(originalPilePosX, MOVE_TIME_IN_IN_SECS);
-        }
+        protected override void ManagePileOnFoodFight(FoodFightCard card){}
+        protected async override void ManagePileOnFoodFightOver(){}
+        // protected override void ManagePileOnFoodFight(FoodFightCard card)
+        // {
+        //     originalPilePosX = rectTransform.localPosition.x;
+        //     rectTransform.DOAnchorPosX(PILE_POS_ON_FOOD_FIGHT, MOVE_TIME_IN_IN_SECS);
+        // }
+        // protected async override void ManagePileOnFoodFightOver()
+        // {
+        //     await Task.Delay(REPOSITIONING_DELAY_IN_MS);
+        //     rectTransform.DOAnchorPosX(originalPilePosX, MOVE_TIME_IN_IN_SECS);
+        // }
 
         /// Flip the top card from the draw pile (Food Fight).
         /// Returns null if empty. Caller is responsible for placing it back or keeping it.
@@ -202,6 +190,7 @@ namespace TacoVsBurrito
             drawBtn.onClick.RemoveAllListeners();
             drawBtn.onClick.AddListener(OnDrawBtnClicked);
         }
+        public RectTransform GetRectTransform() => GetComponent<RectTransform>();
 
     }
 }

@@ -48,11 +48,6 @@ namespace TacoVsBurrito
             allPlayers = new(GameManager.Instance.Players);
             activePlayersInRound = new(GameManager.Instance.Players);
 
-            if (CancelFoodFightOnInsufficientCards())
-            {
-                return;
-            }
-
             GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT!");
             ActivateFoodFightDrawPile();
             BeginRound(GameManager.Instance.CurrentPlayer);

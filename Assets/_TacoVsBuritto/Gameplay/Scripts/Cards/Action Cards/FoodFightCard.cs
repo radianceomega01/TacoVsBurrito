@@ -8,9 +8,17 @@ namespace TacoVsBurrito
     public class FoodFightCard : ActionCardBase, ITargetTypeAction
     {
         const int EXECUTION_DELAY_IN_MS = 200;
+        GameManager gameManager;
         public override void ExecuteAction()
         {
             //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
+            gameManager = GameManager.Instance;
+            if(gameManager.GetDrawPile().IsDrawPileEmpty || 
+                gameManager.GetDrawPile().PileCards.Count < gameManager.Players.Count)
+            {
+                GameManager.Instance.GetTrashPile().Trash(this);
+                return;
+            }
             GameEvents.OnFoodFightAction?.Invoke(this);
         }
 

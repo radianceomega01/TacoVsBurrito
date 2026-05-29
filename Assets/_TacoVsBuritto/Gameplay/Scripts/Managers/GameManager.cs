@@ -46,6 +46,8 @@ namespace TacoVsBurrito
         [SerializeField] DrawPile drawPile;
         [SerializeField] TrashPile trashPile;
         [SerializeField] PlayArea playArea;
+        [SerializeField] Transform gameplayPanel;
+        [SerializeField] Transform foodFightPanel;
 
         const int FRAME_RATE = 90;
 
@@ -215,6 +217,8 @@ namespace TacoVsBurrito
         public TrashPile GetTrashPile() => trashPile;
         public DrawPile GetDrawPile() => drawPile;
         public PlayArea GetPlayArea() => playArea;
+        public Transform GetGameplayPanel() => gameplayPanel;
+        public Transform GetFoodFightPanel() => foodFightPanel;
     }
     public enum GameState
     {
