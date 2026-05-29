@@ -35,6 +35,7 @@ namespace TacoVsBurrito
             card.ChangePosition(cardsParent.position);
             card.ChangeParent(cardsParent);
             card.DisableInteraction();
+            card.ToggleInteractionType(InteractionType.Click);
             card.ToggleBackFace(false);
         }
 

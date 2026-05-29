@@ -14,7 +14,7 @@ namespace TacoVsBurrito
         int currentPlayerIndex = 0;
         CancellationTokenSource noBuenoTimerCts;
         private List<NoBuenoCard> noBuenoCardsPlayed = new();
-        private ActionCardBase currentTrashedCard;
+        private ActionCardBase currentPlayedActionCard;
         private TrashPile trashPile;
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
@@ -92,7 +92,7 @@ namespace TacoVsBurrito
         void ManageActionCardPlayed(ActionCardBase card)
         {
             Debug.LogWarning("reached turn handler with card: "+ card.GetType());
-            if(card is not NoBuenoCard) currentTrashedCard = card;
+            if(card is not NoBuenoCard) currentPlayedActionCard = card;
             
             //SwitchState(card.GetStateOnTrashed());
             //card.ExecuteAction();    
@@ -109,7 +109,7 @@ namespace TacoVsBurrito
             currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
             SwitchState(TurnState.DrawPhase);
-            currentTrashedCard = null;
+            currentPlayedActionCard = null;
         }
         void ManageTurnChangedInFoodFight(PlayerBase newPlayer)
         {
@@ -153,7 +153,7 @@ namespace TacoVsBurrito
                 }
                 else
                 {
-                    trashPile.Trash(currentTrashedCard);
+                    trashPile.Trash(currentPlayedActionCard);
                     ManageTurnEnded(GameManager.Instance.CurrentPlayer);
                 }
                 noBuenoCardsPlayed.ForEach(card => trashPile.Trash(card));
@@ -167,18 +167,18 @@ namespace TacoVsBurrito
 
         void CheckAndResolveAction()
         {
-            if (currentTrashedCard != null && currentTrashedCard is ITargetTypeAction targetTyeCard) //No bueno is immediately executed
+            if (currentPlayedActionCard != null && currentPlayedActionCard is ITargetTypeAction targetTyeCard) //No bueno is immediately executed
             {
-                GameEvents.OnActionResolved?.Invoke(currentTrashedCard);
+                GameEvents.OnActionResolved?.Invoke(currentPlayedActionCard);
                 targetTyeCard.ResolveAction();
             }
         }
         void CheckAndExecuteAction()
         {
-            if (currentTrashedCard != null && currentTrashedCard is not NoBuenoCard) //No bueno is immediately executed
+            if (currentPlayedActionCard != null && currentPlayedActionCard is not NoBuenoCard) //No bueno is immediately executed
             {
-                currentTrashedCard.ExecuteAction();
-                if(currentTrashedCard is ITargetTypeAction)
+                currentPlayedActionCard.ExecuteAction();
+                if(currentPlayedActionCard is ITargetTypeAction)
                 {
                     SwitchState(TurnState.ActionTargetPhase);
                 }
@@ -188,9 +188,10 @@ namespace TacoVsBurrito
         void ManageNoBuenoPlayed(NoBuenoCard noBuenoCard)
         {
             //PLayer played no bueno as a regular action card in play area
-            if(currentTrashedCard == null)
+            if(currentPlayedActionCard == null || currentTurnState != TurnState.NoBuenoWindowPhase)
             {
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+                trashPile.Trash(noBuenoCard);
                 return;
             }
 
@@ -200,7 +201,7 @@ namespace TacoVsBurrito
         }
         void ManageTargetAction(TargetTypeContext context)
         {
-            if(currentTrashedCard is ITargetTypeAction targetTypeCard)
+            if(currentPlayedActionCard is ITargetTypeAction targetTypeCard)
             {
                 targetTypeCard.OnActionTargeted(context);
             }

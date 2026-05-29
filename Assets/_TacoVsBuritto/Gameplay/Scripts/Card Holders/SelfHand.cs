@@ -58,6 +58,7 @@ namespace TacoVsBurrito
             _cards.Add(c);
             c.ChangeScale(CARD_SCALE);
             c.ToggleBackFace(false);
+            c.ToggleInteractionType(InteractionType.Drag);
             ArrangeCardsAnimated();
             UpdateCountTxt();
         }
@@ -66,6 +67,7 @@ namespace TacoVsBurrito
             _cards.Add(c);
             c.ChangeScale(CARD_SCALE);
             c.ToggleBackFace(true);
+            c.ToggleInteractionType(InteractionType.Drag);
             SetCardInDefaultPlace(c);
             UpdateCountTxt();
             c.DisableInteraction();
@@ -149,7 +151,7 @@ namespace TacoVsBurrito
             {
                 _cards.ForEach(card => card.EnableInteraction());
             }
-            else if (turnState == TurnState.NoBuenoWindowPhase)
+            else if (GameManager.Instance.CurrentPlayer is not SelfPlayer && turnState == TurnState.NoBuenoWindowPhase)
             {
                 _cards.ForEach(card =>
                 {

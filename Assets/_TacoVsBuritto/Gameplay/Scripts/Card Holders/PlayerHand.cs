@@ -29,6 +29,7 @@ namespace TacoVsBurrito
             _cards.Add(c);
             c.ToggleBackFace(true);
             c.DisableInteraction();
+            c.ToggleInteractionType(InteractionType.Click);
             ArrangeCard(c);
             UpdateCountTxt();
         }

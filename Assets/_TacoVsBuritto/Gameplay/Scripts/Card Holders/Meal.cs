@@ -62,6 +62,7 @@ namespace TacoVsBurrito
             card.ChangeScale(CARD_SCALE);
             card.DisableInteraction();
             card.ToggleBackFace(false);
+            card.ToggleInteractionType(InteractionType.Click);
             ArrangeCardsAnimated();
 
             if (card is HotSauceBossCard) HotSauceBossCardCount++;
@@ -178,18 +179,7 @@ namespace TacoVsBurrito
                 _cards.ForEach(card =>
                 {
                     card.EnableInteraction();
-                    card.ToggleInteractionType();
                     card.ActivateGlow();
-                });
-            }
-        }
-        private void ToggleInteractionType(PlayerBase player)
-        {
-            if(player != parentPlayer)
-            {
-                _cards.ForEach(card =>
-                {
-                    card.ToggleInteractionType();
                 });
             }
         }
@@ -221,7 +211,6 @@ namespace TacoVsBurrito
         {
             if(actionCard is not CraftyCrowCard)
                 return;
-            ToggleInteractionType(GameManager.Instance.CurrentPlayer);
             currentGlowingCard?.DeactivateGlow();
             currentGlowingCard = null;    
         }

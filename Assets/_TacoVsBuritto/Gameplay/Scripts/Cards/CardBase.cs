@@ -32,7 +32,7 @@ namespace TacoVsBurrito
 
         private ICardPickupTarget tempPickupTarget;
         private bool wasInteractionEnabledBeforeDrag;
-        private InteractionType interactionType = InteractionType.Drag;
+        private InteractionType interactionType = InteractionType.Click;
 
 
         public string Name { get { return cardName; } }
@@ -192,14 +192,8 @@ namespace TacoVsBurrito
         {
             _canvasGroup.blocksRaycasts = true;
         }
-        public void ToggleInteractionType()
-        {
-            interactionType = (interactionType == InteractionType.Drag) ? InteractionType.Click : InteractionType.Drag;
-        }
-        public void ToggleBackFace(bool showBack)
-        {
-            backFaceImage.gameObject.SetActive(showBack);
-        }
+        public void ToggleInteractionType(InteractionType interactionType) => this.interactionType = interactionType;
+        public void ToggleBackFace(bool showBack) => backFaceImage.gameObject.SetActive(showBack);
         public void ChangeScale(float value) => _rectTransform.DOScale(value, TIME_TO_SCALE_IN_SECS);
         public void SetAsLastSibbling() => transform.SetSiblingIndex(transform.parent.childCount - 1);
 

@@ -48,7 +48,6 @@ namespace TacoVsBurrito
             for(int i=0; i<pileCards.Count; i++)
             {
                 pileCards[i].ToggleBackFace(false);
-                pileCards[i].ToggleInteractionType();
                 pileCards[i].ChangePosition(positions[i]);
                 pileCards[i].transform.SetParent(cardsParent);
 
@@ -64,7 +63,6 @@ namespace TacoVsBurrito
             if(pileCards == null || !rootTransform.gameObject.activeInHierarchy)
                 return;
 
-            pileCards.ForEach(card => card.ToggleInteractionType());
             cardPile.PutCardsBack(pileCards);
             cardPile.RemoveCard(selectedCard);
             GameEvents.OnCardsPileCardTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, null, selectedCard));
