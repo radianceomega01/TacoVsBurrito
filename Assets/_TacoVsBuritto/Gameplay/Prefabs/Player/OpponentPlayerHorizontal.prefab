@@ -145,6 +145,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7823520516834217843, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
+      propertyPath: m_text
+      value: AI
+      objectReference: {fileID: 0}
     - target: {fileID: 7887847195910679844, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
       propertyPath: m_Name
       value: OpponentPlayerHorizontal

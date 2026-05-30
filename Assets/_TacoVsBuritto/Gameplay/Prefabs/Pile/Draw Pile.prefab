@@ -170,12 +170,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
+  m_fontSize: 36
   m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 30
+  m_fontSizeMax: 36
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -510,7 +510,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 180, y: 240}
+  m_SizeDelta: {x: 230, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6627574356601891442
 MonoBehaviour:
@@ -1598,6 +1598,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TummyAcheCard
       objectReference: {fileID: 0}
+    - target: {fileID: 7085874730286202948, guid: 8a9b529980461084c90924576f0f5931, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -21.489998
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085874730286202948, guid: 8a9b529980461084c90924576f0f5931, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -26.400002
+      objectReference: {fileID: 0}
     - target: {fileID: 8111523542057252243, guid: 8a9b529980461084c90924576f0f5931, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2476,11 +2484,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5293600466274744921, guid: d8bd320a5609fb344b5f687e1e36644b, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 135
+      value: 170
       objectReference: {fileID: 0}
     - target: {fileID: 5293600466274744921, guid: d8bd320a5609fb344b5f687e1e36644b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 5293600466274744921, guid: d8bd320a5609fb344b5f687e1e36644b, type: 3}
       propertyPath: m_LocalPosition.x

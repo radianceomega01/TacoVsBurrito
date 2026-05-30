@@ -171,11 +171,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 67347514412693533, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 135
+      value: 170
       objectReference: {fileID: 0}
     - target: {fileID: 67347514412693533, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 67347514412693533, guid: 85696888f03f5c64d8b276c0fd50c1a7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -271,6 +271,7 @@ MonoBehaviour:
   DescriptionTxtField: {fileID: 9015011803136255482}
   backFaceImage: {fileID: 4782107970850321925}
   glowBG: {fileID: 892895204565343670}
+  cardsCount: {fileID: 0}
   cardValue: 1
   ValueTxtField: {fileID: 660552813068261590}
 --- !u!114 &892895204565343670 stripped
