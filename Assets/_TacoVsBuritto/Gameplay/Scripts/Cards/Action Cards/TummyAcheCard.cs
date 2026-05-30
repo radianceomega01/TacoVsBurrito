@@ -22,7 +22,7 @@ namespace TacoVsBurrito
         {
             GameEvents.OnTurnEnded(GameManager.Instance.CurrentPlayer);
         }
-
+        public override bool CanExecuteAction() => false;
         public int GetModifiedMealScore(int currentScore) => currentScore + cardValue;
         public override TurnState GetStateOnTrashed() => TurnState.SkipPhase;
 
