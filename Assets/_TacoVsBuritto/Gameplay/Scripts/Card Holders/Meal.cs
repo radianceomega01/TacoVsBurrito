@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -11,7 +12,7 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Meal  (the face-up cards in front of a player)
     // ----------------------------------------------------------
-    public class Meal: MonoBehaviour, ICardDropTarget
+    public class Meal : MonoBehaviour, ICardDropTarget
     {
         [SerializeField] Transform cardsTransform;
         [SerializeField] TextMeshProUGUI scoreTxt;
@@ -21,7 +22,8 @@ namespace TacoVsBurrito
         private PlayerBase parentPlayer;
 
         public MealType Type { get; }
-        private List<CardBase> _cards;
+        private List<CardBase> _cards; // All meal cards
+        private List<MealCardStack> _cardStacks; // For stacking cards of same meal value or type
         private CardBase currentGlowingCard;
 
         public IReadOnlyList<CardBase> Cards => _cards;
@@ -33,6 +35,7 @@ namespace TacoVsBurrito
         void Awake()
         {
             _cards = new();
+            _cardStacks = new();
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
             GameEvents.OnCraftyCrowAction += ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget += ManageCardClickedForCraftyCrow;
@@ -58,12 +61,16 @@ namespace TacoVsBurrito
         {
             if (card is not IMealTypeAction)
                 return;
+
             _cards.Add(card);
+            AddCardInStack(card);
+
             card.ChangeScale(CARD_SCALE);
+            card.ChangeParent(cardsTransform);
+            card.transform.SetAsLastSibling();
             card.DisableInteraction();
             card.ToggleBackFace(false);
             card.ToggleInteractionType(InteractionType.Click);
-            ArrangeCardsAnimated();
 
             if (card is HotSauceBossCard) HotSauceBossCardCount++;
             if (card is IngredientCardBase) IngredientCardCount++;
@@ -71,12 +78,58 @@ namespace TacoVsBurrito
             UpdateScore();
         }
 
+        void AddCardInStack(CardBase card)
+        {
+            bool didCreateNewStack = false;
+            MealCardStack stack = FindMatchingStack(card);
+
+            if (stack == null)
+            {
+                stack = new MealCardStack();
+                _cardStacks.Add(stack);
+                didCreateNewStack = true;
+            }
+            stack.Cards.Add(card);
+            if (didCreateNewStack)
+                ArrangeCardsAnimated();
+            else
+                SetCardPositionToStack(card, stack);
+        }
+
         /// Remove a specific card (used by Crafty Crow).
         public void RemoveCard(CardBase card)
         {
+            // Remove from flat gameplay list
             _cards.Remove(card);
+            RemoveCardFromStack(card);
+            // Update counters
+            if (card is HotSauceBossCard)
+                HotSauceBossCardCount--;
+
+            if (card is IngredientCardBase)
+                IngredientCardCount--;
+
             UpdateScore();
-            ArrangeCardsAnimated();
+        }
+
+        void RemoveCardFromStack(CardBase card)
+        {
+            bool didRemoveOneStack = false;
+            MealCardStack stack =
+            _cardStacks.Find(s => s.Cards.Contains(card));
+
+            if (stack != null)
+            {
+                stack.Cards.Remove(card);
+
+                if (stack.Cards.Count == 0)
+                {
+                    _cardStacks.Remove(stack);
+                    didRemoveOneStack = true;
+                }
+            }
+            if (didRemoveOneStack)
+                ArrangeCardsAnimated();
         }
 
         /// Remove and return all cards (Health Inspector / Order Envy).
@@ -84,15 +137,9 @@ namespace TacoVsBurrito
         {
             var all = new List<CardBase>(_cards);
             _cards.Clear();
+            _cardStacks.Clear();
             UpdateScore();
             return all;
-        }
-
-        public void ChangeParentAndPosition(Transform parentTransform, Vector3 position)
-        {
-            transform.DOMove(position, 0.5f);
-            transform.SetParent(parentTransform);
-            transform.DORotate(Vector3.zero, 0.5f);
         }
 
         // ---- Scoring ----
@@ -111,7 +158,7 @@ namespace TacoVsBurrito
                 {
                     score = @ingredientCard.GetModifiedMealScore(score);
                 }
-                else if(card is TummyAcheCard @tummyAcheCard)
+                else if (card is TummyAcheCard @tummyAcheCard)
                 {
                     score = @tummyAcheCard.GetModifiedMealScore(score);
                 }
@@ -150,23 +197,95 @@ namespace TacoVsBurrito
             int count = _cards.Count;
             if (count == 0) return;
 
-            float totalWidth = (count - 1) * CARD_SPACING;
+            Vector3 basePos = cardsTransform.position;
+            Vector3 right = cardsTransform.right;
+
+            // STACK-BASED LAYOUT (optimized system)
+
+            int stackCount = _cardStacks.Count;
+            if (stackCount == 0) return;
+
+            float totalWidth = (stackCount - 1) * CARD_SPACING;
             float startOffset = -totalWidth / 2f;
-            for (int i = 0; i < count; i++)
+
+            for (int i = 0; i < stackCount; i++)
             {
+                MealCardStack stack = _cardStacks[i];
+
                 float offset = startOffset + i * CARD_SPACING;
-                Vector3 targetPos = cardsTransform.position + cardsTransform.right * offset;
 
-                _cards[i].ChangePosition(targetPos);
-                _cards[i].ChangeParent(cardsTransform);
+                Vector3 stackPos = basePos + right * offset;
 
+                int cardCount = stack.Cards.Count;
+
+                for (int j = 0; j < cardCount; j++)
+                {
+                    CardBase card = stack.Cards[j];
+
+                    card.ChangePosition(stackPos);
+                }
             }
+        }
+
+        void SetCardPositionToStack(CardBase currentCard, MealCardStack stack)
+        {
+            // Position of the stack = position of topmost card already in stack
+            Vector3 stackPosition = stack.Cards[^2].transform.position;
+
+            currentCard.ChangePosition(stackPosition);
+
+            // Show updated count on new top card
+            //card.SetStackCount(stack.Cards.Count);
+        }
+
+        // void ArrangeCardsAnimated()
+        // {
+        //     int count = _cards.Count;
+        //     if (count == 0) return;
+
+        //     float totalWidth = (count - 1) * CARD_SPACING;
+        //     float startOffset = -totalWidth / 2f;
+        //     for (int i = 0; i < count; i++)
+        //     {
+        //         float offset = startOffset + i * CARD_SPACING;
+        //         Vector3 targetPos = cardsTransform.position + cardsTransform.right * offset;
+
+        //         _cards[i].ChangePosition(targetPos);
+        //         _cards[i].ChangeParent(cardsTransform);
+
+        //     }
+        // }
+
+        MealCardStack FindMatchingStack(CardBase newCard)
+        {
+            foreach (var stack in _cardStacks)
+            {
+                CardBase existing = stack.TopCard;
+
+                // Tummy Ache stack
+                if (existing is TummyAcheCard && newCard is TummyAcheCard)
+                    return stack;
+
+                // Hot Sauce Boss stack
+                if (existing is HotSauceBossCard && newCard is HotSauceBossCard)
+                    return stack;
+
+                // Ingredient value stack
+                if (existing is IngredientCardBase a &&
+                    newCard is IngredientCardBase b &&
+                    a.CardValue == b.CardValue)
+                {
+                    return stack;
+                }
+            }
+
+            return null;
         }
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
             //Deactivate glow if action on card was canceled due to no bueno
-            if(turnState == TurnState.DrawPhase && currentGlowingCard != null)
+            if (turnState == TurnState.DrawPhase && currentGlowingCard != null)
             {
                 currentGlowingCard?.DeactivateGlow();
                 currentGlowingCard = null;
@@ -174,7 +293,7 @@ namespace TacoVsBurrito
         }
         void ManageCraftyCrowAction()
         {
-            if(GameManager.Instance.CurrentPlayer != parentPlayer)
+            if (GameManager.Instance.CurrentPlayer != parentPlayer)
             {
                 _cards.ForEach(card =>
                 {
@@ -185,7 +304,7 @@ namespace TacoVsBurrito
         }
         private void DisableInteraction(PlayerBase player)
         {
-            if(player != parentPlayer)
+            if (player != parentPlayer)
             {
                 _cards.ForEach(card =>
                 {
@@ -197,24 +316,24 @@ namespace TacoVsBurrito
         private void ManageCardClickedForCraftyCrow(CardBase card)
         {
             currentGlowingCard = card;
-            _cards.ForEach(c => 
+            _cards.ForEach(c =>
             {
-                if(c != card) c.DeactivateGlow();
+                if (c != card) c.DeactivateGlow();
             });
-            DisableInteraction(GameManager.Instance.CurrentPlayer); 
+            DisableInteraction(GameManager.Instance.CurrentPlayer);
 
-            if(_cards.Contains(card))
+            if (_cards.Contains(card))
                 GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
         }
 
         void ManageActionResolved(ActionCardBase actionCard)
         {
-            if(actionCard is not CraftyCrowCard)
+            if (actionCard is not CraftyCrowCard)
                 return;
             currentGlowingCard?.DeactivateGlow();
-            currentGlowingCard = null;    
+            currentGlowingCard = null;
         }
-        
+
         void UpdateScore() => scoreTxt.SetText(CalculateScore().ToString());
     }
     public enum MealType
@@ -222,5 +341,12 @@ namespace TacoVsBurrito
         Taco,
         Burrito
     }
-    
+
+    [Serializable]
+    public class MealCardStack
+    {
+        public List<CardBase> Cards = new();
+        public CardBase TopCard => Cards[^1];
+    }
+
 }

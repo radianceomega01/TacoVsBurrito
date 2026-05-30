@@ -71,7 +71,7 @@ namespace TacoVsBurrito
         }
         public void ChangeParent(Transform newParent)
         {
-            transform.SetParent(newParent);
+            transform.SetParent(newParent, true);
         }
         public void ChangeSiblingIndex(int newIndex)
         {
@@ -105,7 +105,7 @@ namespace TacoVsBurrito
 
             // Optional visual feedback
             transform.localScale = Vector3.one * DRAG_SCALE;
-            transform.SetParent(canvas.transform); // Move to top-level canvas to avoid clipping
+            ChangeParent(canvas.transform); // Move to top-level canvas to avoid clipping
 
             StartCoroutine(PickCardBeforeDrag(eventData));
 
