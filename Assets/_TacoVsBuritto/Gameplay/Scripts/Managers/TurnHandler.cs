@@ -18,6 +18,7 @@ namespace TacoVsBurrito
         private TrashPile trashPile;
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
+        const int CARD_TRASH_DELAY_IN_MS = 500;
 
         public TurnHandler(TrashPile trashPile)
         {
@@ -89,9 +90,8 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
         }
 
-        void ManageActionCardPlayed(ActionCardBase card)
+        async void ManageActionCardPlayed(ActionCardBase card)
         {
-            Debug.LogWarning("reached turn handler with card: "+ card.GetType());
             if(card is not NoBuenoCard) currentPlayedActionCard = card;
             
             //SwitchState(card.GetStateOnTrashed());
@@ -101,7 +101,14 @@ namespace TacoVsBurrito
                 card.ExecuteAction();
                 return;
             }
-            ManageStartNoBuenoInterruptWindow(card);
+            if(card.CanExecuteAction())
+                ManageStartNoBuenoInterruptWindow(card);
+            else
+            {
+                await Task.Delay(CARD_TRASH_DELAY_IN_MS);
+                trashPile.Trash(card);
+                ManageTurnEnded(GameManager.Instance.CurrentPlayer);
+            }
         }
 
         void ManageTurnEnded(PlayerBase oldPlayer)
@@ -199,6 +206,7 @@ namespace TacoVsBurrito
             SwitchState(TurnState.NoBuenoWindowPhase);
             StartNoBuenoTimer();
         }
+        
         void ManageTargetAction(TargetTypeContext context)
         {
             if(currentPlayedActionCard is ITargetTypeAction targetTypeCard)

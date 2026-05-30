@@ -10,14 +10,6 @@ namespace TacoVsBurrito
         
         public override void ExecuteAction()
         {
-            if(! IsSufficientCardForCraftyCrow())
-            {
-                GameEvents.OnLogMessage("CraftyCrow cancelled due to insufficient cards!");
-                GameManager.Instance.GetTrashPile().Trash(this);
-                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
-                return;
-            }
-            
             GameEvents.OnLogMessage("Pick an Enemy Card from Meal!");
             GameEvents.OnCraftyCrowAction?.Invoke();
         }
@@ -35,6 +27,16 @@ namespace TacoVsBurrito
             GameManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveCraftyCrow(targetTypeContext.caster, targetTypeContext.victim, targetTypeContext.cardTargeted);
             targetTypeContext = default;
+        }
+
+        public override bool CanExecuteAction()
+        {
+            if(! IsSufficientCardForCraftyCrow())
+            {
+                GameEvents.OnLogMessage("CraftyCrow cancelled due to insufficient cards!");
+                return false;
+            }
+            return true;
         }
         public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
 

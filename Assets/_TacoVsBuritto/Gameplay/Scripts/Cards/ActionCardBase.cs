@@ -26,6 +26,7 @@ namespace TacoVsBurrito
         }
         
         public abstract void ExecuteAction();
+        public virtual bool CanExecuteAction() => true;
         public virtual TurnState GetStateOnTrashed() => TurnState.ActionResolvePhase; 
     }
 }

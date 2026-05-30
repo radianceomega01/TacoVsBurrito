@@ -57,6 +57,9 @@ namespace TacoVsBurrito
         {
             playerCardInRound.Add(player, card);
             cardsDrawn.Add(card);
+
+            if (CancelFoodFightOnInsufficientCards())
+                return;
             if (playerCardInRound.Count == activePlayersInRound.Count)
             {
                 RoundEnd();
@@ -135,7 +138,7 @@ namespace TacoVsBurrito
 
         bool CancelFoodFightOnInsufficientCards()
         {
-            if (drawPile.PileCards.Count < GameManager.Instance.Players.Count)
+            if (drawPile.IsDrawPileEmpty || drawPile.PileCards.Count < GameManager.Instance.Players.Count)
             {
                 GameEvents.OnLogMessage?.Invoke("Food Fight cancelled due to insifficient cards in Draw Pile!");
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);

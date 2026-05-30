@@ -12,13 +12,7 @@ namespace TacoVsBurrito
         public override void ExecuteAction()
         {
             //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
-            gameManager = GameManager.Instance;
-            if(gameManager.GetDrawPile().IsDrawPileEmpty || 
-                gameManager.GetDrawPile().PileCards.Count < gameManager.Players.Count)
-            {
-                GameManager.Instance.GetTrashPile().Trash(this);
-                return;
-            }
+            
             GameEvents.OnFoodFightAction?.Invoke(this);
         }
 
@@ -36,6 +30,18 @@ namespace TacoVsBurrito
             await Task.Delay(EXECUTION_DELAY_IN_MS);
             GameManager.Instance.GetTrashPile().Trash(this);
             GameEvents.OnFoodFightAction?.Invoke(this);
+        }
+
+        public override bool CanExecuteAction()
+        {
+            GameManager gameManager = GameManager.Instance;
+            if(gameManager.GetDrawPile().IsDrawPileEmpty || 
+                gameManager.GetDrawPile().PileCards.Count < gameManager.Players.Count)
+            {
+                GameEvents.OnLogMessage("FoodFight cancelled due to insufficient cards!");
+                return false;
+            }
+            return true;
         }
         
         public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;

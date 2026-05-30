@@ -14,7 +14,7 @@ namespace TacoVsBurrito
         private const int STARTING_HAND_SIZE = 5;
         private const int DEALING_DELAY_IN_MS = 50;
         public bool IsDrawPileEmpty => pileCards.Count == 0;
-         bool isFoodFightActive;
+        bool isFoodFightActive;
 
         protected override void Awake()
         {
