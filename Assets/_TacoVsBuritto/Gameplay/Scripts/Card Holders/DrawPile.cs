@@ -14,7 +14,7 @@ namespace TacoVsBurrito
         private const int STARTING_HAND_SIZE = 5;
         private const int DEALING_DELAY_IN_MS = 50;
         public bool IsDrawPileEmpty => pileCards.Count == 0;
-
+         bool isFoodFightActive;
 
         protected override void Awake()
         {
@@ -140,7 +140,7 @@ namespace TacoVsBurrito
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            if (turnState == TurnState.DrawPhase && IsDrawPileEmpty)
+            if (turnState == TurnState.DrawPhase && !isFoodFightActive && IsDrawPileEmpty)
             {
                 GameEvents.OnDrawPhaseSkipped?.Invoke();
                 GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
@@ -156,8 +156,14 @@ namespace TacoVsBurrito
                 TogglePileInteraction(false);
         }
 
-        protected override void ManagePileOnFoodFight(FoodFightCard card){}
-        protected async override void ManagePileOnFoodFightOver(){}
+        protected override void ManagePileOnFoodFight(FoodFightCard card)
+        {
+            isFoodFightActive = true;
+        }
+        protected async override void ManagePileOnFoodFightOver()
+        {
+            isFoodFightActive = false;
+        }
         // protected override void ManagePileOnFoodFight(FoodFightCard card)
         // {
         //     originalPilePosX = rectTransform.localPosition.x;

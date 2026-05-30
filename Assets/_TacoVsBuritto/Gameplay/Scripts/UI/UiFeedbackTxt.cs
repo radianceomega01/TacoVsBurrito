@@ -33,10 +33,14 @@ namespace TacoVsBurrito
         }
         async void DisplayFeedback(string text)
         {
-            cts.Cancel();
-            feedbackText.text = text;
-            await Task.Delay(FEEDBACK_DISPLAY_DURATION_IN_MS, cts.Token);
-            feedbackText.text = "";
+            try
+            {
+                cts.Cancel();
+                feedbackText.text = text;
+                await Task.Delay(FEEDBACK_DISPLAY_DURATION_IN_MS, cts.Token);
+                feedbackText.text = "";
+            }
+            catch (OperationCanceledException) { }
         }
     }
 }
