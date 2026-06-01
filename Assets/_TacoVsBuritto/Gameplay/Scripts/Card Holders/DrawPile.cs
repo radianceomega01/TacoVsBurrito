@@ -8,9 +8,10 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 namespace TacoVsBurrito
 {
-    public class DrawPile : CardPileBase
+    public class DrawPile : CardPileBase, IGlowEntity
     {
         [SerializeField] Button drawBtn;
+        [SerializeField] GlowBGUI glowBG;
         private const int STARTING_HAND_SIZE = 5;
         private const int DEALING_DELAY_IN_MS = 50;
         public bool IsDrawPileEmpty => pileCards.Count == 0;
@@ -150,10 +151,14 @@ namespace TacoVsBurrito
             if (turnState == TurnState.DrawPhase && player is SelfPlayer && !IsDrawPileEmpty)
             {
                 TogglePileInteraction(true);
+                ActivateGlow();
                 GameEvents.OnLogMessage?.Invoke("Draw a card!");
             }
             else
+            {
                 TogglePileInteraction(false);
+                DeactivateGlow();
+            }
         }
 
         protected override void ManagePileOnFoodFight(FoodFightCard card)
@@ -198,5 +203,8 @@ namespace TacoVsBurrito
         }
         public RectTransform GetRectTransform() => GetComponent<RectTransform>();
 
+        public void ActivateGlow() => glowBG.ShowEffect();
+
+        public void DeactivateGlow() => glowBG.Reset();
     }
 }

@@ -13,6 +13,7 @@ namespace TacoVsBurrito
         RectTransform drawPileRect;
         const float CARD_DRAWN_OFFSET_FROM_PILE = 16f;
         List<CardBase> cardsDrawn = new();
+        PlayerBase currentPlayer;
 
         private const float PILE_POS_ON_FOOD_FIGHT = 0f;
         private float originalPilePosX;
@@ -28,11 +29,11 @@ namespace TacoVsBurrito
             drawPileRect = drawPile.GetRectTransform();
             drawPile.ChangeBtnListener(OnDrawBtnClicked);
             ManageDrawPileOnFoodFight();
+            currentPlayer = GameManager.Instance.CurrentPlayer;
         }
 
-        void OnDrawBtnClicked()
+        public void OnDrawBtnClicked()
         {
-            PlayerBase currentPlayer = GameManager.Instance.CurrentPlayer;
             CardBase card = drawPile.FlipTop();
             card.ChangePosition(GetOffsetPositionForCard(currentPlayer.transform.position));
             card.SetAsLastSibbling();
@@ -50,6 +51,8 @@ namespace TacoVsBurrito
 
             return finalPosition;
         }
+
+        public void UpdateCurrentPlayer(PlayerBase player) => currentPlayer = player;
 
         async void ManageDrawPileOnFoodFight()
         {
@@ -70,7 +73,6 @@ namespace TacoVsBurrito
                 card.ChangePosition(drawPile.transform.position);
                 card.ToggleBackFace(true);
             });
-            //drawPile.AddCardsBack(cardsDrawn);
             drawPile.ResetBtnListener();
         }
     }

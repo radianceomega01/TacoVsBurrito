@@ -9,8 +9,9 @@ namespace TacoVsBurrito
 {
     public class FoodFightHandler : MonoBehaviour
     {
-        const int DELAY_BETWEEN_TURNS_IN_MS = 1000;
-        const int DELAY_AFTER_FOOD_FIGHT_IN_MS = 1500;
+        const int DELAY_BETWEEN_TURNS_IN_MS = 300;
+        const int DELAY_BETWEEN_ROUNDS_IN_MS = 500;
+        const int DELAY_AFTER_FOOD_FIGHT_IN_MS = 1000;
         DrawPile drawPile;
         TrashPile trashPile;
         FoodFightDrawPile foodFightDrawPile;
@@ -53,27 +54,33 @@ namespace TacoVsBurrito
             BeginRound(GameManager.Instance.CurrentPlayer);
         }
 
-        void OnCardDrawn(CardBase card, PlayerBase player)
+        async void OnCardDrawn(CardBase card, PlayerBase player)
         {
+            Debug.LogWarning("Adding player: "+ player.GetType());
             playerCardInRound.Add(player, card);
             cardsDrawn.Add(card);
 
-            if (CancelFoodFightOnInsufficientCards())
-                return;
+            // if (CancelFoodFightOnInsufficientCards())
+            //     return;
             if (playerCardInRound.Count == activePlayersInRound.Count)
             {
                 RoundEnd();
                 return;
             }
             PlayerBase nextPlayer = GetNextPlayer();
-            GameEvents.OnTurnChangedInFoodFight?.Invoke(nextPlayer);
+
+            //Automatic FoodFight
+            await Task.Delay(DELAY_BETWEEN_TURNS_IN_MS);
+            foodFightDrawPile.UpdateCurrentPlayer(nextPlayer);
+            drawPile.TriggerDrawBtnClick();
+            //GameEvents.OnTurnChangedInFoodFight?.Invoke(nextPlayer);
         }
 
         PlayerBase GetNextPlayer()
         {
             currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.Count;
             PlayerBase nextPlayer = activePlayersInRound.Find(x => x.Index == currentPlayerIndex);
-            if (nextPlayer == null)
+            if (nextPlayer == null) //Player was eliminated in the round, find the next available player
             {
                 GetNextPlayer();
             }
@@ -100,11 +107,15 @@ namespace TacoVsBurrito
         {
             currentPlayerIndex = player.Index;
             playerCardInRound.Clear();
-            await Task.Delay(DELAY_BETWEEN_TURNS_IN_MS);
-            GameEvents.OnTurnChangedInFoodFight?.Invoke(player);
+            await Task.Delay(DELAY_BETWEEN_ROUNDS_IN_MS);
+
+            //Automatic FoodFight
+            foodFightDrawPile.UpdateCurrentPlayer(player);
+            drawPile.TriggerDrawBtnClick();
+            //GameEvents.OnTurnChangedInFoodFight?.Invoke(player);
         }
 
-        void RoundEnd()
+        async void RoundEnd()
         {
             activePlayersInRound = GetPromotedPlayers();
             if (activePlayersInRound.Count == 1)
@@ -118,6 +129,7 @@ namespace TacoVsBurrito
                     return;
                 else
                 {
+                    await Task.Delay(DELAY_BETWEEN_ROUNDS_IN_MS);
                     BeginRound(GetNextPlayer());
                 }
             }
@@ -145,8 +157,8 @@ namespace TacoVsBurrito
                 if(foodFightDrawPile != null)
                 {
                     DeactivateFoodFightDrawPile();
-                    drawPile.AddCardsBack(cardsDrawn);
                 }
+                drawPile.AddCardsBack(cardsDrawn);
                 trashPile.Trash(foodFightCard);
                 GameEvents.OnFoodFightOver?.Invoke();
                 return true;
