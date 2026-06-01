@@ -71,6 +71,7 @@ namespace TacoVsBurrito
             card.transform.SetAsLastSibling();
             card.DisableInteraction();
             card.ToggleBackFace(false);
+            card.ChangeRotation(Quaternion.identity);
             card.ToggleInteractionType(InteractionType.Click);
 
             if (card is HotSauceBossCard) HotSauceBossCardCount++;
