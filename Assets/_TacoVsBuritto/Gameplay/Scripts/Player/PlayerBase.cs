@@ -47,18 +47,6 @@ namespace TacoVsBurrito
 
         public int Score => Meal.CalculateScore();
 
-        public void SwapMeal(PlayerBase other)
-        {
-            List<CardBase> currentPlayerCards = hand.TakeAll();
-            List<CardBase> otherPlayerCards = other.hand.TakeAll();
-            currentPlayerCards.ForEach(c => other.hand.AddCard(c));
-            otherPlayerCards.ForEach(c => hand.AddCard(c));
-
-            List<CardBase> currentMealCards = meal.TakeAll();
-            List<CardBase> otherMealCards = other.meal.TakeAll();
-            currentMealCards.ForEach(c => other.meal.AddCard(c));
-            otherMealCards.ForEach(c => meal.AddCard(c));
-        }
         protected void ManagePlayerOnFoodFightOver()
         {
             fullScaleView.gameObject.SetActive(true);

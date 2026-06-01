@@ -131,7 +131,7 @@ MonoBehaviour:
   DescriptionTxtField: {fileID: 7903195241307819556}
   backFaceImage: {fileID: 5975008516556905947}
   glowBG: {fileID: 2076784223260407400}
-  cardsCount: {fileID: 0}
+  cardsCount: {fileID: 4417024350144637908}
 --- !u!114 &2076784223260407400 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -154,6 +154,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &4417024350144637908 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4681713616950175533, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 9058046739804818681}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d880907030ae1488ca775ef1c7232ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardsCount
 --- !u!224 &5975008516556905947 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3413687913257193762, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

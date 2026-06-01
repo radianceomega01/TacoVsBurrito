@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting;
@@ -62,11 +63,11 @@ namespace TacoVsBurrito
             if (card is not IMealTypeAction)
                 return;
 
+            card.ChangeParent(cardsTransform);
             _cards.Add(card);
             AddCardInStack(card);
 
             card.ChangeScale(CARD_SCALE);
-            card.ChangeParent(cardsTransform);
             card.transform.SetAsLastSibling();
             card.DisableInteraction();
             card.ToggleBackFace(false);
@@ -80,20 +81,15 @@ namespace TacoVsBurrito
 
         void AddCardInStack(CardBase card)
         {
-            bool didCreateNewStack = false;
             MealCardStack stack = FindMatchingStack(card);
 
             if (stack == null)
             {
                 stack = new MealCardStack();
                 _cardStacks.Add(stack);
-                didCreateNewStack = true;
             }
             stack.Cards.Add(card);
-            if (didCreateNewStack)
-                ArrangeCardsAnimated();
-            else
-                SetCardPositionToStack(card, stack);
+            RearrangeCards();
         }
 
         /// Remove a specific card (used by Crafty Crow).
@@ -114,7 +110,6 @@ namespace TacoVsBurrito
 
         void RemoveCardFromStack(CardBase card)
         {
-            bool didRemoveOneStack = false;
             MealCardStack stack =
             _cardStacks.Find(s => s.Cards.Contains(card));
 
@@ -125,11 +120,9 @@ namespace TacoVsBurrito
                 if (stack.Cards.Count == 0)
                 {
                     _cardStacks.Remove(stack);
-                    didRemoveOneStack = true;
                 }
             }
-            if (didRemoveOneStack)
-                ArrangeCardsAnimated();
+            RearrangeCards();   
         }
 
         /// Remove and return all cards (Health Inspector / Order Envy).
@@ -137,9 +130,18 @@ namespace TacoVsBurrito
         {
             var all = new List<CardBase>(_cards);
             _cards.Clear();
+            DisableCountForSimilarCards();
             _cardStacks.Clear();
             UpdateScore();
             return all;
+        }
+
+        void DisableCountForSimilarCards()
+        {
+            foreach (var stack in _cardStacks)
+            {
+                stack.TopCard.DisableCountOnSimilarCards();
+            }
         }
 
         // ---- Scoring ----
@@ -192,7 +194,7 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }
 
-        void ArrangeCardsAnimated()
+        void RearrangeCards()
         {
             int count = _cards.Count;
             if (count == 0) return;
@@ -224,21 +226,21 @@ namespace TacoVsBurrito
 
                     card.ChangePosition(stackPos);
                 }
+
+                UpdateCountOnSimilarCardStack(stack);
             }
         }
 
-        void SetCardPositionToStack(CardBase currentCard, MealCardStack stack)
+        void UpdateCountOnSimilarCardStack(MealCardStack stack)
         {
-            // Position of the stack = position of topmost card already in stack
-            Vector3 stackPosition = stack.Cards[^2].transform.position;
-
-            currentCard.ChangePosition(stackPosition);
-
-            // Show updated count on new top card
-            //card.SetStackCount(stack.Cards.Count);
+            stack.TopCard.ShowCountOnSimilarCards(stack.Cards.Count);
+            if (stack.Cards.Count > 1)
+            {
+                stack.Cards[^2].DisableCountOnSimilarCards();
+            }
         }
 
-        // void ArrangeCardsAnimated()
+        // void RearrangeCards()
         // {
         //     int count = _cards.Count;
         //     if (count == 0) return;

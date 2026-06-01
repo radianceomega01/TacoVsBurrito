@@ -65,6 +65,14 @@ namespace TacoVsBurrito
         {
             transform.DOMove(newPos, TIME_TO_MOVE_IN_SECS);
         }
+        public void ChangePositionLocal(Vector3 newPos)
+        {
+            transform.position = newPos;
+        }
+        public void ChangeRectPosition(Vector3 newPos)
+        {
+            _rectTransform.DOMove(newPos, TIME_TO_MOVE_IN_SECS);
+        }
         public void ChangeRotation(Quaternion angle)
         {
             transform.DORotateQuaternion(angle, TIME_TO_MOVE_IN_SECS);
@@ -208,8 +216,10 @@ namespace TacoVsBurrito
         {
             glowBG.Reset();
         }
-        public void IncrementCountOnSimilarCards() => cardsCount.IncrementCount();
-        public void DecrementCountOnSimilarCards() => cardsCount.DecrementCount();
+        public void ShowCountOnSimilarCards(int count) => cardsCount.ShowCount(count);
+        public void DisableCountOnSimilarCards() => cardsCount.DisableCount();
+        public RectTransform GetRect() => _rectTransform;
+
     }
     public enum InteractionType
     {

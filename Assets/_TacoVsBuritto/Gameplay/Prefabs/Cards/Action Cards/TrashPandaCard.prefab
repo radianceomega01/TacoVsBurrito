@@ -108,6 +108,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -663929158582927390}
   m_SourcePrefab: {fileID: 100100000, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!114 &846548709881293193 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4681713616950175533, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5424377032264289956}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d880907030ae1488ca775ef1c7232ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardsCount
 --- !u!114 &2260964573223725441 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6064041265733347109, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -153,7 +164,7 @@ MonoBehaviour:
   DescriptionTxtField: {fileID: 6583749860005039225}
   backFaceImage: {fileID: 7212683276620390278}
   glowBG: {fileID: 3035953433753908277}
-  cardsCount: {fileID: 0}
+  cardsCount: {fileID: 846548709881293193}
 --- !u!114 &6583749860005039225 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

@@ -7,28 +7,21 @@ namespace TacoVsBurrito
     {
         [SerializeField] TextMeshProUGUI countTxt;
 
-        public int Count {get; private set;}
-
-        public void IncrementCount()
+        public void ShowCount(int count)
         {
-            if(Count == 0)
+            if(count >= 2) //Start showing count from 2, as 1 card doesn't need a count
             {
                 gameObject.SetActive(true);
+                UpdateCountTxt(count.ToString());
             }
-            Count++;
-            UpdateCountTxt();
-        }
-        public void DecrementCount()
-        {
-            Count--;
-            UpdateCountTxt();
-            if(Count == 0)
+            else
             {
                 gameObject.SetActive(false);
             }
         }
 
-        void UpdateCountTxt() => countTxt.SetText(Count.ToString());
+        public void DisableCount() => gameObject.SetActive(false);
+        void UpdateCountTxt(string count) => countTxt.SetText(count);
 
     }
 }

@@ -180,7 +180,16 @@ namespace TacoVsBurrito
         /// After swap, cannot be blocked.
         public void ResolveOrderEnvy(PlayerBase caster, PlayerBase target)
         {
-            caster.SwapMeal(target);
+            //caster.SwapMeal(target);
+            List<CardBase> currentPlayerCards = caster.Hand.TakeAll();
+            List<CardBase> otherPlayerCards = target.Hand.TakeAll();
+            currentPlayerCards.ForEach(c => target.Hand.AddCard(c));
+            otherPlayerCards.ForEach(c => caster.Hand.AddCard(c));
+
+            List<CardBase> currentMealCards = caster.Meal.TakeAll();
+            List<CardBase> otherMealCards = target.Meal.TakeAll();
+            currentMealCards.ForEach(c => target.Meal.AddCard(c));
+            otherMealCards.ForEach(c => caster.Meal.AddCard(c));
 
             GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.GetType()} swapped their hand and meal with {target.GetType()}!");
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
