@@ -16,6 +16,7 @@ namespace TacoVsBurrito
         private List<NoBuenoCard> noBuenoCardsPlayed = new();
         private ActionCardBase currentPlayedActionCard;
         private TrashPile trashPile;
+        private bool isDrawPileEmpty = false;
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
         const int CARD_TRASH_DELAY_IN_MS = 500;
@@ -28,7 +29,7 @@ namespace TacoVsBurrito
             GameEvents.OnGameStarted += StartGame;
             GameEvents.OnTurnEnded += ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight += ManageTurnChangedInFoodFight;
-            GameEvents.OnDrawPhaseSkipped += ManageDrawPhaseSkipped;
+            GameEvents.OnDrawPileEmpty += ManageDrawPileEmpty;
             GameEvents.OnActionCardPlayed += ManageActionCardPlayed;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
@@ -45,7 +46,7 @@ namespace TacoVsBurrito
             GameEvents.OnGameStarted -= StartGame;
             GameEvents.OnTurnEnded -= ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight -= ManageTurnChangedInFoodFight;
-            GameEvents.OnDrawPhaseSkipped -= ManageDrawPhaseSkipped;
+            GameEvents.OnDrawPileEmpty -= ManageDrawPileEmpty;
             GameEvents.OnActionCardPlayed -= ManageActionCardPlayed;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
@@ -115,7 +116,15 @@ namespace TacoVsBurrito
         {
             currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
-            SwitchState(TurnState.DrawPhase);
+            if(isDrawPileEmpty)
+            {
+                GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
+                SwitchState(TurnState.PlayPhase);
+            }
+            else
+            {
+                SwitchState(TurnState.DrawPhase);
+            }
             currentPlayedActionCard = null;
         }
         void ManageTurnChangedInFoodFight(PlayerBase newPlayer)
@@ -130,9 +139,9 @@ namespace TacoVsBurrito
             SwitchState(state);
         }
 
-        void ManageDrawPhaseSkipped()
+        void ManageDrawPileEmpty()
         {
-            GoToNextState();
+            isDrawPileEmpty = true;
         }
         void ManageStartNoBuenoInterruptWindow(ActionCardBase card)
         {

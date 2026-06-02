@@ -141,13 +141,6 @@ namespace TacoVsBurrito
 
         void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            if (turnState == TurnState.DrawPhase && !isFoodFightActive && IsDrawPileEmpty)
-            {
-                GameEvents.OnDrawPhaseSkipped?.Invoke();
-                GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
-                return;
-            }
-            
             if (turnState == TurnState.DrawPhase && player is SelfPlayer && !IsDrawPileEmpty)
             {
                 TogglePileInteraction(true);

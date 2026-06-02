@@ -63,7 +63,5 @@ namespace TacoVsBurrito
         // ---- Game log ----
         public static Action<string>                OnLogMessage;
 
-        // ---- Turn indicator ----
-        public static Action                                OnDrawPhaseSkipped; // draw pile empty
     }
 }

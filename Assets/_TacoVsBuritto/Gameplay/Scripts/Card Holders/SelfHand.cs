@@ -151,7 +151,6 @@ namespace TacoVsBurrito
 
         protected override void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            GameEvents.OnLogMessage("turnState: "+turnState.ToString() + " | player: " + player.GetType());
             if (GameManager.Instance.CurrentPlayer is SelfPlayer && turnState == TurnState.PlayPhase)
             {
                 _cards.ForEach(card => card.EnableInteraction());
