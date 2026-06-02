@@ -87,7 +87,6 @@ namespace TacoVsBurrito
                 cardsDistributed++;
                 playerIndex++;
             }
-            Debug.LogWarning("complete");
             GameEvents.OnCardsDistributed?.Invoke();
         }
 

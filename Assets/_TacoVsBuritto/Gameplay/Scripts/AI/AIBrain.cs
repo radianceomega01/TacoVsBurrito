@@ -256,8 +256,8 @@ namespace TacoVsBurrito
                 if(c is HotSauceBossCard) return 100;
                 else if(c is CraftyCrowCard) return 90;
                 else if(c is OrderEnvyCard) return 80;
-                else if(c is TrashPandaCard) return 70;
-                else if(c is NoBuenoCard) return 60;
+                else if(c is NoBuenoCard) return 70;
+                else if(c is TrashPandaCard) return 60;
                 else if (c is IngredientCardBase ingredientCard) return ingredientCard.CardValue;
                 else return 0;
             }).FirstOrDefault();
