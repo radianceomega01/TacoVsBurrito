@@ -23,12 +23,12 @@ namespace TacoVsBurrito
         Dictionary<PlayerBase, CardBase> playerCardInRound = new();
         int currentPlayerIndex;
 
-        private void Awake()
+        private void OnEnable()
         {
             GameEvents.OnFoodFightAction += BeginFoodFight;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             GameEvents.OnFoodFightAction -= BeginFoodFight;
         }
@@ -56,7 +56,6 @@ namespace TacoVsBurrito
 
         async void OnCardDrawn(CardBase card, PlayerBase player)
         {
-            Debug.LogWarning("Adding player: "+ player.GetType());
             playerCardInRound.Add(player, card);
             cardsDrawn.Add(card);
 

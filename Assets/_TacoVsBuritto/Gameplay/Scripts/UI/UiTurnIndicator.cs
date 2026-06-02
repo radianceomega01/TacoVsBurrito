@@ -9,13 +9,13 @@ namespace TacoVsBurrito
     {
         [SerializeField] TextMeshProUGUI turnTxt;
 
-        void Awake()
+        void OnEnable()
         {
             GameEvents.OnTurnStarted += UpdateTxt;
             GameEvents.OnCardSelectionForFoodFightWinner += UpdateTxtForFoodFightWinner;
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             GameEvents.OnTurnStarted -= UpdateTxt;
             GameEvents.OnCardSelectionForFoodFightWinner -= UpdateTxtForFoodFightWinner;

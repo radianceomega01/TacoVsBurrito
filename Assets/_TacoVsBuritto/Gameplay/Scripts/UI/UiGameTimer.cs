@@ -10,12 +10,12 @@ namespace TacoVsBurrito
 
         Coroutine currentCoroutine;
         const int TIMER_INTERVAL_IN_SECS = 1;
-        void Awake()
+        void OnEnable()
         {
             GameEvents.OnTimerEvent += ManageTimerEvent;
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             GameEvents.OnTimerEvent -= ManageTimerEvent;
         }

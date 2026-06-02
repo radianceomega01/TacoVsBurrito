@@ -37,12 +37,15 @@ namespace TacoVsBurrito
         {
             _cards = new();
             _cardStacks = new();
+        }
+        void OnEnable()
+        {
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
             GameEvents.OnCraftyCrowAction += ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget += ManageCardClickedForCraftyCrow;
             GameEvents.OnActionResolved += ManageActionResolved;
         }
-        void OnDestroy()
+        void OnDisable()
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnCraftyCrowAction -= ManageCraftyCrowAction;

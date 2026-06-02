@@ -11,13 +11,13 @@ namespace TacoVsBurrito
         public bool IsTargetTypeAction => GetStateOnTrashed() == TurnState.ActionTargetPhase;
         protected ActionResolver resolver;
 
-        protected override void Awake() {
-            base.Awake();
+        protected override void OnEnable() {
+            base.OnEnable();
             GameEvents.OnActionResolverSet += ManageActionResolverSet;
         }
 
-        protected override void OnDestroy() {
-            base.OnDestroy();
+        protected override void OnDisable() {
+            base.OnDisable();
             GameEvents.OnActionResolverSet -= ManageActionResolverSet;
         }
         protected void ManageActionResolverSet(ActionResolver resolver)

@@ -12,13 +12,13 @@ namespace TacoVsBurrito
         protected List<CardBase> pileCards = new();
         public IReadOnlyList<CardBase> PileCards => pileCards;
 
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
             GameEvents.OnFoodFightAction += ManagePileOnFoodFight;
             GameEvents.OnFoodFightOver += ManagePileOnFoodFightOver;
         }
 
-        protected virtual void OnDestroy()
+        protected virtual void OnDisable()
         {
             GameEvents.OnFoodFightAction -= ManagePileOnFoodFight;
             GameEvents.OnFoodFightOver -= ManagePileOnFoodFightOver;

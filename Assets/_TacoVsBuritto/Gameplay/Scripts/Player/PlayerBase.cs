@@ -30,11 +30,14 @@ namespace TacoVsBurrito
             meal = GetComponentInChildren<Meal>();
             fullScaleView = GetComponentInChildren<FullScalePlayerView>();
             minifiedView = GetComponentInChildren<MinifiedPlayerView>(true);
+        }
 
+        protected virtual void OnEnable()
+        {
             GameEvents.OnFoodFightAction += ManagePlayerOnFoodFight;
             GameEvents.OnFoodFightOver += ManagePlayerOnFoodFightOver;
         }
-        protected virtual void OnDestroy() 
+        protected virtual void OnDisable() 
         {
             GameEvents.OnFoodFightAction -= ManagePlayerOnFoodFight;
             GameEvents.OnFoodFightOver -= ManagePlayerOnFoodFightOver;

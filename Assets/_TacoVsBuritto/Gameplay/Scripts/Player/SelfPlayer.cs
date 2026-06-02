@@ -3,14 +3,14 @@ namespace TacoVsBurrito
 {
     public class SelfPlayer : HumanPlayer
     {
-        protected override void Awake()
+        protected override void OnEnable()
         {
-            base.Awake();
+            base.OnEnable();
         }
 
-        protected override void OnDestroy()
+        protected override void OnDisable()
         {
-            base.OnDestroy();
+            base.OnDisable();
         }
     }
 }

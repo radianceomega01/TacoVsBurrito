@@ -11,7 +11,7 @@ namespace TacoVsBurrito
         [SerializeField] GlowBGUI glowBG;
         private PlayerBase parentPlayer;
 
-        void Awake()
+        void OnEnable()
         {
             GameEvents.OnOrderEnvyAction += ManageOrderEnvyAction;
             GameEvents.OnOrderEnvyActionTargeted += ManageOrderEnvyActionTargeted;
@@ -19,12 +19,12 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             GameEvents.OnOrderEnvyAction -= ManageOrderEnvyAction;
             GameEvents.OnOrderEnvyActionTargeted -= ManageOrderEnvyActionTargeted;
             GameEvents.OnActionResolved -= ManageActionResolved;
-            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
+            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 
         void Start()

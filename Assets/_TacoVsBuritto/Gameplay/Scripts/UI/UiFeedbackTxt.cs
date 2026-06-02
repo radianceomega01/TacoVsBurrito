@@ -15,11 +15,14 @@ namespace TacoVsBurrito
 
         void Awake()
         {
-            GameEvents.OnLogMessage += UpdateTxt;
             cts = new CancellationTokenSource();
         }
+        void OnEnable()
+        {
+            GameEvents.OnLogMessage += UpdateTxt;
+        }
 
-        void OnDestroy()
+        void OnDisable()
         {
             GameEvents.OnLogMessage -= UpdateTxt;
         }

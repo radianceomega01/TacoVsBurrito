@@ -80,11 +80,13 @@ namespace TacoVsBurrito
             //DontDestroyOnLoad(gameObject);
             _resolver = new ActionResolver(drawPile, trashPile, _players);
             _turnHandler = new TurnHandler(trashPile);
-
+        }
+        void OnEnable()
+        {
             GameEvents.OnGameOver += ManageGameOver;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             GameEvents.OnGameOver -= ManageGameOver;
         }

@@ -22,17 +22,21 @@ namespace TacoVsBurrito
         private const float ARC_ANGLE = 30f;
         private const int CARD_ARRANGE_DEALY_IN_MS = 500;
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
             _rectTransform = GetComponent<RectTransform>();
             _parentSelfPlayer = GetComponentInParent<SelfPlayer>();
+        }
+        
+        protected override void OnEnable()
+        {
+            base.OnEnable();
             GameEvents.OnCardsDistributed += ArrangeCardsAfterDistribution;
         }
 
-        protected override void OnDestroy()
+        protected override void OnDisable()
         {
-            base.OnDestroy();
+            base.OnDisable();
             GameEvents.OnCardsDistributed -= ArrangeCardsAfterDistribution;
         }
 
@@ -147,6 +151,7 @@ namespace TacoVsBurrito
 
         protected override void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
+            GameEvents.OnLogMessage("turnState: "+turnState.ToString() + " | player: " + player.GetType());
             if (GameManager.Instance.CurrentPlayer is SelfPlayer && turnState == TurnState.PlayPhase)
             {
                 _cards.ForEach(card => card.EnableInteraction());

@@ -28,7 +28,7 @@ namespace TacoVsBurrito
 
         private AudioSource _src;
 
-        private void Awake()
+        private void OnEnable()
         {
             _src = GetComponent<AudioSource>();
             _src.playOnAwake = false;

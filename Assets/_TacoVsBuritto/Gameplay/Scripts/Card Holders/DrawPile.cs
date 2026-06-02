@@ -17,9 +17,9 @@ namespace TacoVsBurrito
         public bool IsDrawPileEmpty => pileCards.Count == 0;
         bool isFoodFightActive;
 
-        protected override void Awake()
+        protected override void OnEnable()
         {
-            base.Awake();
+            base.OnEnable();
             GameEvents.OnShuffleCards += ManageCardShuffle;
             GameEvents.OnDistributeCards += DealStartingHand;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
@@ -27,9 +27,9 @@ namespace TacoVsBurrito
             drawBtn.onClick.AddListener(OnDrawBtnClicked);
         }
 
-        protected override void OnDestroy()
+        protected override void OnDisable()
         {
-            base.OnDestroy();
+            base.OnDisable();
             GameEvents.OnShuffleCards -= ManageCardShuffle;
             GameEvents.OnDistributeCards -= DealStartingHand;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;

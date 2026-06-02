@@ -12,13 +12,13 @@ namespace TacoVsBurrito
 
         List<CardBase> pileCards;
         CardPileBase cardPile;
-        void Awake()
+        void OnEnable()
         {
             GameEvents.OnTrashPandaAction += ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget += CardClickedForActionTarget;
             GameEvents.OnCardSelectionForFoodFightWinner += ManageCardSelectionForFoodFightWinner;
         }
-        void OnDestroy()
+        void OnDisable()
         {
             GameEvents.OnTrashPandaAction -= ManageTrashPandaAction;
             GameEvents.OnCardClickedForActionTarget -= CardClickedForActionTarget;

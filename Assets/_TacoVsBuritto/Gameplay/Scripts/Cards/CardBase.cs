@@ -37,18 +37,20 @@ namespace TacoVsBurrito
 
         public string Name { get { return cardName; } }
 
-
-        protected virtual void Awake()
+        protected virtual void Awake() 
         {
             _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
             canvas = GetComponentInParent<Canvas>();
-
+            
+        }
+        protected virtual void OnEnable()
+        {
             GameEvents.OnCardDragBegin += DisableInteraction;
             GameEvents.OnCardDragEnd += ResumeInteraction; ;
         }
 
-        protected virtual void OnDestroy()
+        protected virtual void OnDisable()
         {
             GameEvents.OnCardDragBegin -= DisableInteraction;
             GameEvents.OnCardDragEnd -= ResumeInteraction;

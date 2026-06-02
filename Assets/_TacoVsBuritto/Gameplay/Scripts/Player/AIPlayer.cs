@@ -19,13 +19,17 @@ namespace TacoVsBurrito
         const int PLAY_NO_BUENO_DELAY_IN_MS = 1500;
 
         bool isSelfTurnRunning = false;
-        ActionCardBase currentActionCardPlayed = null;
         int noBuenoCounter = 0;
 
         protected override void Awake()
         {
             base.Awake();
             aIBrain = transform.AddComponent<AIBrain>();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
 
             GameEvents.OnTurnStarted += ManageTurnStarted;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
@@ -38,9 +42,9 @@ namespace TacoVsBurrito
             GameEvents.OnCardSelectionForFoodFightWinner += ManageCardSelectionAction;
         }
 
-        protected override void OnDestroy()
+        protected override void OnDisable()
         {
-            base.OnDestroy();
+            base.OnDisable();
             GameEvents.OnTurnStarted -= ManageTurnStarted;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;
@@ -67,7 +71,6 @@ namespace TacoVsBurrito
         {
             
             noBuenoCounter = 0;
-            currentActionCardPlayed = null;
             isSelfTurnRunning = player is AIPlayer;
 
             if (isSelfTurnRunning && !drawPile.IsDrawPileEmpty)
@@ -169,11 +172,6 @@ namespace TacoVsBurrito
                 {
                     PlayNoBueno();
                 }
-            }
-
-            if(card is not NoBuenoCard)
-            {
-                currentActionCardPlayed = card;
             }
         }
         void ManageNoBuenoPlayed(NoBuenoCard card)

@@ -15,11 +15,11 @@ namespace TacoVsBurrito
 
         public IReadOnlyList<CardBase> Cards => _cards;
         public int Count => _cards.Count;
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
-        protected virtual void OnDestroy()
+        protected virtual void OnDisable()
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
