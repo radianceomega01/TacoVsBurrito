@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
@@ -15,8 +16,8 @@ namespace TacoVsBurrito {
         [SerializeField] GameObject opponentPlayerPrefab;
         [SerializeField] List<Transform> playerPositions;
 
-        private const int SHUFFLE_DELAY_IN_MS = 1500;
-        private const int DISTRIBUTION_DELAY_IN_MS = 1500;
+        private const int SHUFFLE_DELAY_IN_MS = 1000;
+        private const int DISTRIBUTION_DELAY_IN_MS = 1000;
 
         List<PlayerBase> activePlayers = new();
 
@@ -31,7 +32,6 @@ namespace TacoVsBurrito {
             GameEvents.OnGameInit?.Invoke(activePlayers);
             await InitCardShuffle();
             await InitDistributeInitialHands();
-            GameEvents.OnGameStarted?.Invoke();
         }
 
         void SetupPlayers()

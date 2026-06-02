@@ -268,13 +268,17 @@ namespace TacoVsBurrito
             {
                 CardBase existing = stack.TopCard;
 
-                // Tummy Ache stack
-                if (existing is TummyAcheCard && newCard is TummyAcheCard)
-                    return stack;
-
                 // Hot Sauce Boss stack
                 if (existing is HotSauceBossCard && newCard is HotSauceBossCard)
                     return stack;
+
+                // Tummy Ache stack
+                if (existing is TummyAcheCard x &&
+                    newCard is TummyAcheCard y &&
+                    x.CardValue == y.CardValue)
+                {
+                    return stack;
+                }
 
                 // Ingredient value stack
                 if (existing is IngredientCardBase a &&

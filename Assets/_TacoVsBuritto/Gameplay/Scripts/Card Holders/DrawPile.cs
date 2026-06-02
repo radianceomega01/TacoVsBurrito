@@ -14,22 +14,24 @@ namespace TacoVsBurrito
         [SerializeField] GlowBGUI glowBG;
         private const int STARTING_HAND_SIZE = 5;
         private const int DEALING_DELAY_IN_MS = 50;
-        public bool IsDrawPileEmpty => pileCards.Count == 0;
-        bool isFoodFightActive;
 
-        protected override void OnEnable()
+        public bool IsDrawPileEmpty => pileCards.Count == 0;
+
+        protected override void Awake()
         {
-            base.OnEnable();
+            base.Awake();
+            drawBtn.onClick.AddListener(OnDrawBtnClicked);
+            
+        }
+        void OnEnable()
+        {
             GameEvents.OnShuffleCards += ManageCardShuffle;
             GameEvents.OnDistributeCards += DealStartingHand;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
-
-            drawBtn.onClick.AddListener(OnDrawBtnClicked);
         }
 
-        protected override void OnDisable()
+        void OnDisable()
         {
-            base.OnDisable();
             GameEvents.OnShuffleCards -= ManageCardShuffle;
             GameEvents.OnDistributeCards -= DealStartingHand;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
@@ -63,16 +65,6 @@ namespace TacoVsBurrito
             pileCards.RemoveAt(pileCards.Count - 1);
             return c;
         }
-        List<CardBase> DrawMany(int count)
-        {
-            var result = new List<CardBase>();
-            for (int i = 0; i < count; i++)
-            {
-                var c = Draw();
-                if (c != null) result.Add(c); else break;
-            }
-            return result;
-        }
 
         async void DealStartingHand(List<PlayerBase> players)
         {
@@ -95,6 +87,7 @@ namespace TacoVsBurrito
                 cardsDistributed++;
                 playerIndex++;
             }
+            Debug.LogWarning("complete");
             GameEvents.OnCardsDistributed?.Invoke();
         }
 
@@ -154,27 +147,11 @@ namespace TacoVsBurrito
             }
         }
 
-        protected override void ManagePileOnFoodFight(FoodFightCard card)
-        {
-            isFoodFightActive = true;
-        }
-        protected async override void ManagePileOnFoodFightOver()
-        {
-            isFoodFightActive = false;
-        }
-        // protected override void ManagePileOnFoodFight(FoodFightCard card)
-        // {
-        //     originalPilePosX = rectTransform.localPosition.x;
-        //     rectTransform.DOAnchorPosX(PILE_POS_ON_FOOD_FIGHT, MOVE_TIME_IN_IN_SECS);
-        // }
-        // protected async override void ManagePileOnFoodFightOver()
-        // {
-        //     await Task.Delay(REPOSITIONING_DELAY_IN_MS);
-        //     rectTransform.DOAnchorPosX(originalPilePosX, MOVE_TIME_IN_IN_SECS);
-        // }
+        //Empty override since draw pile is not affected by food fight like other piles    
+        protected override void ManagePileOnFoodFight(FoodFightCard card){}
+        protected async override void ManagePileOnFoodFightOver(){}
 
         /// Flip the top card from the draw pile (Food Fight).
-        /// Returns null if empty. Caller is responsible for placing it back or keeping it.
         public CardBase FlipTop() => Draw();
 
         /// Shuffle a list of cards back into the draw pile (Food Fight leftovers).

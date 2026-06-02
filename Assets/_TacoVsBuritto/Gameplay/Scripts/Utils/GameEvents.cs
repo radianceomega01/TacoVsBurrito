@@ -16,8 +16,7 @@ namespace TacoVsBurrito
         public static Action<ActionResolver>            OnActionResolverSet;     
         public static Action                            OnShuffleCards;     
         public static Action<List<PlayerBase>>          OnDistributeCards;     
-        public static Action                            OnCardsDistributed;     
-        public static Action                            OnGameStarted;     
+        public static Action                            OnCardsDistributed;
         public static Action<PlayerBase>                OnTurnStarted;
         public static Action<TurnState, PlayerBase>     OnTurnStateChanged;
         public static Action<PlayerBase>                OnTurnEnded;

@@ -26,7 +26,7 @@ namespace TacoVsBurrito
             this.trashPile = trashPile;
             activePlayers = new();
             GameEvents.OnGameInit += DecidePlayers;
-            GameEvents.OnGameStarted += StartGame;
+            GameEvents.OnCardsDistributed += StartGame;
             GameEvents.OnTurnEnded += ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight += ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPileEmpty += ManageDrawPileEmpty;
@@ -43,7 +43,7 @@ namespace TacoVsBurrito
         ~TurnHandler()
         {
             GameEvents.OnGameInit -= DecidePlayers;
-            GameEvents.OnGameStarted -= StartGame;
+            GameEvents.OnCardsDistributed -= StartGame;
             GameEvents.OnTurnEnded -= ManageTurnEnded;
             GameEvents.OnTurnChangedInFoodFight -= ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPileEmpty -= ManageDrawPileEmpty;
@@ -201,12 +201,13 @@ namespace TacoVsBurrito
             }
         }
 
-        void ManageNoBuenoPlayed(NoBuenoCard noBuenoCard)
+        async void ManageNoBuenoPlayed(NoBuenoCard noBuenoCard)
         {
             //PLayer played no bueno as a regular action card in play area
             if(currentPlayedActionCard == null || currentTurnState != TurnState.NoBuenoWindowPhase)
             {
                 GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+                await Task.Delay(CARD_TRASH_DELAY_IN_MS);
                 trashPile.Trash(noBuenoCard);
                 return;
             }

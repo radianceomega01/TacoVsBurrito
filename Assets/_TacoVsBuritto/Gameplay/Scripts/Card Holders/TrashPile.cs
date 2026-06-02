@@ -12,15 +12,13 @@ namespace TacoVsBurrito
         public int TrashCount => pileCards.Count;
         private TurnState currentTurnState;
 
-        protected override void OnEnable()
+        void OnEnable()
         {
-            base.OnEnable();
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
         }
 
-        protected override void OnDisable()
+        void OnDisable()
         {
-            base.OnDisable();
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 

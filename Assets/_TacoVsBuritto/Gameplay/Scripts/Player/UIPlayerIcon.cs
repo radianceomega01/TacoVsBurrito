@@ -7,7 +7,7 @@ namespace TacoVsBurrito
 {
     public class UIPlayerIcon : MonoBehaviour, IGlowEntity
     {
-        [SerializeField] Image iconImage;
+        [SerializeField] Button iconButton;
         [SerializeField] GlowBGUI glowBG;
         private PlayerBase parentPlayer;
 
@@ -30,6 +30,7 @@ namespace TacoVsBurrito
         void Start()
         {
             parentPlayer = GetComponentInParent<PlayerBase>();
+            ToggleInteraction(false);
         }
 
         public void OnIconClick()
@@ -48,7 +49,7 @@ namespace TacoVsBurrito
         //For self player who had interaction enabled
         void ToggleInteraction(bool value)
         {
-            iconImage.raycastTarget = value;
+            iconButton.interactable = value;
         }
 
         //For other players who had interaction enabled
