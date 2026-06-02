@@ -228,14 +228,14 @@ PrefabInstance:
     - target: {fileID: 2820955911516130074, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: abd57bd8119a5864c9121d40299164e6, type: 3}
+      objectReference: {fileID: 21300000, guid: 605947196b3d38d47bf50201c1896c94, type: 3}
     - target: {fileID: 4994793293924348163, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_BlocksRaycasts
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
       propertyPath: m_Name
-      value: TummyAcheCard
+      value: TummyAcheCard(-1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
