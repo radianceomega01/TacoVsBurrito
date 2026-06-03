@@ -303,6 +303,9 @@ namespace TacoVsBurrito
         }
         void ManageCraftyCrowAction()
         {
+            if (GameManager.Instance.CurrentPlayer is not SelfPlayer)
+                return;
+                
             if (GameManager.Instance.CurrentPlayer != parentPlayer)
             {
                 _cards.ForEach(card =>
