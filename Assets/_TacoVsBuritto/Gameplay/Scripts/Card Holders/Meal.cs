@@ -18,7 +18,7 @@ namespace TacoVsBurrito
         [SerializeField] Transform cardsTransform;
         [SerializeField] TextMeshProUGUI scoreTxt;
 
-        private const float CARD_SPACING = 6.2f;
+        private const float CARD_SPACING = 6f;
         private const float CARD_SCALE = 0.8f;
         private PlayerBase parentPlayer;
 
@@ -305,7 +305,7 @@ namespace TacoVsBurrito
         {
             if (GameManager.Instance.CurrentPlayer is not SelfPlayer)
                 return;
-                
+
             if (GameManager.Instance.CurrentPlayer != parentPlayer)
             {
                 _cards.ForEach(card =>
