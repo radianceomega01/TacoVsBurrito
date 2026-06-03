@@ -91,7 +91,6 @@ namespace TacoVsBurrito
             AIDecision decision = aIBrain.Decide(this, GameManager.Instance.Players);
 
             var card = Hand.GetAt(decision.cardIndex);
-            bool isLastCard = Hand.Count == 1;
 
             if (card == null)
                 return;
@@ -103,11 +102,6 @@ namespace TacoVsBurrito
             else
             {
                 _players[decision.destIndex].Meal.DropCardAfterDrag(card);
-            }
-
-            if (isLastCard)
-            {
-                GameEvents.OnGameFinished?.Invoke();
             }
         }
 
