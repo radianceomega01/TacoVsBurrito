@@ -364,6 +364,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelfPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 8332462960327273680, guid: 33b50f7de6226436fa13491c0eb8f8bb, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332462960327273680, guid: 33b50f7de6226436fa13491c0eb8f8bb, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 530
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
