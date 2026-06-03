@@ -117,6 +117,7 @@ namespace TacoVsBurrito
                     "📭 Draw pile is empty! PlayerBases now skip the draw step.");
             }
             GameManager.Instance.CardDrawnFromPile(drawnCard);
+            DeactivateGlow();
         }
         public override void PutCardsBack(List<CardBase> cards)
         {
