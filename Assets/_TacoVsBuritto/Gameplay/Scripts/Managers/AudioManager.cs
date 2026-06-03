@@ -39,7 +39,7 @@ namespace TacoVsBurrito
             GameEvents.OnNoBuenoPlayed      += (card)        => Play(sfxNoBueno);
             GameEvents.OnCraftyCrowActionTargeted += (TargetTypeContext ctx) => Play(sfxCraftyCrow);
             GameEvents.OnOrderEnvyAction         += _        => Play(sfxOrderEnvy);
-            GameEvents.OnGameOver           += _        => Play(sfxWin);
+            GameEvents.OnGameFinished           += ()        => Play(sfxWin);
 
             // GameEvents.OnCardPlacedInMeal += (_, _, card) =>
             // {

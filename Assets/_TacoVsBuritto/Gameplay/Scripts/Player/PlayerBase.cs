@@ -6,7 +6,6 @@ namespace TacoVsBurrito
 {
     public abstract class PlayerBase : MonoBehaviour
     {
-
         private PlayerHand hand;
         private Meal meal;
         FullScalePlayerView fullScaleView;

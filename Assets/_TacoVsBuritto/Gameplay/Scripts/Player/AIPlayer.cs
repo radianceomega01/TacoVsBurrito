@@ -107,8 +107,7 @@ namespace TacoVsBurrito
 
             if (isLastCard)
             {
-                //Todo: Gameover logic
-                GameEvents.OnGameOver?.Invoke(this);
+                GameEvents.OnGameFinished?.Invoke();
             }
         }
 

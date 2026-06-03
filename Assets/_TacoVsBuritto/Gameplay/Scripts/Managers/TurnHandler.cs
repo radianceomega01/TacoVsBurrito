@@ -116,6 +116,11 @@ namespace TacoVsBurrito
         {
             currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
+            if(CheckAndFinishGame())
+            {
+                return;
+            }
+
             if(isDrawPileEmpty)
             {
                 GameEvents.OnLogMessage?.Invoke($"  (Draw pile empty – skip draw step)");
@@ -127,6 +132,20 @@ namespace TacoVsBurrito
             }
             currentPlayedActionCard = null;
         }
+
+        bool CheckAndFinishGame()
+        {
+            foreach(var player in activePlayers)
+            {
+                if(player.Hand.Count == 0)
+                {
+                    GameEvents.OnGameFinished?.Invoke();
+                    return true;
+                }
+            }
+            return false;
+        }
+
         void ManageTurnChangedInFoodFight(PlayerBase newPlayer)
         {
             currentPlayerIndex = newPlayer.Index;

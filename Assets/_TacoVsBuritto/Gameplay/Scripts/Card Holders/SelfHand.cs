@@ -51,10 +51,6 @@ namespace TacoVsBurrito
         {
             base.RemoveCard(c);
             ArrangeCardsAnimated();
-            if(_cards.Count == 0)
-            {
-                GameEvents.OnGameOver?.Invoke(_parentSelfPlayer);
-            }
         }
 
         public override void AddCard(CardBase c)

@@ -83,12 +83,12 @@ namespace TacoVsBurrito
         }
         void OnEnable()
         {
-            GameEvents.OnGameOver += ManageGameOver;
+            GameEvents.OnGameFinished += ManageGameOver;
         }
 
         private void OnDisable()
         {
-            GameEvents.OnGameOver -= ManageGameOver;
+            GameEvents.OnGameFinished -= ManageGameOver;
         }
 
         void Start()
@@ -153,7 +153,7 @@ namespace TacoVsBurrito
             if (tiedWinners.Count == 1)
             {
                 GameEvents.OnLogMessage?.Invoke($"\n🎉 WINNER: {ranked[0].Name} with {topScore} pts!");
-                GameEvents.OnGameOver?.Invoke(ranked[0]);
+                GameEvents.OnGameFinished?.Invoke();
             }
             else
             {
@@ -181,7 +181,7 @@ namespace TacoVsBurrito
                 }
             }
 
-            if (flips.Count == 0) { GameEvents.OnGameOver?.Invoke(tiedPlayerBases[0]); yield break; }
+            if (flips.Count == 0) { GameEvents.OnGameFinished?.Invoke(); yield break; }
 
             int best = flips.Values.Max(c => c is IngredientCardBase @base ? @base.CardValue : 0);
             var winner = flips.FirstOrDefault(kv =>
@@ -191,10 +191,10 @@ namespace TacoVsBurrito
             drawPile.ShuffleBackIn(flips.Values.ToList());
 
             GameEvents.OnLogMessage?.Invoke($"\n🎉 TIEBREAKER WINNER: {winner?.Name ?? tiedPlayerBases[0].Name}!");
-            GameEvents.OnGameOver?.Invoke(winner ?? tiedPlayerBases[0]);
+            GameEvents.OnGameFinished?.Invoke();
         }
 
-        void ManageGameOver(PlayerBase finishingPlayer)
+        void ManageGameOver()
         {
             Tuple<PlayerBase, int> winnerWithScore = Tuple.Create<PlayerBase, int>(null, 0);
             foreach(PlayerBase player in _players)
@@ -204,7 +204,7 @@ namespace TacoVsBurrito
                     winnerWithScore = Tuple.Create(player, player.Score);
                 }
             }
-            GameEvents.OnLogMessage?.Invoke("Player: "+winnerWithScore.Item1+ " won the game with "+ winnerWithScore.Item2 + " score!");
+            GameEvents.OnGameWinner?.Invoke(winnerWithScore);
         }
 
         private List<PlayerBase> GetClockwiseOrderFrom(PlayerBase start)

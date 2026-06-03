@@ -22,7 +22,8 @@ namespace TacoVsBurrito
         public static Action<PlayerBase>                OnTurnEnded;
         public static Action<PlayerBase>                OnTurnChangedInFoodFight;
         public static Action<TurnState, PlayerBase>     OnPlayerAndTurnStateChanged;
-        public static Action<PlayerBase>                OnGameOver;         // Finishing player
+        public static Action                            OnGameFinished;
+        public static Action<Tuple<PlayerBase, int>>    OnGameWinner;         // Winning player and score
 
         // ---- Draw pile ----
         public static Action<PlayerBase, CardBase>       OnCardDrawn;        // (drawer, card drawn)
