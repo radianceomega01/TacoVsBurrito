@@ -7,6 +7,6 @@ namespace TacoVsBurrito
     {
         public void PickCardBeforeDrag(CardBase card);
         public void ReturnCardOnNoTarget(CardBase card);
-        public void SetCardHolderToCard(CardBase card);
+        public void SetCurrentPickupTargetToCard(CardBase card);
     }
 }

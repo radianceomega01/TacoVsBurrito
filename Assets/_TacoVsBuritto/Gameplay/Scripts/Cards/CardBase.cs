@@ -33,7 +33,7 @@ namespace TacoVsBurrito
         private ICardPickupTarget tempPickupTarget;
         private bool wasInteractionEnabledBeforeDrag;
         private InteractionType interactionType = InteractionType.Click;
-        private ICardPickupTarget currentCardHolder;
+        private ICardPickupTarget currentPickupTarget;
 
 
         public string Name { get { return cardName; } }
@@ -179,8 +179,8 @@ namespace TacoVsBurrito
             }
             else //Safety handling to avoid card drag issue due to no pickup target being set before very fast drag 
             {
-                currentCardHolder?.PickCardBeforeDrag(this);
-                currentCardHolder?.ReturnCardOnNoTarget(this);
+                currentPickupTarget?.PickCardBeforeDrag(this);
+                currentPickupTarget?.ReturnCardOnNoTarget(this);
             }
             tempPickupTarget = null;
         }
@@ -230,7 +230,7 @@ namespace TacoVsBurrito
         public void ShowCountOnSimilarCards(int count) => cardsCount.ShowCount(count);
         public void DisableCountOnSimilarCards() => cardsCount.DisableCount();
         public RectTransform GetRect() => _rectTransform;
-        public void SetCurrentCardHolder(ICardPickupTarget cardHolder) => currentCardHolder = cardHolder;
+        public void SetCurrentPickupTarget(ICardPickupTarget cardHolder) => currentPickupTarget = cardHolder;
 
     }
     public enum InteractionType
