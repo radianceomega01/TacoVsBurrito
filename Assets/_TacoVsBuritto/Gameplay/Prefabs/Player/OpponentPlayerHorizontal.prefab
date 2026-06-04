@@ -59,7 +59,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1412432366042105381, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
       propertyPath: m_text
-      value: AI
+      value: BOT
       objectReference: {fileID: 0}
     - target: {fileID: 3642822952625115745, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
       propertyPath: scoreTxt
