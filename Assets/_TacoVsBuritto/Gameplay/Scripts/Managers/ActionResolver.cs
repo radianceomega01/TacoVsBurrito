@@ -90,7 +90,7 @@ namespace TacoVsBurrito
 
             GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.GetType()}'s entire meal is trashed!");
 
-            GameEvents.OnHealthInspector?.Invoke();
+            GameEvents.OnHealthInspectorSFX?.Invoke();
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer); // skip play phase       
         }
 
@@ -144,7 +144,6 @@ namespace TacoVsBurrito
 
             _trashPile.RemoveCard(chosenCard);
             caster.Hand.AddCard(chosenCard);
-            GameEvents.OnCardAddedToHand?.Invoke(caster, chosenCard);
             GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved '{chosenCard.Name}' from the Trash pile.");
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }

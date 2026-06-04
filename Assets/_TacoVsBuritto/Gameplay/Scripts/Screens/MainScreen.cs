@@ -6,6 +6,7 @@ public class MainScreen : MonoBehaviour
 {
     public void startGame()
     {
+        GameEvents.OnGUIClickSFX?.Invoke();
         SceneManager.LoadScene(NamingUtils._GameplayScreen);
     }
 }

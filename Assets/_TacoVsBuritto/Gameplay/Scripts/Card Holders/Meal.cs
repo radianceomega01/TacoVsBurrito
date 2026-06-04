@@ -81,6 +81,7 @@ namespace TacoVsBurrito
             if (card is IngredientCardBase) IngredientCardCount++;
 
             UpdateScore();
+            GameEvents.OnCardMovedSFX?.Invoke();
         }
 
         void AddCardInStack(CardBase card)

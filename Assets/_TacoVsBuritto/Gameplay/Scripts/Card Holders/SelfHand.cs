@@ -44,6 +44,7 @@ namespace TacoVsBurrito
         {
             await Task.Delay(CARD_ARRANGE_DEALY_IN_MS);
             _cards.ForEach(card => card.ToggleBackFace(false));
+            GameEvents.OnCardFlippedSFX?.Invoke();
             ArrangeCardsAnimated();
         }
 

@@ -26,12 +26,7 @@ namespace TacoVsBurrito
         public static Action<Tuple<PlayerBase, int>>    OnGameWinner;         // Winning player and score
 
         // ---- Draw pile ----
-        public static Action<PlayerBase, CardBase>       OnCardDrawn;        // (drawer, card drawn)
         public static Action                             OnDrawPileEmpty;    // draw pile exhausted
-
-        // ---- Hand changes ----
-        public static Action<PlayerBase, CardBase>      OnCardAddedToHand;
-        public static Action<PlayerBase>                OnHandChanged;      // general refresh
 
         // ---- Meal changes ----
         public static Action                                    OnCraftyCrowAction;      
@@ -55,13 +50,18 @@ namespace TacoVsBurrito
         public static Action<ActionCardBase>                      OnActionCardPlayed;   // (card trashed)
         public static Action<ActionCardBase>                      OnStartNoBuenoInterruptWindow;
         public static Action<NoBuenoCard>                         OnNoBuenoPlayed;  
-        public static Action                                OnHealthInspector;  // (victim)
 
         // ---- Timer ----
-        public static Action<int>                            OnTimerEvent;
+        public static Action<int>                   OnTimerEvent;
 
         // ---- Game log ----
         public static Action<string>                OnLogMessage;
 
+        //Audio Specific Events
+        public static Action                        OnHealthInspectorSFX;  // (victim)
+        public static Action                        OnGUIClickSFX;
+        public static Action                        OnCardMovedSFX;
+        public static Action                        OnCardFlippedSFX;
+        public static Action                        OnCardDrawSFX;
     }
 }

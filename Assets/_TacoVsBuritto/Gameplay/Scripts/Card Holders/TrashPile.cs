@@ -25,6 +25,7 @@ namespace TacoVsBurrito
         public void Trash(CardBase card)
         {
             SetCardOnPile(card);
+            GameEvents.OnCardMovedSFX?.Invoke();
         }
         void SetCardOnPile(CardBase card)
         {
@@ -40,6 +41,7 @@ namespace TacoVsBurrito
         public void TrashAll(IEnumerable<CardBase> cards)
         {
             foreach (var c in cards) SetCardOnPile(c);
+            GameEvents.OnCardDrawSFX?.Invoke();
         }
 
         public Dictionary<CardBase, int> RetrieveFromTrash()

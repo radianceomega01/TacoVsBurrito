@@ -83,6 +83,7 @@ namespace TacoVsBurrito
                 }
 
                 await Task.Delay(DEALING_DELAY_IN_MS);
+                GameEvents.OnCardMovedSFX?.Invoke();
                 players[playerIndex % players.Count].Hand.AddCardWithoutArranging(card);
                 cardsDistributed++;
                 playerIndex++;
@@ -117,6 +118,7 @@ namespace TacoVsBurrito
                     "📭 Draw pile is empty! PlayerBases now skip the draw step.");
             }
             GameManager.Instance.CardDrawnFromPile(drawnCard);
+            GameEvents.OnCardFlippedSFX?.Invoke();
             DeactivateGlow();
         }
         public override void PutCardsBack(List<CardBase> cards)

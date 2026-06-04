@@ -66,6 +66,7 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             PlayAction(card);
+            GameEvents.OnCardMovedSFX?.Invoke();
         }
 
         void ManageTurnStateChanged(TurnState state, PlayerBase player)

@@ -41,6 +41,7 @@ namespace TacoVsBurrito
             cardsDrawn.Add(card);
 
             OnCardDrawn?.Invoke(card, currentPlayer);
+            GameEvents.OnCardMovedSFX?.Invoke();
         }
 
         public Vector3 GetOffsetPositionForCard(Vector3 playerPosition)
