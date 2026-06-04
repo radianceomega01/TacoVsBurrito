@@ -93,6 +93,7 @@ namespace TacoVsBurrito
         {
             Application.targetFrameRate = FRAME_RATE;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
+            Input.multiTouchEnabled = false;
         }
 
         // -------------------------------------------------------
