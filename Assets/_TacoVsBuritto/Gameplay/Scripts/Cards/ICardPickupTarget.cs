@@ -5,7 +5,8 @@ namespace TacoVsBurrito
 {
     public interface ICardPickupTarget
     {
-        public abstract void PickCardBeforeDrag(CardBase card);
-        public abstract void ReturnCardOnNoTarget(CardBase card);
+        public void PickCardBeforeDrag(CardBase card);
+        public void ReturnCardOnNoTarget(CardBase card);
+        public void SetCardHolderToCard(CardBase card);
     }
 }

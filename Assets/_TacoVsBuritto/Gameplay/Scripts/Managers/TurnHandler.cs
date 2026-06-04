@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System;
 namespace TacoVsBurrito
 {
-    public class TurnHandler
+    public class TurnHandler: IDisposable
     {
         TurnState currentTurnState = TurnState.None;
         List<PlayerBase> activePlayers;
@@ -40,7 +40,7 @@ namespace TacoVsBurrito
             GameEvents.OnCardsPileCardTargeted += ManageTargetAction;
         }
 
-        ~TurnHandler()
+        void UnsubscribeEvents()
         {
             GameEvents.OnGameInit -= DecidePlayers;
             GameEvents.OnCardsDistributed -= StartGame;
@@ -114,12 +114,13 @@ namespace TacoVsBurrito
 
         void ManageTurnEnded(PlayerBase oldPlayer)
         {
-            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
-            GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
             if(CheckAndFinishGame())
             {
                 return;
             }
+            
+            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
+            GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
 
             if(isDrawPileEmpty)
             {
@@ -242,6 +243,11 @@ namespace TacoVsBurrito
             {
                 targetTypeCard.OnActionTargeted(context);
             }
+        }
+
+        public void Dispose()
+        {
+            UnsubscribeEvents();
         }
     }
 

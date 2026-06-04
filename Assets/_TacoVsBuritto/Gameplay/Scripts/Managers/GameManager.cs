@@ -201,6 +201,8 @@ namespace TacoVsBurrito
                 }
             }
             GameEvents.OnGameWinner?.Invoke(winnerWithScore);
+            _turnHandler.Dispose();
+            _turnHandler = null;
         }
 
         private List<PlayerBase> GetClockwiseOrderFrom(PlayerBase start)
