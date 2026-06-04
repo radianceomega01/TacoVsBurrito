@@ -5,13 +5,11 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class PlayerHand : MonoBehaviour
+    public abstract class PlayerHandBase : MonoBehaviour
     {
         [SerializeField] protected TextMeshProUGUI cardCountTxt;
 
         protected readonly List<CardBase> _cards = new List<CardBase>();
-        private const float CARD_SCALE = 0.4f;
-        private const int CARD_SQUEEZED_DELAY_IN_MS = 200;
 
         public IReadOnlyList<CardBase> Cards => _cards;
         public int Count => _cards.Count;
@@ -24,31 +22,9 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 
-        public virtual void AddCard(CardBase c)
-        {
-            _cards.Add(c);
-            c.ToggleBackFace(true);
-            c.DisableInteraction();
-            c.ToggleInteractionType(InteractionType.Click);
-            ArrangeCard(c);
-            UpdateCountTxt();
-        }
+        public abstract void AddCard(CardBase c);
+        public abstract void AddCardWithoutArranging(CardBase c);
 
-        public virtual void AddCardWithoutArranging(CardBase c)
-        {
-            AddCard(c);
-        }
-
-        async Task ArrangeCard(CardBase card)
-        {
-            card.ChangePosition(transform.position);
-            card.ChangeRotation(Quaternion.identity);
-            card.ChangeParent(transform);
-            card.ChangeScale(CARD_SCALE);
-
-            await Task.Delay(CARD_SQUEEZED_DELAY_IN_MS);
-            card.ChangeScale(0);
-        }
         public virtual void RemoveCard(CardBase c)
         {
             _cards.Remove(c);
@@ -61,10 +37,8 @@ namespace TacoVsBurrito
             _cards.Clear();
             return all;
         }
+        
         protected virtual void ManageTurnStateChanged(TurnState turnState, PlayerBase player){}
-        // {
-        //     _cards.ForEach(card => card.DisableInteraction());
-        // }
         protected void UpdateCountTxt() => cardCountTxt.SetText(Count.ToString());
         public CardBase GetAt(int i) => (i >= 0 && i < _cards.Count) ? _cards[i] : null;
     }

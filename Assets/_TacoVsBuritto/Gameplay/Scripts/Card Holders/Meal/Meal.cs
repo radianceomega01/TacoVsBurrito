@@ -13,7 +13,7 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Meal  (the face-up cards in front of a player)
     // ----------------------------------------------------------
-    public class Meal : MonoBehaviour, ICardDropTarget
+    public class MealBase : MonoBehaviour, ICardDropTarget
     {
         [SerializeField] Transform cardsTransform;
         [SerializeField] TextMeshProUGUI scoreTxt;

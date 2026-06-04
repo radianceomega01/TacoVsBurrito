@@ -9,22 +9,14 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Hand  (private cards held by a player)
     // ----------------------------------------------------------
-    public class SelfHand : PlayerHand, ICardPickupTarget
+    public class SelfHand : PlayerHandBase, ICardPickupTarget
     {
-        private RectTransform _rectTransform;
-
-        private const float CARD_SPACING = 7f;
         private const float CARD_SCALE = 1.4f;
         private const float MIN_ARC_RADIUS = 5f;
         private const float MAX_ARC_RADIUS = 50f;
         private const float ARC_RADIUS_GROWTH = 10f;
         private const float ARC_ANGLE = 30f;
         private const int CARD_ARRANGE_DEALY_IN_MS = 500;
-
-        void Awake()
-        {
-            _rectTransform = GetComponent<RectTransform>();
-        }
         
         protected override void OnEnable()
         {
@@ -98,9 +90,6 @@ namespace TacoVsBurrito
             float angleStep = ARC_ANGLE / (count - 1);
             float startAngle = -ARC_ANGLE / 2f;
 
-            // Dynamic radius based only on count
-            // float dynamicRadius =
-            //     MIN_ARC_RADIUS + Mathf.Sqrt(count - 1) * ARC_RADIUS_GROWTH;
             float dynamicRadius =
                 MIN_ARC_RADIUS + (count - 1) * ARC_RADIUS_GROWTH;    
 
@@ -128,16 +117,6 @@ namespace TacoVsBurrito
             }
         }
 
-        void ModifyWidthOfRect()
-        {
-            int count = _cards.Count;
-            if (count == 0) return;
-
-            float totalSpacing = (count - 1) * CARD_SPACING;
-            float newWidth = count * Cards[0].GetWidth() - totalSpacing;
-
-            _rectTransform.sizeDelta = new Vector2(newWidth, _rectTransform.sizeDelta.y); // Base width plus spacing
-        }
         void SetCardInDefaultPlace(CardBase card)
         {
             card.ChangePosition(transform.position);
