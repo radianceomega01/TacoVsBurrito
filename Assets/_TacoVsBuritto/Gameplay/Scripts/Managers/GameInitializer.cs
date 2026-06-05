@@ -10,6 +10,7 @@ namespace TacoVsBurrito
         [Header("Game Settings")]
         [Range(2, 4)]
         [SerializeField] int numberOfPlayers = 2;
+        [SerializeField] GameDataSO gameData;
         [SerializeField] GameMode gameMode = GameMode.VsAI;
 
         [SerializeField] Transform playersParent;
@@ -25,6 +26,7 @@ namespace TacoVsBurrito
 
         void Start()
         {
+            numberOfPlayers = gameData.numOfPlayers;
             SetupPlayers();
             BeginGame();
         }

@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GameInitializer
   numberOfPlayers: 4
+  gameData: {fileID: 11400000, guid: 97283dfd7404f40cc8550d64a74fe9c3, type: 2}
   gameMode: 1
   playersParent: {fileID: 1877611474}
   selfPlayer: {fileID: 149571958}

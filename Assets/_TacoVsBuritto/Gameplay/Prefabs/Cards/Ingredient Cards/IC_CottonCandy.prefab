@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IC_CottonCandy
       objectReference: {fileID: 0}
+    - target: {fileID: 3999307477141569390, guid: d8bd320a5609fb344b5f687e1e36644b, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4879214194981052048, guid: d8bd320a5609fb344b5f687e1e36644b, type: 3}
       propertyPath: cardValue
       value: 2
