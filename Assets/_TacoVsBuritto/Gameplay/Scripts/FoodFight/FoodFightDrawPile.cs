@@ -11,7 +11,7 @@ namespace TacoVsBurrito
     {
         DrawPile drawPile;
         RectTransform drawPileRect;
-        const float CARD_DRAWN_OFFSET_FROM_PILE = 16f;
+        const float CARD_DRAWN_OFFSET_FROM_PILE = 14f;
         List<CardBase> cardsDrawn = new();
         PlayerBase currentPlayer;
 
