@@ -13,19 +13,19 @@ namespace TacoVsBurrito
     // ----------------------------------------------------------
     //  Meal  (the face-up cards in front of a player)
     // ----------------------------------------------------------
-    public class MealBase : MonoBehaviour, ICardDropTarget
+    public abstract class PlayerMealBase : MonoBehaviour, ICardDropTarget
     {
-        [SerializeField] Transform cardsTransform;
-        [SerializeField] TextMeshProUGUI scoreTxt;
+        [SerializeField] protected Transform cardsTransform;
+        [SerializeField] protected TextMeshProUGUI scoreTxt;
 
-        private const float CARD_SPACING = 6f;
-        private const float CARD_SCALE = 0.8f;
-        private PlayerBase parentPlayer;
+        protected virtual float CARD_SPACING => 6f;
+        protected virtual float CARD_SCALE => 0.8f;
+        protected PlayerBase parentPlayer;
 
-        public MealType Type { get; }
-        private List<CardBase> _cards; // All meal cards
-        private List<MealCardStack> _cardStacks; // For stacking cards of same meal value or type
-        private CardBase currentGlowingCard;
+        protected MealType Type { get; }
+        protected List<CardBase> _cards; // All meal cards
+        protected List<MealCardStack> _cardStacks; // For stacking cards of same meal value or type
+        protected CardBase currentGlowingCard;
 
         public IReadOnlyList<CardBase> Cards => _cards;
         public PlayerBase ParentPlayer => parentPlayer;
@@ -38,14 +38,14 @@ namespace TacoVsBurrito
             _cards = new();
             _cardStacks = new();
         }
-        void OnEnable()
+        protected virtual void OnEnable()
         {
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
             GameEvents.OnCraftyCrowAction += ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget += ManageCardClickedForCraftyCrow;
             GameEvents.OnActionResolved += ManageActionResolved;
         }
-        void OnDisable()
+        protected virtual void OnDisable()
         {
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnCraftyCrowAction -= ManageCraftyCrowAction;
@@ -53,7 +53,7 @@ namespace TacoVsBurrito
             GameEvents.OnActionResolved -= ManageActionResolved;
         }
 
-        void Start()
+        protected void Start()
         {
             parentPlayer = GetComponentInParent<PlayerBase>();
             UpdateScore();
@@ -71,7 +71,6 @@ namespace TacoVsBurrito
             AddCardInStack(card);
 
             card.ChangeScale(CARD_SCALE);
-            card.transform.SetAsLastSibling();
             card.DisableInteraction();
             card.ToggleBackFace(false);
             card.ChangeRotation(Quaternion.identity);
@@ -94,6 +93,7 @@ namespace TacoVsBurrito
                 _cardStacks.Add(stack);
             }
             stack.Cards.Add(card);
+            card.SetSibblingIndex(stack.TopCard.transform.GetSiblingIndex() + 1);
             RearrangeCards();
         }
 
@@ -199,44 +199,9 @@ namespace TacoVsBurrito
             GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
         }
 
-        void RearrangeCards()
-        {
-            int count = _cards.Count;
-            if (count == 0) return;
+        protected abstract void RearrangeCards();
 
-            Vector3 basePos = cardsTransform.position;
-            Vector3 right = cardsTransform.right;
-
-            // STACK-BASED LAYOUT (optimized system)
-
-            int stackCount = _cardStacks.Count;
-            if (stackCount == 0) return;
-
-            float totalWidth = (stackCount - 1) * CARD_SPACING;
-            float startOffset = -totalWidth / 2f;
-
-            for (int i = 0; i < stackCount; i++)
-            {
-                MealCardStack stack = _cardStacks[i];
-
-                float offset = startOffset + i * CARD_SPACING;
-
-                Vector3 stackPos = basePos + right * offset;
-
-                int cardCount = stack.Cards.Count;
-
-                for (int j = 0; j < cardCount; j++)
-                {
-                    CardBase card = stack.Cards[j];
-
-                    card.ChangePosition(stackPos);
-                }
-
-                UpdateCountOnSimilarCardStack(stack);
-            }
-        }
-
-        void UpdateCountOnSimilarCardStack(MealCardStack stack)
+        protected void UpdateCountOnSimilarCardStack(MealCardStack stack)
         {
             stack.TopCard.ShowCountOnSimilarCards(stack.Cards.Count);
             if (stack.Cards.Count > 1)
@@ -293,7 +258,7 @@ namespace TacoVsBurrito
             return null;
         }
 
-        void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
+        protected void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
             //Deactivate glow if action on card was canceled due to no bueno
             if (turnState == TurnState.DrawPhase && currentGlowingCard != null)
@@ -302,7 +267,7 @@ namespace TacoVsBurrito
                 currentGlowingCard = null;
             }
         }
-        void ManageCraftyCrowAction()
+        protected void ManageCraftyCrowAction()
         {
             if (GameManager.Instance.CurrentPlayer is not SelfPlayer)
                 return;
@@ -316,7 +281,7 @@ namespace TacoVsBurrito
                 });
             }
         }
-        private void DisableInteraction(PlayerBase player)
+        void DisableInteraction(PlayerBase player)
         {
             if (player != parentPlayer)
             {
@@ -327,7 +292,7 @@ namespace TacoVsBurrito
             }
         }
 
-        private void ManageCardClickedForCraftyCrow(CardBase card)
+        protected void ManageCardClickedForCraftyCrow(CardBase card)
         {
             currentGlowingCard = card;
             _cards.ForEach(c =>
@@ -340,7 +305,7 @@ namespace TacoVsBurrito
                 GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
         }
 
-        void ManageActionResolved(ActionCardBase actionCard)
+        protected void ManageActionResolved(ActionCardBase actionCard)
         {
             if (actionCard is not CraftyCrowCard)
                 return;

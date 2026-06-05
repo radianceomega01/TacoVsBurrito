@@ -3202,8 +3202,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6557808894894804421}
   - component: {fileID: 5307208591966181732}
-  - component: {fileID: 3642822952625115745}
   - component: {fileID: 6575994652333522017}
+  - component: {fileID: 2934729341867560885}
   m_Layer: 5
   m_Name: MealHolder
   m_TagString: Untagged
@@ -3239,20 +3239,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8874612530132302635}
   m_CullTransparentMesh: 1
---- !u!114 &3642822952625115745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8874612530132302635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49eb0199c1553354d8fbee33dae671e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.Meal
-  cardsTransform: {fileID: 7165079167967298384}
-  scoreTxt: {fileID: 0}
 --- !u!114 &6575994652333522017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3283,6 +3269,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1.5
+--- !u!114 &2934729341867560885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8874612530132302635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76ab27948f9d04c61a3e8c6dbc6eceb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.PlayerMealHorizontal
+  cardsTransform: {fileID: 7165079167967298384}
+  scoreTxt: {fileID: 5743680923515050046}
 --- !u!1 &9063541273415805426
 GameObject:
   m_ObjectHideFlags: 0

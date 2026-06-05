@@ -7,14 +7,14 @@ namespace TacoVsBurrito
     public abstract class PlayerBase : MonoBehaviour
     {
         private PlayerHandBase hand;
-        private MealBase meal;
+        private PlayerMealBase meal;
         FullScalePlayerView fullScaleView;
         MinifiedPlayerView minifiedView;
         public int Index { get; private set; }
         public string Name { get; private set; }
 
         public PlayerHandBase Hand { get { return hand; } }
-        public MealBase Meal { get { return meal; } }
+        public PlayerMealBase Meal { get { return meal; } }
 
         // Turn-state flags
         public bool SkipNextTurn { get; set; } = false;   // (not in base rules but useful for expansions)
@@ -26,7 +26,7 @@ namespace TacoVsBurrito
         protected virtual void Awake()
         {
             hand = GetComponentInChildren<PlayerHandBase>();
-            meal = GetComponentInChildren<MealBase>();
+            meal = GetComponentInChildren<PlayerMealBase>();
             fullScaleView = GetComponentInChildren<FullScalePlayerView>();
             minifiedView = GetComponentInChildren<MinifiedPlayerView>(true);
         }

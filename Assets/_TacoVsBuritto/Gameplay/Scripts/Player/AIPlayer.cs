@@ -71,7 +71,7 @@ namespace TacoVsBurrito
         {
             
             noBuenoCounter = 0;
-            isSelfTurnRunning = player is AIPlayer;
+            isSelfTurnRunning = player == this;
 
             if (isSelfTurnRunning && !drawPile.IsDrawPileEmpty)
             {
@@ -107,7 +107,7 @@ namespace TacoVsBurrito
 
         void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {
-            if (player is AIPlayer)
+            if (player == this)
             {
                 if (state == TurnState.PlayPhase)
                 {
@@ -147,7 +147,7 @@ namespace TacoVsBurrito
         }
         async void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary, PlayerBase winner)
         {
-            if(winner is not AIPlayer)
+            if(winner != this)
                 return;
 
             await Task.Delay(THINKING_DELAY_IN_MS);

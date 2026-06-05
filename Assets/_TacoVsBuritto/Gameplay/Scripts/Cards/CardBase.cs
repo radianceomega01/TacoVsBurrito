@@ -215,6 +215,7 @@ namespace TacoVsBurrito
         public void ToggleBackFace(bool showBack) => backFaceImage.gameObject.SetActive(showBack);
         public void ChangeScale(float value) => _rectTransform.DOScale(value, TIME_TO_SCALE_IN_SECS);
         public void SetAsLastSibbling() => transform.SetSiblingIndex(transform.parent.childCount - 1);
+        public void SetSibblingIndex(int index) => transform.SetSiblingIndex(index);
 
         public float GetWidth() => _rectTransform.sizeDelta.x;
 
