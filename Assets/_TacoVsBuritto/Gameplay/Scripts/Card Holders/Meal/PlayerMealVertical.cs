@@ -4,8 +4,8 @@ namespace TacoVsBurrito
 {
     public class PlayerMealVertical : PlayerMealBase
     {
-        protected override float CARD_SPACING => 5f;
-        protected override float CARD_SCALE => 1.2f;
+        protected override float CARD_SPACING => 4f;
+        protected override float CARD_SCALE => 0.8f;
 
         protected override void RearrangeCards()
         {

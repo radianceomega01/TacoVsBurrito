@@ -91,9 +91,13 @@ namespace TacoVsBurrito
             {
                 stack = new MealCardStack();
                 _cardStacks.Add(stack);
+                card.SetAsLastSibbling();
+            }
+            else
+            {
+                card.SetSibblingIndex(stack.TopCard.transform.GetSiblingIndex() + 1);
             }
             stack.Cards.Add(card);
-            card.SetSibblingIndex(stack.TopCard.transform.GetSiblingIndex() + 1);
             RearrangeCards();
         }
 
