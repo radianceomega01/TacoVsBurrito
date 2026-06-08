@@ -9,10 +9,10 @@ namespace TacoVsBurrito
         public override async void ExecuteAction()
         {
             await Task.Delay(EXECUTION_DEALY_IN_MS);
-            GameManager.Instance.GetTrashPile().Trash(this);
+            GameplayManager.Instance.GetTrashPile().Trash(this);
 
             await Task.Delay(EXECUTION_DEALY_IN_MS);
-            resolver.ResolveHealthInspector(GameManager.Instance.CurrentPlayer);
+            resolver.ResolveHealthInspector(GameplayManager.Instance.CurrentPlayer);
         }
         
         public override TurnState GetStateOnTrashed() => TurnState.ActionResolvePhase;

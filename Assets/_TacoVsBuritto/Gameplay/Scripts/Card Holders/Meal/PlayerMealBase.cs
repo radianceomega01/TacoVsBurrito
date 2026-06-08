@@ -195,12 +195,12 @@ namespace TacoVsBurrito
 
         public bool CanDrop(CardBase card)
         {
-            return card is IMealTypeAction;
+            return card is IMealTypeAction && DragManager.ActiveCard == card;
         }
         public void DropCardAfterDrag(CardBase card)
         {
             AddCard(card);
-            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
         }
 
         protected abstract void RearrangeCards();
@@ -273,10 +273,10 @@ namespace TacoVsBurrito
         }
         protected void ManageCraftyCrowAction()
         {
-            if (GameManager.Instance.CurrentPlayer is not SelfPlayer)
+            if (GameplayManager.Instance.CurrentPlayer is not SelfPlayer)
                 return;
 
-            if (GameManager.Instance.CurrentPlayer != parentPlayer)
+            if (GameplayManager.Instance.CurrentPlayer != parentPlayer)
             {
                 _cards.ForEach(card =>
                 {
@@ -303,10 +303,10 @@ namespace TacoVsBurrito
             {
                 if (c != card) c.DeactivateGlow();
             });
-            DisableInteraction(GameManager.Instance.CurrentPlayer);
+            DisableInteraction(GameplayManager.Instance.CurrentPlayer);
 
             if (_cards.Contains(card))
-                GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, card));
+                GameEvents.OnCraftyCrowActionTargeted?.Invoke(new TargetTypeContext(GameplayManager.Instance.CurrentPlayer, parentPlayer, card));
         }
 
         protected void ManageActionResolved(ActionCardBase actionCard)

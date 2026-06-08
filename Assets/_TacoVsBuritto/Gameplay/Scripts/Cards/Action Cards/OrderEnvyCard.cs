@@ -10,7 +10,7 @@ namespace TacoVsBurrito
         {
             GameEvents.OnLogMessage("Pick an Enemy to swap Cards!");
             //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
-            GameEvents.OnOrderEnvyAction?.Invoke(GameManager.Instance.CurrentPlayer);
+            GameEvents.OnOrderEnvyAction?.Invoke(GameplayManager.Instance.CurrentPlayer);
         }
 
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
@@ -21,7 +21,7 @@ namespace TacoVsBurrito
 
         public void ResolveAction()
         {
-            GameManager.Instance.GetTrashPile().Trash(this);
+            GameplayManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveOrderEnvy(targetTypeContext.caster, targetTypeContext.victim);
             targetTypeContext = default;
         }

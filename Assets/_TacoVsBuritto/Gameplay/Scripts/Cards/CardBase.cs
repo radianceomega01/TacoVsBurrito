@@ -30,10 +30,10 @@ namespace TacoVsBurrito
         private CanvasGroup _canvasGroup;
         private Vector3 _originalScale;
 
-        private ICardPickupTarget tempPickupTarget;
         private bool wasInteractionEnabledBeforeDrag;
         private InteractionType interactionType = InteractionType.Click;
         private ICardPickupTarget currentPickupTarget;
+        private bool canDrag;
 
 
         public string Name { get { return cardName; } }
@@ -105,6 +105,8 @@ namespace TacoVsBurrito
         public void OnBeginDrag(PointerEventData eventData)
         {
             if(interactionType == InteractionType.Click) return;
+            canDrag = DragManager.TryStartDrag(this);
+            if(!canDrag) return;
 
             GameEvents.OnCardDragBegin?.Invoke();
 
@@ -118,27 +120,23 @@ namespace TacoVsBurrito
             transform.localScale = Vector3.one * DRAG_SCALE;
             ChangeParent(canvas.transform); // Move to top-level canvas to avoid clipping
 
-            StartCoroutine(PickCardBeforeDrag(eventData));
+            //StartCoroutine(PickCardBeforeDrag());
+            currentPickupTarget?.PickCardBeforeDrag(this);
 
         }
-
-        IEnumerator PickCardBeforeDrag(PointerEventData eventData)
+        IEnumerator PickCardBeforeDrag()
         {
             yield return null;
-            GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
-            if (targetObject != null)
-            {
-                tempPickupTarget = targetObject.GetComponent<ICardPickupTarget>();
-                tempPickupTarget?.PickCardBeforeDrag(this);
-            }
+            currentPickupTarget?.PickCardBeforeDrag(this);
         }
+
         // =========================================================
         // DRAG
         // =========================================================
 
         public void OnDrag(PointerEventData eventData)
         {
-            if(interactionType == InteractionType.Click) return;
+            if(interactionType == InteractionType.Click || !canDrag) return;
 
             _rectTransform.anchoredPosition +=
                 eventData.delta / canvas.scaleFactor;
@@ -150,7 +148,7 @@ namespace TacoVsBurrito
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(interactionType == InteractionType.Click) return;
+            if(interactionType == InteractionType.Click|| !canDrag) return;
 
             GameEvents.OnCardDragEnd?.Invoke();
             _canvasGroup.blocksRaycasts = true;
@@ -160,43 +158,31 @@ namespace TacoVsBurrito
             GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
             if (targetObject != null)
             {
-                // ICardHolder cardHolder = targetObject.GetComponent<ICardHolder>();
-                // if (cardHolder != null)
-                // {
-                //     currentCardHolder = cardHolder;
-                // }
                 ICardDropTarget dropTarget = targetObject.GetComponent<ICardDropTarget>();
                 if (dropTarget != null && dropTarget.CanDrop(this))
                 {
                     dropTarget.DropCardAfterDrag(this);
-                    return;
+                }
+                else
+                {
+                    ReturnToHandOnNoTarget();
                 }
             }
-
-            if(tempPickupTarget != null)
+            else
             {
-                tempPickupTarget.ReturnCardOnNoTarget(this);
+                ReturnToHandOnNoTarget();
             }
-            else //Safety handling to avoid card drag issue due to no pickup target being set before very fast drag 
-            {
-                currentPickupTarget?.PickCardBeforeDrag(this);
-                currentPickupTarget?.ReturnCardOnNoTarget(this);
-            }
-            tempPickupTarget = null;
+            DragManager.EndDrag(this);
         }
 
         // =========================================================
         // RETURN TO ORIGINAL POSITION
         // =========================================================
 
-        // public void ReturnToHand()
-        // {
-        //     transform.SetParent(_originalParent);
-        //     transform.SetSiblingIndex(_originalParent.childCount - 1);
-
-        //     _rectTransform.anchoredPosition =
-        //         _originalAnchoredPosition;
-        // }
+        public void ReturnToHandOnNoTarget()
+        {
+            currentPickupTarget?.ReturnCardOnNoTarget(this);
+        }
 
         public void DisableInteraction()
         {

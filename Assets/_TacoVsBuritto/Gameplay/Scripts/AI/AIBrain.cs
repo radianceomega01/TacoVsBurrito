@@ -134,7 +134,7 @@ namespace TacoVsBurrito
 
             // 7. Trash Panda
             int tp = FindFirstAction(ai, typeof(TrashPandaCard));
-            if (tp >= 0 && GameManager.Instance.GetTrashPile().TrashCount > 0)
+            if (tp >= 0 && GameplayManager.Instance.GetTrashPile().TrashCount > 0)
                 return new AIDecision { cardIndex = tp, destIndex = -1 };
 
             // 8. Food Fight

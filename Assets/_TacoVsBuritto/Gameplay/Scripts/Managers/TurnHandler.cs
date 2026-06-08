@@ -108,7 +108,7 @@ namespace TacoVsBurrito
             {
                 await Task.Delay(CARD_TRASH_DELAY_IN_MS);
                 trashPile.Trash(card);
-                ManageTurnEnded(GameManager.Instance.CurrentPlayer);
+                ManageTurnEnded(GameplayManager.Instance.CurrentPlayer);
             }
         }
 
@@ -190,7 +190,7 @@ namespace TacoVsBurrito
                 else
                 {
                     trashPile.Trash(currentPlayedActionCard);
-                    ManageTurnEnded(GameManager.Instance.CurrentPlayer);
+                    ManageTurnEnded(GameplayManager.Instance.CurrentPlayer);
                 }
                 noBuenoCardsPlayed.ForEach(card => trashPile.Trash(card));
                 noBuenoCardsPlayed.Clear();    
@@ -226,7 +226,7 @@ namespace TacoVsBurrito
             //PLayer played no bueno as a regular action card in play area
             if(currentPlayedActionCard == null || currentTurnState != TurnState.NoBuenoWindowPhase)
             {
-                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+                GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
                 await Task.Delay(CARD_TRASH_DELAY_IN_MS);
                 trashPile.Trash(noBuenoCard);
                 return;

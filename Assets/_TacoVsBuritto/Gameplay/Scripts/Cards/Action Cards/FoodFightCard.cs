@@ -8,7 +8,7 @@ namespace TacoVsBurrito
     public class FoodFightCard : ActionCardBase, ITargetTypeAction
     {
         const int EXECUTION_DELAY_IN_MS = 200;
-        GameManager gameManager;
+        GameplayManager gameManager;
         public override void ExecuteAction()
         {
             //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
@@ -20,7 +20,7 @@ namespace TacoVsBurrito
         {
             GameEvents.OnFoodFightOver?.Invoke();
             await Task.Delay(EXECUTION_DELAY_IN_MS);
-            GameManager.Instance.GetTrashPile().Trash(this);
+            GameplayManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveFoodFight(targetTypeContext.caster, targetTypeContext.cardTargeted);
         }
 
@@ -28,13 +28,13 @@ namespace TacoVsBurrito
         {
             GameEvents.OnFoodFightOver?.Invoke();
             await Task.Delay(EXECUTION_DELAY_IN_MS);
-            GameManager.Instance.GetTrashPile().Trash(this);
+            GameplayManager.Instance.GetTrashPile().Trash(this);
             GameEvents.OnFoodFightAction?.Invoke(this);
         }
 
         public override bool CanExecuteAction()
         {
-            GameManager gameManager = GameManager.Instance;
+            GameplayManager gameManager = GameplayManager.Instance;
             if(gameManager.GetDrawPile().IsDrawPileEmpty || 
                 gameManager.GetDrawPile().PileCards.Count < gameManager.Players.Count)
             {

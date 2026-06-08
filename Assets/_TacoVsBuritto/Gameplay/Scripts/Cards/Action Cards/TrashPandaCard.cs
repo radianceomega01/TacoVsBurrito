@@ -13,7 +13,7 @@ namespace TacoVsBurrito
         public override async void ExecuteAction()
         {
             await Task.Delay(EXECUTION_DEALY_IN_MS);
-            GameEvents.OnTrashPandaAction?.Invoke(GameManager.Instance.GetTrashPile().RetrieveFromTrash());
+            GameEvents.OnTrashPandaAction?.Invoke(GameplayManager.Instance.GetTrashPile().RetrieveFromTrash());
         }
 
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
@@ -25,13 +25,13 @@ namespace TacoVsBurrito
 
         public void ResolveAction()
         {
-            GameManager.Instance.GetTrashPile().Trash(this);
+            GameplayManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveTrashPanda(targetTypeContext.caster, targetTypeContext.cardTargeted);
             targetTypeContext = default;
         }
         public override bool CanExecuteAction()
         {
-            Dictionary<CardBase, int> pileCards = GameManager.Instance.GetTrashPile().RetrieveFromTrash();
+            Dictionary<CardBase, int> pileCards = GameplayManager.Instance.GetTrashPile().RetrieveFromTrash();
             if(pileCards.Count == 0)
             {
                 GameEvents.OnLogMessage("TrashPanda cancelled due to insufficient cards!");

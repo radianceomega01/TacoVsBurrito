@@ -29,7 +29,7 @@ namespace TacoVsBurrito
             drawPileRect = drawPile.GetRectTransform();
             drawPile.ChangeBtnListener(OnDrawBtnClicked);
             ManageDrawPileOnFoodFight();
-            currentPlayer = GameManager.Instance.CurrentPlayer;
+            currentPlayer = GameplayManager.Instance.CurrentPlayer;
         }
 
         public void OnDrawBtnClicked()

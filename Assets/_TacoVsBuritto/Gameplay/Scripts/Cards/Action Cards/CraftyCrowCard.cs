@@ -24,7 +24,7 @@ namespace TacoVsBurrito
 
         public void ResolveAction()
         {
-            GameManager.Instance.GetTrashPile().Trash(this);
+            GameplayManager.Instance.GetTrashPile().Trash(this);
             resolver.ResolveCraftyCrow(targetTypeContext.caster, targetTypeContext.victim, targetTypeContext.cardTargeted);
             targetTypeContext = default;
         }
@@ -43,9 +43,9 @@ namespace TacoVsBurrito
         bool IsSufficientCardForCraftyCrow()
         {
             bool value = false;
-            foreach(PlayerBase player in GameManager.Instance.Players)
+            foreach(PlayerBase player in GameplayManager.Instance.Players)
             {
-                if(player == GameManager.Instance.CurrentPlayer)
+                if(player == GameplayManager.Instance.CurrentPlayer)
                     continue;
 
                 if(player.Meal.Cards.Count > 0)

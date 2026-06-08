@@ -68,7 +68,7 @@ namespace TacoVsBurrito
         {
             selfPlayer.InitIndex(0);
             activePlayers.Add(selfPlayer);
-            GameManager.Instance.AddPlayerBeforeGameStarts(selfPlayer);
+            GameplayManager.Instance.AddPlayerBeforeGameStarts(selfPlayer);
         }
         void InitializeOpponentPlayer(GameObject opponentPrefab, int index)
         {
@@ -83,7 +83,7 @@ namespace TacoVsBurrito
             PlayerBase player = opponentPrefab.GetComponent<PlayerBase>();
             player.InitIndex(index);
             activePlayers.Add(player);
-            GameManager.Instance.AddPlayerBeforeGameStarts(player);
+            GameplayManager.Instance.AddPlayerBeforeGameStarts(player);
         }
 
         async Task InitCardShuffle()

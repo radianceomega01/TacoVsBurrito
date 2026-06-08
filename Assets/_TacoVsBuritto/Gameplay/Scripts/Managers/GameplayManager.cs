@@ -41,7 +41,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class GameManager : MonoBehaviour
+    public class GameplayManager : MonoBehaviour
     {
         [SerializeField] DrawPile drawPile;
         [SerializeField] TrashPile trashPile;
@@ -52,7 +52,7 @@ namespace TacoVsBurrito
         // -------------------------------------------------------
         //  Singleton
         // -------------------------------------------------------
-        public static GameManager Instance { get; private set; }
+        public static GameplayManager Instance { get; private set; }
 
         // -------------------------------------------------------
         //  Runtime state
@@ -70,7 +70,7 @@ namespace TacoVsBurrito
 
         // -------------------------------------------------------
 
-        private GameManager() { }
+        private GameplayManager() { }
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }

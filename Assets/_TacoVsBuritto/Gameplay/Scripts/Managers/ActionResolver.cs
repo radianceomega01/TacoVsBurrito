@@ -91,7 +91,7 @@ namespace TacoVsBurrito
             GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.GetType()}'s entire meal is trashed!");
 
             GameEvents.OnHealthInspectorSFX?.Invoke();
-            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer); // skip play phase       
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer); // skip play phase       
         }
 
         // ==========================================================
@@ -107,7 +107,7 @@ namespace TacoVsBurrito
 
             GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! card stolen from {victim.GetType()} meal");
 
-            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);       
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);       
         }
 
         // ==========================================================
@@ -145,7 +145,7 @@ namespace TacoVsBurrito
             _trashPile.RemoveCard(chosenCard);
             caster.Hand.AddCard(chosenCard);
             GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved '{chosenCard.Name}' from the Trash pile.");
-            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
         }
 
         // ==========================================================
@@ -191,7 +191,7 @@ namespace TacoVsBurrito
             otherMealCards.ForEach(c => caster.Meal.AddCard(c));
 
             GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.GetType()} swapped their hand and meal with {target.GetType()}!");
-            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
         }
     }
 }

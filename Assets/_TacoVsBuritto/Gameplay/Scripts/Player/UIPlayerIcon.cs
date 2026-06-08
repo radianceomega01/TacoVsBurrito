@@ -35,7 +35,7 @@ namespace TacoVsBurrito
 
         public void OnIconClick()
         {
-            GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(GameManager.Instance.CurrentPlayer, parentPlayer, null));
+            GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(GameplayManager.Instance.CurrentPlayer, parentPlayer, null));
             GameEvents.OnGUIClickSFX?.Invoke();
         }
         

@@ -20,7 +20,7 @@ namespace TacoVsBurrito
 
         public override void ExecuteAction()
         {
-            GameEvents.OnTurnEnded(GameManager.Instance.CurrentPlayer);
+            GameEvents.OnTurnEnded(GameplayManager.Instance.CurrentPlayer);
         }
         public override bool CanExecuteAction() => false;
         public int GetModifiedMealScore(int currentScore) => currentScore + cardValue;

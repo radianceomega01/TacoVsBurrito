@@ -57,6 +57,7 @@ namespace TacoVsBurrito
         public override void AddCardWithoutArranging(CardBase c)
         {
             _cards.Add(c);
+            SetCurrentPickupTargetToCard(c);
             c.ChangeScale(CARD_SCALE);
             c.ToggleBackFace(true);
             c.ToggleInteractionType(InteractionType.Drag);
@@ -126,11 +127,11 @@ namespace TacoVsBurrito
 
         protected override void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            if (GameManager.Instance.CurrentPlayer is SelfPlayer && turnState == TurnState.PlayPhase)
+            if (GameplayManager.Instance.CurrentPlayer is SelfPlayer && turnState == TurnState.PlayPhase)
             {
                 _cards.ForEach(card => card.EnableInteraction());
             }
-            else if (GameManager.Instance.CurrentPlayer is not SelfPlayer && turnState == TurnState.NoBuenoWindowPhase)
+            else if (GameplayManager.Instance.CurrentPlayer is not SelfPlayer && turnState == TurnState.NoBuenoWindowPhase)
             {
                 _cards.ForEach(card =>
                 {
@@ -153,7 +154,10 @@ namespace TacoVsBurrito
             AddCard(card);
         }
 
-        public void SetCurrentPickupTargetToCard(CardBase card) => card.SetCurrentPickupTarget(this);
+        public void SetCurrentPickupTargetToCard(CardBase card)
+        {
+            card.SetCurrentPickupTarget(this);
+        }
     }
 }
 

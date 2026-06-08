@@ -28,7 +28,7 @@ namespace TacoVsBurrito
 
         void Start()
         {
-            trashPile = GameManager.Instance.GetTrashPile();
+            trashPile = GameplayManager.Instance.GetTrashPile();
         }
 
         public async void PlayAction(CardBase card)
@@ -42,7 +42,7 @@ namespace TacoVsBurrito
             {
                 await Task.Delay(TRASH_DEALY_IN_MS);
                 trashPile.Trash(card);
-                GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+                GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
             }
         }
         void SetCardOnPile(CardBase card)
@@ -60,7 +60,9 @@ namespace TacoVsBurrito
         {
             if (currentTurnState == TurnState.NoBuenoWindowPhase && card is not NoBuenoCard)
                 return false;
-
+            if(DragManager.ActiveCard != card)
+                return false;
+                
             return true;
         }
         public void DropCardAfterDrag(CardBase card)

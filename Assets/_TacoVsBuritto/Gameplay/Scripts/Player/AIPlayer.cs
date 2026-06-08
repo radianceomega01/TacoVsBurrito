@@ -12,7 +12,7 @@ namespace TacoVsBurrito
         private AIBrain aIBrain;
         private DrawPile drawPile;
         private PlayArea playArea;
-        private IReadOnlyList<PlayerBase> _players => GameManager.Instance.Players;
+        private IReadOnlyList<PlayerBase> _players => GameplayManager.Instance.Players;
 
         const int CARD_DRAW_DELAY_IN_MS = 750;
         const int THINKING_DELAY_IN_MS = 1500;
@@ -59,8 +59,8 @@ namespace TacoVsBurrito
 
         void Start()
         {
-            drawPile = GameManager.Instance.GetDrawPile();
-            playArea = GameManager.Instance.GetPlayArea();
+            drawPile = GameplayManager.Instance.GetDrawPile();
+            playArea = GameplayManager.Instance.GetPlayArea();
 
             //aIBrain.SetDifficulty(difficulty);
             aIBrain.SetDifficulty(AIDifficulty.Hard);
@@ -88,7 +88,7 @@ namespace TacoVsBurrito
         async void PlayACard()
         {
             await Task.Delay(THINKING_DELAY_IN_MS);
-            AIDecision decision = aIBrain.Decide(this, GameManager.Instance.Players);
+            AIDecision decision = aIBrain.Decide(this, GameplayManager.Instance.Players);
 
             var card = Hand.GetAt(decision.cardIndex);
 

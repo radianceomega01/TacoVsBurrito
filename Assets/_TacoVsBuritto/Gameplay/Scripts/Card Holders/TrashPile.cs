@@ -51,7 +51,7 @@ namespace TacoVsBurrito
 
         public bool CanDrop(CardBase card)
         {
-            if (currentTurnState == TurnState.NoBuenoWindowPhase)
+            if (currentTurnState == TurnState.NoBuenoWindowPhase || DragManager.ActiveCard != card)
                 return false;
 
             return true;
@@ -59,7 +59,7 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             Trash(card);
-            GameEvents.OnTurnEnded?.Invoke(GameManager.Instance.CurrentPlayer);
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
         }
 
         public override void PutCardsBack(List<CardBase> cards)
