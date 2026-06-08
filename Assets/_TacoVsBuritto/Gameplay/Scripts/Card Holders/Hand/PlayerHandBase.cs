@@ -22,7 +22,15 @@ namespace TacoVsBurrito
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
         }
 
-        public abstract void AddCard(CardBase c);
+        public virtual void AddCard(CardBase c)
+        {
+            _cards.Add(c);
+            UpdateCountTxt();
+            if(c is NoBuenoCard noBuenoCard)
+            {
+                noBuenoCard.NoBuenoPlayer = GetComponentInParent<PlayerBase>();
+            }
+        }
         public abstract void AddCardWithoutArranging(CardBase c);
 
         public virtual void RemoveCard(CardBase c)

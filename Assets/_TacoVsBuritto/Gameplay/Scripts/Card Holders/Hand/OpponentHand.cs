@@ -10,12 +10,11 @@ namespace TacoVsBurrito
 
         public override void AddCard(CardBase c)
         {
-            _cards.Add(c);
+            base.AddCard(c);
             c.ToggleBackFace(true);
             c.DisableInteraction();
             c.ToggleInteractionType(InteractionType.Click);
             ArrangeCard(c);
-            UpdateCountTxt();
         }
 
         public override void AddCardWithoutArranging(CardBase c)

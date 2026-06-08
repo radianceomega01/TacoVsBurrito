@@ -5,6 +5,7 @@ namespace TacoVsBurrito
 {
     public class NoBuenoCard : ActionCardBase, IImmediateTypeAction
     {
+        public PlayerBase NoBuenoPlayer { get; set; }
         public override void ExecuteAction()
         {
             GameEvents.OnNoBuenoPlayed?.Invoke(this);

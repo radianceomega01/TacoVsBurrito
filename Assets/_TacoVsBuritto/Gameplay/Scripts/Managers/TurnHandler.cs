@@ -192,7 +192,11 @@ namespace TacoVsBurrito
                     trashPile.Trash(currentPlayedActionCard);
                     ManageTurnEnded(GameplayManager.Instance.CurrentPlayer);
                 }
-                noBuenoCardsPlayed.ForEach(card => trashPile.Trash(card));
+                noBuenoCardsPlayed.ForEach(card =>
+                {
+                    card.NoBuenoPlayer = null;
+                    trashPile.Trash(card);
+                });
                 noBuenoCardsPlayed.Clear();    
             }
             catch (TaskCanceledException)
@@ -203,7 +207,7 @@ namespace TacoVsBurrito
 
         void CheckAndResolveAction()
         {
-            if (currentPlayedActionCard != null && currentPlayedActionCard is ITargetTypeAction targetTyeCard) //No bueno is immediately executed
+            if (currentPlayedActionCard != null && currentPlayedActionCard is ITargetTypeAction targetTyeCard)
             {
                 GameEvents.OnActionResolved?.Invoke(currentPlayedActionCard);
                 targetTyeCard.ResolveAction();
@@ -223,15 +227,24 @@ namespace TacoVsBurrito
 
         async void ManageNoBuenoPlayed(NoBuenoCard noBuenoCard)
         {
-            //PLayer played no bueno as a regular action card in play area
-            if(currentPlayedActionCard == null || currentTurnState != TurnState.NoBuenoWindowPhase)
+            //Player played no bueno as a regular action card in play area or no bueno phase expired
+            if(currentTurnState != TurnState.NoBuenoWindowPhase)
             {
+                if(currentPlayedActionCard != null) //means no bueno time expired
+                {
+                    noBuenoCard.NoBuenoPlayer.Hand.AddCard(noBuenoCard);
+                }
+                else // means played on play area in play phase 
+                {
+                    await Task.Delay(CARD_TRASH_DELAY_IN_MS);
+                    noBuenoCard.NoBuenoPlayer = null;
+                    trashPile.Trash(noBuenoCard);
+                }
                 GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
-                await Task.Delay(CARD_TRASH_DELAY_IN_MS);
-                trashPile.Trash(noBuenoCard);
                 return;
             }
 
+            //Valid no bueno thown during no bueno phase
             noBuenoCardsPlayed.Add(noBuenoCard);
             SwitchState(TurnState.NoBuenoWindowPhase);
             StartNoBuenoTimer();

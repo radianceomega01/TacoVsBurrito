@@ -46,13 +46,12 @@ namespace TacoVsBurrito
 
         public override void AddCard(CardBase c)
         {
-            _cards.Add(c);
+            base.AddCard(c);
             SetCurrentPickupTargetToCard(c);
             c.ChangeScale(CARD_SCALE);
             c.ToggleBackFace(false);
             c.ToggleInteractionType(InteractionType.Drag);
             ArrangeCardsAnimated();
-            UpdateCountTxt();
         }
         public override void AddCardWithoutArranging(CardBase c)
         {
