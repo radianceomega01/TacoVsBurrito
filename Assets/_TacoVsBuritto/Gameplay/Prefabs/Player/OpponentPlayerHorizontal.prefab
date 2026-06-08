@@ -57,6 +57,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 621483742508408057, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1412432366042105381, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
       propertyPath: m_text
       value: BOT
@@ -152,6 +156,10 @@ PrefabInstance:
     - target: {fileID: 7887847195910679844, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
       propertyPath: m_Name
       value: OpponentPlayerHorizontal
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481452208605055907, guid: 464d0dff88c576c4c9f22dff597240a9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

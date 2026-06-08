@@ -66,7 +66,7 @@ namespace TacoVsBurrito
 
         void InitializeSelfPlayer()
         {
-            selfPlayer.InitIndex(0);
+            selfPlayer.Init(0, "You");
             activePlayers.Add(selfPlayer);
             GameplayManager.Instance.AddPlayerBeforeGameStarts(selfPlayer);
         }
@@ -81,7 +81,7 @@ namespace TacoVsBurrito
                 opponentPrefab.AddComponent<HumanPlayer>();
             }
             PlayerBase player = opponentPrefab.GetComponent<PlayerBase>();
-            player.InitIndex(index);
+            player.Init(index, $"Bot {index}");
             activePlayers.Add(player);
             GameplayManager.Instance.AddPlayerBeforeGameStarts(player);
         }

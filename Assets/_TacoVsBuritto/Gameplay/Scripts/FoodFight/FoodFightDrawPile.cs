@@ -35,7 +35,8 @@ namespace TacoVsBurrito
         public void OnDrawBtnClicked()
         {
             CardBase card = drawPile.FlipTop();
-            card.ChangePosition(GetOffsetPositionForCard(currentPlayer.transform.position));
+            //card.ChangePosition(GetOffsetPositionForCard(currentPlayer.transform.position));
+            card.ChangePosition(currentPlayer.GetFoodFightCardPosition());
             card.SetAsLastSibbling();
             card.ToggleBackFace(false);
             cardsDrawn.Add(card);
@@ -44,14 +45,14 @@ namespace TacoVsBurrito
             GameEvents.OnCardMovedSFX?.Invoke();
         }
 
-        public Vector3 GetOffsetPositionForCard(Vector3 playerPosition)
-        {
-            Vector3 modifiedPilePosition = new Vector3(playerPosition.x, transform.position.y, transform.position.z);
-            Vector3 directionToPlayer = (playerPosition - modifiedPilePosition).normalized;
-            Vector3 finalPosition = modifiedPilePosition + directionToPlayer * CARD_DRAWN_OFFSET_FROM_PILE;
+        // public Vector3 GetOffsetPositionForCard(Vector3 playerPosition)
+        // {
+        //     Vector3 modifiedPilePosition = new Vector3(playerPosition.x, transform.position.y, transform.position.z);
+        //     Vector3 directionToPlayer = (playerPosition - modifiedPilePosition).normalized;
+        //     Vector3 finalPosition = modifiedPilePosition + directionToPlayer * CARD_DRAWN_OFFSET_FROM_PILE;
 
-            return finalPosition;
-        }
+        //     return finalPosition;
+        // }
 
         public void UpdateCurrentPlayer(PlayerBase player) => currentPlayer = player;
 

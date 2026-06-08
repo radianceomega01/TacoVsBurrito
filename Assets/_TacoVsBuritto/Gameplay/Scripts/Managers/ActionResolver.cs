@@ -88,7 +88,7 @@ namespace TacoVsBurrito
             var mealContents = victim.Meal.TakeAll();
             _trashPile.TrashAll(mealContents);
 
-            GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.GetType()}'s entire meal is trashed!");
+            GameEvents.OnLogMessage?.Invoke($"🚨 HEALTH INSPECTOR! {victim.Name}'s entire meal is trashed!");
 
             GameEvents.OnHealthInspectorSFX?.Invoke();
             GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer); // skip play phase       
@@ -105,7 +105,7 @@ namespace TacoVsBurrito
             caster.Meal.AddCard(stealTarget);
             victim.Meal.RemoveCard(stealTarget);
 
-            GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! card stolen from {victim.GetType()} meal");
+            GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! card stolen from {victim.Name} meal");
 
             GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);       
         }
@@ -138,7 +138,7 @@ namespace TacoVsBurrito
             {
                 // Health Inspector triggers IMMEDIATELY when taken from trash
                 ResolveHealthInspector(caster);
-                GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.GetType()} retrieved a Health Inspector from the Trash");
+                GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved a Health Inspector from the Trash");
                 return;        
             }
 
@@ -161,7 +161,7 @@ namespace TacoVsBurrito
             {
                 // Health Inspector triggers IMMEDIATELY when taken from trash
                 ResolveHealthInspector(winner);
-                GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT! {winner.GetType()} selected a Health Inspector");
+                GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT! {winner.Name} selected a Health Inspector");
                 return;        
             }
             winner.Hand.AddCard(chosenCard);
@@ -190,7 +190,7 @@ namespace TacoVsBurrito
             currentMealCards.ForEach(c => target.Meal.AddCard(c));
             otherMealCards.ForEach(c => caster.Meal.AddCard(c));
 
-            GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.GetType()} swapped their hand and meal with {target.GetType()}!");
+            GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.Name} swapped their hand and meal with {target.Name}!");
             GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
         }
     }

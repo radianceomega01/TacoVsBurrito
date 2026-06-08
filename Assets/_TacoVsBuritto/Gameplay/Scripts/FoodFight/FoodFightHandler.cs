@@ -77,15 +77,19 @@ namespace TacoVsBurrito
 
         PlayerBase GetNextPlayer()
         {
-            currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.Count;
-            PlayerBase nextPlayer = activePlayersInRound.Find(x => x.Index == currentPlayerIndex);
-            if (nextPlayer == null) //Player was eliminated in the round, find the next available player
+            for (int i = 0; i < allPlayers.Count; i++)
             {
-                GetNextPlayer();
-            }
-            return nextPlayer;
+                currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.Count;
 
+                PlayerBase nextPlayer =
+                    activePlayersInRound.Find(x => x.Index == currentPlayerIndex);
+
+                if (nextPlayer != null)
+                    return nextPlayer;
+            }
+            throw new InvalidOperationException("No active player found.");
         }
+
         void ActivateFoodFightDrawPile()
         {
             //drawPile.enabled = false;
@@ -119,7 +123,7 @@ namespace TacoVsBurrito
             activePlayersInRound = GetPromotedPlayers();
             if (activePlayersInRound.Count == 1)
             {
-                GameEvents.OnLogMessage?.Invoke(activePlayersInRound[0].GetType() + " won the FoodFight!");
+                GameEvents.OnLogMessage?.Invoke(activePlayersInRound[0].Name + " won the FoodFight!");
                 FinishFoodFight(activePlayersInRound[0]);
             }
             else
@@ -152,7 +156,7 @@ namespace TacoVsBurrito
             if (drawPile.IsDrawPileEmpty || drawPile.PileCards.Count < GameplayManager.Instance.Players.Count)
             {
                 GameEvents.OnLogMessage?.Invoke("Food Fight cancelled due to insifficient cards in Draw Pile!");
-                if(foodFightDrawPile != null)
+                if (foodFightDrawPile != null)
                 {
                     DeactivateFoodFightDrawPile();
                 }

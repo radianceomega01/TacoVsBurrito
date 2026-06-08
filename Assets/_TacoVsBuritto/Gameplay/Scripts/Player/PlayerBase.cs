@@ -42,12 +42,16 @@ namespace TacoVsBurrito
             GameEvents.OnFoodFightOver -= ManagePlayerOnFoodFightOver;
         }
 
-        public void InitIndex(int index)
+        public void Init(int index, string name)
         {
             Index = index;
+            Name = name;
+            fullScaleView.SetName(name);
+            minifiedView.SetName(name);
         }
 
         public int Score => Meal.CalculateScore();
+        public Vector3 GetFoodFightCardPosition() => minifiedView.GetFoodFightCardPosition();
 
         protected void ManagePlayerOnFoodFightOver()
         {
