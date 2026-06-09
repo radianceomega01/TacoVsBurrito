@@ -194,7 +194,6 @@ namespace TacoVsBurrito
                 }
                 noBuenoCardsPlayed.ForEach(card =>
                 {
-                    card.NoBuenoPlayer = null;
                     trashPile.Trash(card);
                 });
                 noBuenoCardsPlayed.Clear();    
@@ -230,15 +229,14 @@ namespace TacoVsBurrito
             //Player played no bueno as a regular action card in play area or no bueno phase expired
             if(currentTurnState != TurnState.NoBuenoWindowPhase)
             {
-                if(currentPlayedActionCard != null) //means no bueno time expired
-                {
-                    noBuenoCard.NoBuenoPlayer.Hand.AddCard(noBuenoCard);
-                }
-                else // means played on play area in play phase 
+                if(currentTurnState == TurnState.PlayPhase) // means played on play area in play phase
                 {
                     await Task.Delay(CARD_TRASH_DELAY_IN_MS);
-                    noBuenoCard.NoBuenoPlayer = null;
                     trashPile.Trash(noBuenoCard);
+                }
+                else //means no bueno time expired 
+                {
+                    noBuenoCard.NoBuenoPlayer.Hand.AddCard(noBuenoCard);
                 }
                 GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
                 return;
