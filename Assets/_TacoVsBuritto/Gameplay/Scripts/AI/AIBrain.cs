@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class AIBrain: MonoBehaviour
+    public class AIBrain : MonoBehaviour
     {
         AIDifficulty difficulty = AIDifficulty.Easy;
 
@@ -27,9 +27,9 @@ namespace TacoVsBurrito
         {
             return difficulty switch
             {
-                AIDifficulty.Easy  => DecideEasy(ai, allPlayers),
-                AIDifficulty.Hard  => DecideHard(ai, allPlayers),
-                _                  => DecideNormal(ai, allPlayers)
+                AIDifficulty.Easy => DecideEasy(ai, allPlayers),
+                AIDifficulty.Hard => DecideHard(ai, allPlayers),
+                _ => DecideNormal(ai, allPlayers)
             };
         }
 
@@ -41,7 +41,7 @@ namespace TacoVsBurrito
             int idx = Random.Range(0, ai.Hand.Count);
             var card = ai.Hand.GetAt(idx);
 
-            if(card is NoBuenoCard)
+            if (card is NoBuenoCard)
                 DecideEasy(ai, allPlayers); // don't play No Bueno
 
             int dest = -1; // default trash pile
@@ -50,7 +50,7 @@ namespace TacoVsBurrito
                 if (card is TummyAcheCard)
                     dest = PickRandomOpponent(ai, allPlayers);
                 else
-                    dest = ai.Index;    
+                    dest = ai.Index;
             }
 
             return new AIDecision { cardIndex = idx, destIndex = dest };
@@ -82,12 +82,12 @@ namespace TacoVsBurrito
             // Priority 4: Play any action card
             int act = FindFirstAction(ai, typeof(CraftyCrowCard),
                                         typeof(TrashPandaCard),
-                                        typeof(FoodFightCard));                              
+                                        typeof(FoodFightCard));
             if (act >= 0)
-                return new AIDecision { cardIndex = act, destIndex = -1};
+                return new AIDecision { cardIndex = act, destIndex = -1 };
 
             // // Fallback: discard first card
-             return new AIDecision { cardIndex = 0, destIndex = -1 };
+            return new AIDecision { cardIndex = 0, destIndex = -1 };
         }
 
         // ===========================================================
@@ -106,7 +106,7 @@ namespace TacoVsBurrito
             {
                 var leader = GetLeader(ai, allPlayers);
                 if (leader != null && leader.Meal.HotSauceBossCardCount > 0)
-                    return new AIDecision { cardIndex = cc, destIndex = -1};
+                    return new AIDecision { cardIndex = cc, destIndex = -1 };
             }
 
             // 3. Order Envy if leader has way more points
@@ -129,8 +129,11 @@ namespace TacoVsBurrito
             // 6. Tummy ache to leader
             int ta = FindFirstInHand<TummyAcheCard>(ai);
             if (ta >= 0)
-                return new AIDecision { cardIndex = ta,
-                    destIndex = GetLeaderIndex(ai, allPlayers) };
+                return new AIDecision
+                {
+                    cardIndex = ta,
+                    destIndex = GetLeaderIndex(ai, allPlayers)
+                };
 
             // 7. Trash Panda
             int tp = FindFirstAction(ai, typeof(TrashPandaCard));
@@ -147,7 +150,7 @@ namespace TacoVsBurrito
                 var victim = allPlayers.Where(p => p != ai && p.Meal.Cards.Count > 0)
                                        .OrderByDescending(p => p.Score).FirstOrDefault();
                 if (victim != null)
-                    return new AIDecision { cardIndex = cc, destIndex = -1};
+                    return new AIDecision { cardIndex = cc, destIndex = -1 };
             }
 
             return new AIDecision { cardIndex = 0, destIndex = -1 };
@@ -170,7 +173,7 @@ namespace TacoVsBurrito
             if (cardBeingPlayed is TummyAcheCard &&
                 ai.Meal.HotSauceBossCardCount > 0) return true;
 
-            if (cardBeingPlayed is NoBuenoCard) return true;    
+            if (cardBeingPlayed is NoBuenoCard) return true;
 
             return false;
         }
@@ -195,8 +198,9 @@ namespace TacoVsBurrito
         }
         public void ChooseCraftyCrowVictim(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers, out PlayerBase victim, out CardBase cardToSteal)
         {
-            victim = GetLeader(ai, allPlayers);
-            cardToSteal = PickBestCardFromOpponent(victim);
+            victim = GetPlayerWithHotSauceBoss(ai, allPlayers);
+            if (victim = null) victim = GetLeader(ai, allPlayers);
+            cardToSteal = PickBestCardFromOpponentMeal(victim);
         }
 
         private int FindBestIngredient(PlayerBase p)
@@ -217,7 +221,7 @@ namespace TacoVsBurrito
             {
                 var card = p.Hand.GetAt(i);
 
-                if (card is not ActionCardBase) 
+                if (card is not ActionCardBase)
                     continue;
 
                 foreach (var type in actionTypes)
@@ -245,20 +249,31 @@ namespace TacoVsBurrito
             var others = all.Where(p => p != ai).ToList();
             return others.Count > 0 ? others[Random.Range(0, others.Count)].Index : -1;
         }
-        private CardBase PickBestCardFromOpponent(PlayerBase opponent)
+        private CardBase PickBestCardFromOpponentMeal(PlayerBase opponent)
         {
             return opponent.Meal.Cards.OrderByDescending(c => c is HotSauceBossCard ? 100 : (c is IngredientCardBase ib ? ib.CardValue : 0)).FirstOrDefault();
+        }
+        private PlayerBase GetPlayerWithHotSauceBoss(AIPlayer ai, IReadOnlyList<PlayerBase> players)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i] == ai)
+                    continue;
+                if (players[i].Meal.HotSauceBossCardCount > 0)
+                    return players[i];
+            }
+            return null;
         }
         public CardBase PickBestCardFromCardPile(List<CardBase> cards)
         {
             return cards.OrderByDescending(c =>
             {
-                if(c is HotSauceBossCard) return 100;
-                else if(c is OrderEnvyCard) return 90;
-                else if(c is CraftyCrowCard) return 80;
-                else if(c is NoBuenoCard) return 70;
-                else if(c is TrashPandaCard) return 60;
-                else if(c is FoodFightCard) return 50;
+                if (c is HotSauceBossCard) return 100;
+                else if (c is OrderEnvyCard) return 90;
+                else if (c is CraftyCrowCard) return 80;
+                else if (c is NoBuenoCard) return 70;
+                else if (c is TrashPandaCard) return 60;
+                else if (c is FoodFightCard) return 50;
                 else if (c is IValueTypeCard valueCard) return valueCard.GetValue();
                 else return 0;
             }).FirstOrDefault();
