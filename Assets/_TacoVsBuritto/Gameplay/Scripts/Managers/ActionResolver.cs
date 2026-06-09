@@ -107,7 +107,7 @@ namespace TacoVsBurrito
 
             GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! card stolen from {victim.Name} meal");
 
-            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);       
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
         }
 
         // ==========================================================
@@ -139,7 +139,7 @@ namespace TacoVsBurrito
                 // Health Inspector triggers IMMEDIATELY when taken from trash
                 ResolveHealthInspector(caster);
                 GameEvents.OnLogMessage?.Invoke($"🦝 Trash Panda! {caster.Name} retrieved a Health Inspector from the Trash");
-                return;        
+                return;
             }
 
             _trashPile.RemoveCard(chosenCard);
@@ -162,7 +162,7 @@ namespace TacoVsBurrito
                 // Health Inspector triggers IMMEDIATELY when taken from trash
                 ResolveHealthInspector(winner);
                 GameEvents.OnLogMessage?.Invoke($"🍽 FOOD FIGHT! {winner.Name} selected a Health Inspector");
-                return;        
+                return;
             }
             winner.Hand.AddCard(chosenCard);
             GameEvents.OnTurnChangedInFoodFight?.Invoke(winner);
@@ -179,11 +179,14 @@ namespace TacoVsBurrito
         /// After swap, cannot be blocked.
         public void ResolveOrderEnvy(PlayerBase caster, PlayerBase target)
         {
-            //caster.SwapMeal(target);
-            List<CardBase> currentPlayerCards = caster.Hand.TakeAll();
-            List<CardBase> otherPlayerCards = target.Hand.TakeAll();
-            currentPlayerCards.ForEach(c => target.Hand.AddCard(c));
-            otherPlayerCards.ForEach(c => caster.Hand.AddCard(c));
+            //Swap Meal only if it is last hand card. Else swap hand and meal both
+            if (GameplayManager.Instance.CurrentPlayer.Hand.Count > 0)
+            {
+                List<CardBase> currentPlayerCards = caster.Hand.TakeAll();
+                List<CardBase> otherPlayerCards = target.Hand.TakeAll();
+                currentPlayerCards.ForEach(c => target.Hand.AddCard(c));
+                otherPlayerCards.ForEach(c => caster.Hand.AddCard(c));
+            }
 
             List<CardBase> currentMealCards = caster.Meal.TakeAll();
             List<CardBase> otherMealCards = target.Meal.TakeAll();

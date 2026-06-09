@@ -102,8 +102,18 @@ namespace TacoVsBurrito
                 card.ExecuteAction();
                 return;
             }
+            
             if(card.CanExecuteAction())
-                ManageStartNoBuenoInterruptWindow(card);
+            {
+                if(CurrentPlayer.Hand.Count == 0) // Last Hand card played Nobueno cannot be done
+                {
+                    SwitchState(TurnState.ActionResolvePhase);
+                    //CheckAndResolveAction();
+                    CheckAndExecuteAction();
+                }
+                else
+                    ManageStartNoBuenoInterruptWindow(card);
+            }
             else
             {
                 await Task.Delay(CARD_TRASH_DELAY_IN_MS);
