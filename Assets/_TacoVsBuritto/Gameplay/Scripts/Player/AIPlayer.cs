@@ -130,7 +130,7 @@ namespace TacoVsBurrito
         {
             if(!isSelfTurnRunning)
                 return;
-
+            Debug.LogWarning("arrived for craftycrow");    
             aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
             if (victim != null)
                 GameEvents.OnCardClickedForActionTarget?.Invoke(cardToSteal);
@@ -140,7 +140,7 @@ namespace TacoVsBurrito
         {
             if(!isSelfTurnRunning)
                 return;
-
+            Debug.LogWarning("arrived for trash panda");
             await Task.Delay(THINKING_DELAY_IN_MS);
             CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
             GameEvents.OnCardClickedForActionTarget?.Invoke(cardPicked);

@@ -22,7 +22,7 @@ namespace TacoVsBurrito
         private void ManageGameWinner(Tuple<PlayerBase, int> winnerWithScore)
         {
             container.gameObject.SetActive(true);
-            panelTxt.SetText($"Player {winnerWithScore.Item1} won the game with score {winnerWithScore.Item2}!");
+            panelTxt.SetText($"Player {winnerWithScore.Item1.Name} won the game with score {winnerWithScore.Item2}!");
         }
         public void RestartGame()
         {

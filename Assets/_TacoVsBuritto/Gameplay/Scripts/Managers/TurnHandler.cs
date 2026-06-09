@@ -31,7 +31,6 @@ namespace TacoVsBurrito
             GameEvents.OnTurnChangedInFoodFight += ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPileEmpty += ManageDrawPileEmpty;
             GameEvents.OnActionCardPlayed += ManageActionCardPlayed;
-            GameEvents.OnStartNoBuenoInterruptWindow += ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
             GameEvents.OnPlayerAndTurnStateChanged += ManagePlayerAndStateChanged;
 
@@ -48,7 +47,6 @@ namespace TacoVsBurrito
             GameEvents.OnTurnChangedInFoodFight -= ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPileEmpty -= ManageDrawPileEmpty;
             GameEvents.OnActionCardPlayed -= ManageActionCardPlayed;
-            GameEvents.OnStartNoBuenoInterruptWindow -= ManageStartNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
             GameEvents.OnPlayerAndTurnStateChanged -= ManagePlayerAndStateChanged;
 
@@ -102,7 +100,7 @@ namespace TacoVsBurrito
                 card.ExecuteAction();
                 return;
             }
-            
+
             if(card.CanExecuteAction())
             {
                 if(CurrentPlayer.Hand.Count == 0) // Last Hand card played Nobueno cannot be done
@@ -176,12 +174,13 @@ namespace TacoVsBurrito
         void ManageStartNoBuenoInterruptWindow(ActionCardBase card)
         {
             SwitchState(TurnState.NoBuenoWindowPhase);
+            Debug.LogWarning("ManageStartNoBuenoInterruptWindow");
             StartNoBuenoTimer();
         }
+        
         async void StartNoBuenoTimer()
         {
             noBuenoTimerCts?.Cancel();
-
             noBuenoTimerCts = new CancellationTokenSource();
             try
             {
@@ -243,18 +242,19 @@ namespace TacoVsBurrito
                 {
                     await Task.Delay(CARD_TRASH_DELAY_IN_MS);
                     trashPile.Trash(noBuenoCard);
+                    GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
                 }
                 else //means no bueno time expired 
                 {
                     noBuenoCard.NoBuenoPlayer.Hand.AddCard(noBuenoCard);
                 }
-                GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
                 return;
             }
 
             //Valid no bueno thown during no bueno phase
             noBuenoCardsPlayed.Add(noBuenoCard);
             SwitchState(TurnState.NoBuenoWindowPhase);
+            Debug.LogWarning("ManageNoBuenoPlayed");
             StartNoBuenoTimer();
         }
         

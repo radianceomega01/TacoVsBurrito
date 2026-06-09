@@ -199,7 +199,7 @@ namespace TacoVsBurrito
         public void ChooseCraftyCrowVictim(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers, out PlayerBase victim, out CardBase cardToSteal)
         {
             victim = GetPlayerWithHotSauceBoss(ai, allPlayers);
-            if (victim = null) victim = GetLeader(ai, allPlayers);
+            if (victim == null) victim = GetLeader(ai, allPlayers);
             cardToSteal = PickBestCardFromOpponentMeal(victim);
         }
 
