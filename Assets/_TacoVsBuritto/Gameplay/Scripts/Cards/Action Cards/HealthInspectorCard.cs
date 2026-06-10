@@ -15,6 +15,6 @@ namespace TacoVsBurrito
             resolver.ResolveHealthInspector(GameplayManager.Instance.CurrentPlayer);
         }
         
-        public override TurnState GetStateOnTrashed() => TurnState.ActionResolvePhase;
+        public override TurnState GetStateOnPlayed() => TurnState.ActionResolvePhase;
     }
 }

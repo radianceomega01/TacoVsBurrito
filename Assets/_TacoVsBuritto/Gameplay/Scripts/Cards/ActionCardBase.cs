@@ -8,7 +8,6 @@ namespace TacoVsBurrito
     public abstract class ActionCardBase : CardBase
     {
         protected const int EXECUTION_DEALY_IN_MS = 500;
-        public bool IsTargetTypeAction => GetStateOnTrashed() == TurnState.ActionTargetPhase;
         protected ActionResolver resolver;
 
         protected override void OnEnable() {
@@ -27,6 +26,6 @@ namespace TacoVsBurrito
         
         public abstract void ExecuteAction();
         public virtual bool CanExecuteAction() => true;
-        public virtual TurnState GetStateOnTrashed() => TurnState.ActionResolvePhase; 
+        public virtual TurnState GetStateOnPlayed() => TurnState.ActionResolvePhase; 
     }
 }

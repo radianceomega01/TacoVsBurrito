@@ -85,7 +85,7 @@ namespace TacoVsBurrito
         void SwitchState(TurnState turnState)
         {
             currentTurnState = turnState;
-            Debug.Log($"State changed for player {CurrentPlayer.GetType()} to {turnState.ToString()}");
+            Debug.Log($"State changed for player {CurrentPlayer.Name} to {turnState.ToString()}");
             GameEvents.OnTurnStateChanged?.Invoke(turnState, CurrentPlayer);
         }
 
@@ -105,12 +105,13 @@ namespace TacoVsBurrito
             {
                 if(CurrentPlayer.Hand.Count == 0) // Last Hand card played Nobueno cannot be done
                 {
-                    SwitchState(TurnState.ActionResolvePhase);
                     //CheckAndResolveAction();
                     CheckAndExecuteAction();
                 }
                 else
-                    ManageStartNoBuenoInterruptWindow(card);
+                {
+                    ManageStartNoBuenoInterruptWindow();
+                }
             }
             else
             {
@@ -171,10 +172,9 @@ namespace TacoVsBurrito
         {
             isDrawPileEmpty = true;
         }
-        void ManageStartNoBuenoInterruptWindow(ActionCardBase card)
+        void ManageStartNoBuenoInterruptWindow()
         {
             SwitchState(TurnState.NoBuenoWindowPhase);
-            Debug.LogWarning("ManageStartNoBuenoInterruptWindow");
             StartNoBuenoTimer();
         }
         
@@ -192,7 +192,6 @@ namespace TacoVsBurrito
                 GameEvents.OnLogMessage?.Invoke("⏰ No Bueno window expired!");
                 if(noBuenoCardsPlayed.Count % 2 == 0)
                 {
-                    SwitchState(TurnState.ActionResolvePhase);
                     //CheckAndResolveAction();
                     CheckAndExecuteAction();
                 }
@@ -225,11 +224,13 @@ namespace TacoVsBurrito
         {
             if (currentPlayedActionCard != null && currentPlayedActionCard is not NoBuenoCard) //No bueno is immediately executed
             {
-                currentPlayedActionCard.ExecuteAction();
                 if(currentPlayedActionCard is ITargetTypeAction)
                 {
                     SwitchState(TurnState.ActionTargetPhase);
                 }
+                else
+                    SwitchState(TurnState.ActionResolvePhase);
+                currentPlayedActionCard.ExecuteAction();
             }
         }
 
@@ -253,15 +254,14 @@ namespace TacoVsBurrito
 
             //Valid no bueno thown during no bueno phase
             noBuenoCardsPlayed.Add(noBuenoCard);
-            SwitchState(TurnState.NoBuenoWindowPhase);
-            Debug.LogWarning("ManageNoBuenoPlayed");
-            StartNoBuenoTimer();
+            ManageStartNoBuenoInterruptWindow();
         }
         
         void ManageTargetAction(TargetTypeContext context)
         {
             if(currentPlayedActionCard is ITargetTypeAction targetTypeCard)
             {
+                SwitchState(TurnState.ActionResolvePhase);
                 targetTypeCard.OnActionTargeted(context);
             }
         }

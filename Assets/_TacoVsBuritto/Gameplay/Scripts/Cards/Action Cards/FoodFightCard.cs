@@ -44,6 +44,6 @@ namespace TacoVsBurrito
             return true;
         }
         
-        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
+        public override TurnState GetStateOnPlayed() => TurnState.NoBuenoWindowPhase;
     }
 }

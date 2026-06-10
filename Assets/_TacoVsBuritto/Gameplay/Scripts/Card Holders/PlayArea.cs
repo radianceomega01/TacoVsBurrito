@@ -10,8 +10,7 @@ namespace TacoVsBurrito
 {
     public class PlayArea : CardPileBase, ICardDropTarget
     {
-        private TurnState currentTurnState; 
-        private CardBase currentPlayedCard;
+        private TurnState currentTurnState;
         private TrashPile trashPile;
 
         private const int TRASH_DEALY_IN_MS = 500;
@@ -47,7 +46,6 @@ namespace TacoVsBurrito
         }
         void SetCardOnPile(CardBase card)
         {
-            currentPlayedCard = card;
             card.ChangeScale(CARD_SCALE);
             card.ChangePosition(cardsParent.position);
             card.ChangeParent(cardsParent);
@@ -74,10 +72,6 @@ namespace TacoVsBurrito
         void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {
             currentTurnState = state;
-            if(state == TurnState.ActionResolvePhase)
-            {
-                currentPlayedCard = null;
-            }
         }
     }
 }

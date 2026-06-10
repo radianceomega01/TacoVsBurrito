@@ -25,6 +25,6 @@ namespace TacoVsBurrito
             resolver.ResolveOrderEnvy(targetTypeContext.caster, targetTypeContext.victim);
             targetTypeContext = default;
         }
-        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
+        public override TurnState GetStateOnPlayed() => TurnState.ActionTargetPhase;
     }
 }

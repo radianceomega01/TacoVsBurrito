@@ -10,6 +10,6 @@ namespace TacoVsBurrito
         {
             GameEvents.OnNoBuenoPlayed?.Invoke(this);
         }
-        public override TurnState GetStateOnTrashed() => TurnState.NoBuenoWindowPhase;
+        public override TurnState GetStateOnPlayed() => TurnState.NoBuenoWindowPhase;
     }
 }

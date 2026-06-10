@@ -39,6 +39,6 @@ namespace TacoVsBurrito
             }
             return true;
         }
-        public override TurnState GetStateOnTrashed() => TurnState.ActionTargetPhase;
+        public override TurnState GetStateOnPlayed() => TurnState.ActionTargetPhase;
     }
 }

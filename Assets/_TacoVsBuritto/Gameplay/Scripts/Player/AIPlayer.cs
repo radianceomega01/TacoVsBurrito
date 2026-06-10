@@ -111,6 +111,7 @@ namespace TacoVsBurrito
             {
                 if (state == TurnState.PlayPhase)
                 {
+                    Debug.LogWarning("state: "+ state.ToString() +"player: "+ player.Name);
                     PlayACard();
                 }
             }
@@ -120,7 +121,7 @@ namespace TacoVsBurrito
         {
             if(!isSelfTurnRunning)
                 return;
-                
+
             var envyVictim = aIBrain.ChooseOrderEnvyVictim(this, _players);
             if (envyVictim != null)
                 GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(this, envyVictim, null));
@@ -140,7 +141,7 @@ namespace TacoVsBurrito
         {
             if(!isSelfTurnRunning)
                 return;
-            Debug.LogWarning("arrived for trash panda");
+
             await Task.Delay(THINKING_DELAY_IN_MS);
             CardBase cardPicked = aIBrain.PickBestCardFromCardPile(dictionary.Keys.ToList());
             GameEvents.OnCardClickedForActionTarget?.Invoke(cardPicked);

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21f2bbada50d24b24b1a02bf95209ea3, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GameDataSO
-  numOfPlayers: 0
+  numOfPlayers: 4
