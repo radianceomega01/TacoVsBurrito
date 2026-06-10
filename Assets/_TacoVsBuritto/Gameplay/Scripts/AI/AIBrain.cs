@@ -160,18 +160,19 @@ namespace TacoVsBurrito
         //  No Bueno reaction
         // ===========================================================
         /// Returns true if the AI should play No Bueno against this card.
-        public bool ShouldPlayNoBueno(AIPlayer ai, CardBase cardBeingPlayed)
+        public bool ShouldPlayNoBueno(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers, CardBase cardBeingPlayed)
         {
             // Always block Order Envy targeting us
-            if (cardBeingPlayed is OrderEnvyCard) return true;
+            if (cardBeingPlayed is OrderEnvyCard && IsCurrentlyWinning(ai, allPlayers)) return true;
 
             // Block Crafty Crow if we have a Hot Sauce Boss in our meal
             if (cardBeingPlayed is CraftyCrowCard &&
-                ai.Meal.HotSauceBossCardCount > 0) return true;
+                ai.Meal.HotSauceBossCardCount > 0 && 
+                IsCurrentlyWinning(ai, allPlayers)) return true;
 
             // Block a Tummy Ache being placed in our meal if we have Hot Sauce Boss
-            if (cardBeingPlayed is TummyAcheCard &&
-                ai.Meal.HotSauceBossCardCount > 0) return true;
+            // if (cardBeingPlayed is TummyAcheCard &&
+            //     ai.Meal.HotSauceBossCardCount > 0) return true;
 
             if (cardBeingPlayed is NoBuenoCard) return true;
 
@@ -252,6 +253,10 @@ namespace TacoVsBurrito
         private CardBase PickBestCardFromOpponentMeal(PlayerBase opponent)
         {
             return opponent.Meal.Cards.OrderByDescending(c => c is HotSauceBossCard ? 100 : (c is IngredientCardBase ib ? ib.CardValue : 0)).FirstOrDefault();
+        }
+        private bool IsCurrentlyWinning(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
+        {
+            return allPlayers.OrderByDescending(p => p.Score).FirstOrDefault() == ai;
         }
         private PlayerBase GetPlayerWithHotSauceBoss(AIPlayer ai, IReadOnlyList<PlayerBase> players)
         {

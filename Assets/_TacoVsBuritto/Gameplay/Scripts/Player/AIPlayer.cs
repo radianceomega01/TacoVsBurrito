@@ -175,10 +175,10 @@ namespace TacoVsBurrito
 
         void AIConsiderNoBueno(CardBase cardBeingPlayed)
         {
-            // if (aIBrain.ShouldPlayNoBueno(this, cardBeingPlayed))
-            // {
-            //     PlayNoBueno();
-            // }
+            if (aIBrain.ShouldPlayNoBueno(this, _players, cardBeingPlayed))
+            {
+                PlayNoBueno();
+            }
         }
         async void PlayNoBueno()
         {
