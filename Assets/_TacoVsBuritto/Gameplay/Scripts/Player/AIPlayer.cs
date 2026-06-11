@@ -20,6 +20,7 @@ namespace TacoVsBurrito
 
         bool isSelfTurnRunning = false;
         int noBuenoCounter = 0;
+        PlayerBase lastNoBuenoPlayer;
 
         protected override void Awake()
         {
@@ -161,10 +162,12 @@ namespace TacoVsBurrito
         void ManageNoBuenoInterruptWindow(ActionCardBase card)
         {
             if (!isSelfTurnRunning)
+            {
                 AIConsiderNoBueno(card);
+            }
             else
             {
-                if (noBuenoCounter % 2 == 1 && card is NoBuenoCard) //AI tries to cancel others nobueno for his action card
+                if (noBuenoCounter % 2 == 1 && card is NoBuenoCard && lastNoBuenoPlayer != this) //AI tries to cancel others nobueno for his action card
                 {
                     PlayNoBueno();
                 }
@@ -173,11 +176,12 @@ namespace TacoVsBurrito
         void ManageNoBuenoPlayed(NoBuenoCard card)
         {
             noBuenoCounter++;
+            lastNoBuenoPlayer = card.NoBuenoPlayer;
         }
 
         void AIConsiderNoBueno(CardBase cardBeingPlayed)
         {
-            if (aIBrain.ShouldPlayNoBueno(this, _players, cardBeingPlayed))
+            if (lastNoBuenoPlayer != this && aIBrain.ShouldPlayNoBueno(this, _players, cardBeingPlayed))
             {
                 PlayNoBueno();
             }
@@ -187,11 +191,14 @@ namespace TacoVsBurrito
             await Task.Delay(PLAY_NO_BUENO_DELAY_IN_MS);
             int index = aIBrain.FindFirstInHand<NoBuenoCard>(this);
             if (index == -1)
+            {
                 return;
+            }
             else
             {
-                Hand.RemoveCard(Hand.GetAt(index));
-                playArea.PlayAction(Hand.GetAt(index));
+                CardBase cardToPlay = Hand.GetAt(index);
+                Hand.RemoveCard(cardToPlay);
+                playArea.PlayAction(cardToPlay);
             }
         }
     }

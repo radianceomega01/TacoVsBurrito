@@ -14,7 +14,8 @@ namespace TacoVsBurrito
         int currentPlayerIndex = 0;
         CancellationTokenSource noBuenoTimerCts;
         private List<NoBuenoCard> noBuenoCardsPlayed = new();
-        private ActionCardBase currentPlayedActionCard;
+        private ActionCardBase currentPlayedActionCard; // All action cards except noBueno
+        private ActionCardBase currentActiveActionCard; // All action cards including no bueno
         private TrashPile trashPile;
         private bool isDrawPileEmpty = false;
 
@@ -91,6 +92,7 @@ namespace TacoVsBurrito
 
         async void ManageActionCardPlayed(ActionCardBase card)
         {
+            currentActiveActionCard = card;
             if(card is not NoBuenoCard) currentPlayedActionCard = card; //No bueno is immediately executed
             
             //SwitchState(card.GetStateOnTrashed());
@@ -123,6 +125,7 @@ namespace TacoVsBurrito
 
         void ManageTurnEnded(PlayerBase oldPlayer)
         {
+            currentActiveActionCard = null;
             currentPlayedActionCard = null;
             if(CheckAndFinishGame())
             {
@@ -175,6 +178,7 @@ namespace TacoVsBurrito
         void ManageStartNoBuenoInterruptWindow()
         {
             SwitchState(TurnState.NoBuenoWindowPhase);
+            GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(currentActiveActionCard);
             StartNoBuenoTimer();
         }
         
@@ -250,7 +254,7 @@ namespace TacoVsBurrito
                     noBuenoCard.NoBuenoPlayer.Hand.AddCard(noBuenoCard);
                 }
                 return;
-            }
+            } 
 
             //Valid no bueno thown during no bueno phase
             noBuenoCardsPlayed.Add(noBuenoCard);

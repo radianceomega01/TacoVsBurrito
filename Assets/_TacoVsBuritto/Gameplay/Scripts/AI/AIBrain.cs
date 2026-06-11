@@ -174,8 +174,6 @@ namespace TacoVsBurrito
             // if (cardBeingPlayed is TummyAcheCard &&
             //     ai.Meal.HotSauceBossCardCount > 0) return true;
 
-            if (cardBeingPlayed is NoBuenoCard) return true;
-
             return false;
         }
 
