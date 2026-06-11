@@ -40,14 +40,14 @@ namespace TacoVsBurrito
         }
         protected virtual void OnEnable()
         {
-            GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
+            GameEvents.OnTurnEnded += ManageTurnEnded;
             GameEvents.OnCraftyCrowAction += ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget += ManageCardClickedForCraftyCrow;
             GameEvents.OnActionResolved += ManageActionResolved;
         }
         protected virtual void OnDisable()
         {
-            GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
+            GameEvents.OnTurnEnded -= ManageTurnEnded;
             GameEvents.OnCraftyCrowAction -= ManageCraftyCrowAction;
             GameEvents.OnCardClickedForActionTarget -= ManageCardClickedForCraftyCrow;
             GameEvents.OnActionResolved -= ManageActionResolved;
@@ -262,10 +262,10 @@ namespace TacoVsBurrito
             return null;
         }
 
-        protected void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
+        protected void ManageTurnEnded(PlayerBase player)
         {
             //Deactivate glow if action on card was canceled due to no bueno
-            if (turnState == TurnState.DrawPhase && currentGlowingCard != null)
+            if (currentGlowingCard != null)
             {
                 currentGlowingCard?.DeactivateGlow();
                 currentGlowingCard = null;
