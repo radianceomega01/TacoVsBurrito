@@ -69,7 +69,7 @@ namespace TacoVsBurrito
         public AIBrain GetBrain() => aIBrain;
         void ManageTurnStarted(PlayerBase player)
         {
-            
+
             noBuenoCounter = 0;
             isSelfTurnRunning = player == this;
 
@@ -107,31 +107,33 @@ namespace TacoVsBurrito
 
         void ManageTurnStateChanged(TurnState state, PlayerBase player)
         {
-            if (player == this)
+            if (player != this)
+                return;
+
+            if (state == TurnState.PlayPhase)
             {
-                if (state == TurnState.PlayPhase)
-                {
-                    Debug.LogWarning("state: "+ state.ToString() +"player: "+ player.Name);
-                    PlayACard();
-                }
+                PlayACard();
             }
         }
 
-        void ManageOrderEnvyAction(PlayerBase @base)
+        async void ManageOrderEnvyAction(PlayerBase @base)
         {
-            if(!isSelfTurnRunning)
+            if (!isSelfTurnRunning)
                 return;
 
+            await Task.Delay(THINKING_DELAY_IN_MS);
             var envyVictim = aIBrain.ChooseOrderEnvyVictim(this, _players);
             if (envyVictim != null)
                 GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(this, envyVictim, null));
         }
 
-        void ManageCraftyCraftyCrowAction()
+        async void ManageCraftyCraftyCrowAction()
         {
-            if(!isSelfTurnRunning)
+            if (!isSelfTurnRunning)
                 return;
-            Debug.LogWarning("arrived for craftycrow");    
+
+
+            await Task.Delay(THINKING_DELAY_IN_MS);
             aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
             if (victim != null)
                 GameEvents.OnCardClickedForActionTarget?.Invoke(cardToSteal);
@@ -139,7 +141,7 @@ namespace TacoVsBurrito
 
         async void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary)
         {
-            if(!isSelfTurnRunning)
+            if (!isSelfTurnRunning)
                 return;
 
             await Task.Delay(THINKING_DELAY_IN_MS);
@@ -148,7 +150,7 @@ namespace TacoVsBurrito
         }
         async void ManageCardSelectionAction(Dictionary<CardBase, int> dictionary, PlayerBase winner)
         {
-            if(winner != this)
+            if (winner != this)
                 return;
 
             await Task.Delay(THINKING_DELAY_IN_MS);
@@ -162,7 +164,7 @@ namespace TacoVsBurrito
                 AIConsiderNoBueno(card);
             else
             {
-                if (noBuenoCounter%2 == 1 && card is NoBuenoCard) //AI tries to cancel others nobueno for his action card
+                if (noBuenoCounter % 2 == 1 && card is NoBuenoCard) //AI tries to cancel others nobueno for his action card
                 {
                     PlayNoBueno();
                 }

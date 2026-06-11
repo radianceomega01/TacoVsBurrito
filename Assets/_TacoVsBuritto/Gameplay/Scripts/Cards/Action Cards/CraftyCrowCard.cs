@@ -11,7 +11,6 @@ namespace TacoVsBurrito
         public override void ExecuteAction()
         {
             GameEvents.OnLogMessage("Pick an Enemy Card from Meal!");
-            Debug.LogWarning(this.transform.name);
             GameEvents.OnCraftyCrowAction?.Invoke();
         }
 
@@ -19,7 +18,6 @@ namespace TacoVsBurrito
         public void OnActionTargeted(TargetTypeContext targetTypeContext)
         {
             this.targetTypeContext = targetTypeContext;
-            Debug.LogWarning("On action targeted");
             //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
             ResolveAction();
         }

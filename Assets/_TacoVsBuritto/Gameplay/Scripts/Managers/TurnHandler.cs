@@ -91,7 +91,7 @@ namespace TacoVsBurrito
 
         async void ManageActionCardPlayed(ActionCardBase card)
         {
-            if(card is not NoBuenoCard) currentPlayedActionCard = card;
+            if(card is not NoBuenoCard) currentPlayedActionCard = card; //No bueno is immediately executed
             
             //SwitchState(card.GetStateOnTrashed());
             //card.ExecuteAction();    
@@ -123,6 +123,7 @@ namespace TacoVsBurrito
 
         void ManageTurnEnded(PlayerBase oldPlayer)
         {
+            currentPlayedActionCard = null;
             if(CheckAndFinishGame())
             {
                 return;
@@ -140,7 +141,6 @@ namespace TacoVsBurrito
             {
                 SwitchState(TurnState.DrawPhase);
             }
-            currentPlayedActionCard = null;
         }
 
         bool CheckAndFinishGame()
@@ -222,7 +222,7 @@ namespace TacoVsBurrito
         }
         void CheckAndExecuteAction()
         {
-            if (currentPlayedActionCard != null && currentPlayedActionCard is not NoBuenoCard) //No bueno is immediately executed
+            if (currentPlayedActionCard != null) 
             {
                 if(currentPlayedActionCard is ITargetTypeAction)
                 {
