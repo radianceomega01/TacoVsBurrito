@@ -10,13 +10,9 @@ namespace TacoVsBurrito
         [SerializeField] protected TextMeshProUGUI cardCountTxt;
 
         protected readonly List<CardBase> _cards = new List<CardBase>();
-        protected PlayerBase parentPlayer;
 
         public IReadOnlyList<CardBase> Cards => _cards;
         public int Count => _cards.Count;
-        protected virtual void Awake() {
-            parentPlayer = GetComponentInParent<PlayerBase>();
-        }
 
         protected virtual void OnEnable()
         {
@@ -33,7 +29,7 @@ namespace TacoVsBurrito
             UpdateCountTxt();
             if(c is NoBuenoCard @noBuenoCard)
             {
-                @noBuenoCard.NoBuenoPlayer = parentPlayer;
+                @noBuenoCard.NoBuenoPlayer = GetComponentInParent<PlayerBase>();
             }
         }
         public abstract void AddCardWithoutArranging(CardBase c);

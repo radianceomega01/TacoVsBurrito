@@ -18,7 +18,7 @@ namespace TacoVsBurrito
         private const float ARC_ANGLE = 30f;
         private const int CARD_ARRANGE_DEALY_IN_MS = 500;
 
-        private PlayerBase noBuenoPlayer;
+        private PlayerBase currentNoBuenoPlayer;
 
         protected override void OnEnable()
         {
@@ -150,19 +150,19 @@ namespace TacoVsBurrito
         }
         private void ManageNoBuenoPlayed(NoBuenoCard card)
         {
-            noBuenoPlayer = card.NoBuenoPlayer;
+            currentNoBuenoPlayer = card.NoBuenoPlayer;
         }
         private void ManageTurnEnded(PlayerBase @base)
         {
-            noBuenoPlayer = null;
+            currentNoBuenoPlayer = null;
         }
 
         private bool CanPlayNoBueno()
         {
             //case 1 means we played action card and someone else played no bueno over it.
             //case 2 means opponent played action card and we have not cur̥ently played nobueno over it.
-            return GameplayManager.Instance.CurrentPlayer is SelfPlayer && noBuenoPlayer != null && noBuenoPlayer is not SelfPlayer ||
-                    GameplayManager.Instance.CurrentPlayer is not SelfPlayer && noBuenoPlayer is not SelfPlayer;
+            return GameplayManager.Instance.CurrentPlayer is SelfPlayer && currentNoBuenoPlayer != null && currentNoBuenoPlayer is not SelfPlayer ||
+                    GameplayManager.Instance.CurrentPlayer is not SelfPlayer && currentNoBuenoPlayer is not SelfPlayer;
         }
 
         public void PickCardBeforeDrag(CardBase card)

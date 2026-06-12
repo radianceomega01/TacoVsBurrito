@@ -20,7 +20,7 @@ namespace TacoVsBurrito
 
         bool isSelfTurnRunning = false;
         int noBuenoCounter = 0;
-        PlayerBase lastNoBuenoPlayer;
+        PlayerBase currentNoBuenoPlayer;
 
         protected override void Awake()
         {
@@ -167,7 +167,7 @@ namespace TacoVsBurrito
             }
             else
             {
-                if (noBuenoCounter % 2 == 1 && card is NoBuenoCard && lastNoBuenoPlayer != this) //AI tries to cancel others nobueno for his action card
+                if (noBuenoCounter % 2 == 1 && card is NoBuenoCard && currentNoBuenoPlayer != this) //AI tries to cancel others nobueno for his action card
                 {
                     PlayNoBueno();
                 }
@@ -176,12 +176,12 @@ namespace TacoVsBurrito
         void ManageNoBuenoPlayed(NoBuenoCard card)
         {
             noBuenoCounter++;
-            lastNoBuenoPlayer = card.NoBuenoPlayer;
+            currentNoBuenoPlayer = card.NoBuenoPlayer;
         }
 
         void AIConsiderNoBueno(CardBase cardBeingPlayed)
         {
-            if (lastNoBuenoPlayer != this && aIBrain.ShouldPlayNoBueno(this, _players, cardBeingPlayed))
+            if (currentNoBuenoPlayer != this && aIBrain.ShouldPlayNoBueno(this, _players, cardBeingPlayed))
             {
                 PlayNoBueno();
             }
