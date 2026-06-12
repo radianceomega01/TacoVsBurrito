@@ -17,17 +17,23 @@ namespace TacoVsBurrito
         private const float ARC_RADIUS_GROWTH = 10f;
         private const float ARC_ANGLE = 30f;
         private const int CARD_ARRANGE_DEALY_IN_MS = 500;
-        
+
+        private PlayerBase noBuenoPlayer;
+
         protected override void OnEnable()
         {
             base.OnEnable();
             GameEvents.OnCardsDistributed += ArrangeCardsAfterDistribution;
+            GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
+            GameEvents.OnTurnEnded += ManageTurnEnded;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             GameEvents.OnCardsDistributed -= ArrangeCardsAfterDistribution;
+            GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
+            GameEvents.OnTurnEnded -= ManageTurnEnded;
         }
 
         async void ArrangeCardsAfterDistribution()
@@ -91,7 +97,7 @@ namespace TacoVsBurrito
             float startAngle = -ARC_ANGLE / 2f;
 
             float dynamicRadius =
-                MIN_ARC_RADIUS + (count - 1) * ARC_RADIUS_GROWTH;    
+                MIN_ARC_RADIUS + (count - 1) * ARC_RADIUS_GROWTH;
 
             dynamicRadius = Mathf.Min(dynamicRadius, MAX_ARC_RADIUS);
 
@@ -126,11 +132,11 @@ namespace TacoVsBurrito
 
         protected override void ManageTurnStateChanged(TurnState turnState, PlayerBase player)
         {
-            if (GameplayManager.Instance.CurrentPlayer is SelfPlayer && turnState == TurnState.PlayPhase)
+            if (turnState == TurnState.PlayPhase && GameplayManager.Instance.CurrentPlayer is SelfPlayer)
             {
                 _cards.ForEach(card => card.EnableInteraction());
             }
-            else if (GameplayManager.Instance.CurrentPlayer is not SelfPlayer && turnState == TurnState.NoBuenoWindowPhase)
+            else if (turnState == TurnState.NoBuenoWindowPhase && CanPlayNoBueno())
             {
                 _cards.ForEach(card =>
                 {
@@ -141,6 +147,22 @@ namespace TacoVsBurrito
             {
                 _cards.ForEach(card => card.DisableInteraction());
             }
+        }
+        private void ManageNoBuenoPlayed(NoBuenoCard card)
+        {
+            noBuenoPlayer = card.NoBuenoPlayer;
+        }
+        private void ManageTurnEnded(PlayerBase @base)
+        {
+            noBuenoPlayer = null;
+        }
+
+        private bool CanPlayNoBueno()
+        {
+            //case 1 means we played action card and someone else played no bueno over it.
+            //case 2 means opponent played action card and we have not cur̥ently played nobueno over it.
+            return GameplayManager.Instance.CurrentPlayer is SelfPlayer && noBuenoPlayer != null && noBuenoPlayer is not SelfPlayer ||
+                    GameplayManager.Instance.CurrentPlayer is not SelfPlayer && noBuenoPlayer is not SelfPlayer;
         }
 
         public void PickCardBeforeDrag(CardBase card)

@@ -119,6 +119,7 @@ namespace TacoVsBurrito
             }
             GameplayManager.Instance.CardDrawnFromPile(drawnCard);
             GameEvents.OnCardFlippedSFX?.Invoke();
+            TogglePileInteraction(false);
             DeactivateGlow();
         }
         public override void PutCardsBack(List<CardBase> cards)
