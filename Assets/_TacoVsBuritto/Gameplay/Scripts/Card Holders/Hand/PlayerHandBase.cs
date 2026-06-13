@@ -27,12 +27,11 @@ namespace TacoVsBurrito
         {
             _cards.Add(c);
             UpdateCountTxt();
-            if(c is NoBuenoCard @noBuenoCard)
-            {
-                @noBuenoCard.NoBuenoPlayer = GetComponentInParent<PlayerBase>();
-            }
         }
-        public abstract void AddCardWithoutArranging(CardBase c);
+        public virtual void AddCardWithoutArranging(CardBase c)
+        {
+            SetPlayerToNoBuenoCard(c);
+        }
 
         public virtual void RemoveCard(CardBase c)
         {
@@ -46,7 +45,14 @@ namespace TacoVsBurrito
             _cards.Clear();
             return all;
         }
-        
+        protected void SetPlayerToNoBuenoCard(CardBase c)
+        {
+            if(c is NoBuenoCard @noBuenoCard)
+            {
+                @noBuenoCard.NoBuenoPlayer = GetComponentInParent<PlayerBase>();;
+            }
+        }
+
         protected virtual void ManageTurnStateChanged(TurnState turnState, PlayerBase player){}
         protected void UpdateCountTxt() => cardCountTxt.SetText(Count.ToString());
         public CardBase GetAt(int i) => (i >= 0 && i < _cards.Count) ? _cards[i] : null;

@@ -19,6 +19,7 @@ namespace TacoVsBurrito
 
         public override void AddCardWithoutArranging(CardBase c)
         {
+            base.AddCardWithoutArranging(c);
             AddCard(c);
         }
 

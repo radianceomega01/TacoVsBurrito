@@ -61,6 +61,7 @@ namespace TacoVsBurrito
         }
         public override void AddCardWithoutArranging(CardBase c)
         {
+            base.AddCardWithoutArranging(c);
             _cards.Add(c);
             SetCurrentPickupTargetToCard(c);
             c.ChangeScale(CARD_SCALE);
