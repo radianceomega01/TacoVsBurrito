@@ -108,6 +108,9 @@ namespace TacoVsBurrito
             GameEvents.OnLogMessage?.Invoke($"🐦 Crafty Crow! card stolen from {victim.Name} meal");
 
             GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
+
+            caster.ShowEmoji(EmojiType.Evil);
+            victim.ShowEmoji(EmojiType.Sad);
         }
 
         // ==========================================================
@@ -177,24 +180,27 @@ namespace TacoVsBurrito
 
         /// Swap caster's hand + meal with target's hand + meal.
         /// After swap, cannot be blocked.
-        public void ResolveOrderEnvy(PlayerBase caster, PlayerBase target)
+        public void ResolveOrderEnvy(PlayerBase caster, PlayerBase victim)
         {
             //Swap Meal only if it is last hand card. Else swap hand and meal both
             if (GameplayManager.Instance.CurrentPlayer.Hand.Count > 0)
             {
                 List<CardBase> currentPlayerCards = caster.Hand.TakeAll();
-                List<CardBase> otherPlayerCards = target.Hand.TakeAll();
-                currentPlayerCards.ForEach(c => target.Hand.AddCard(c));
+                List<CardBase> otherPlayerCards = victim.Hand.TakeAll();
+                currentPlayerCards.ForEach(c => victim.Hand.AddCard(c));
                 otherPlayerCards.ForEach(c => caster.Hand.AddCard(c));
             }
 
             List<CardBase> currentMealCards = caster.Meal.TakeAll();
-            List<CardBase> otherMealCards = target.Meal.TakeAll();
-            currentMealCards.ForEach(c => target.Meal.AddCard(c));
+            List<CardBase> otherMealCards = victim.Meal.TakeAll();
+            currentMealCards.ForEach(c => victim.Meal.AddCard(c));
             otherMealCards.ForEach(c => caster.Meal.AddCard(c));
 
-            GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.Name} swapped their hand and meal with {target.Name}!");
+            GameEvents.OnLogMessage?.Invoke($"😤 Order Envy! {caster.Name} swapped their hand and meal with {victim.Name}!");
             GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
+
+            caster.ShowEmoji(EmojiType.Laughing);
+            victim.ShowEmoji(EmojiType.Sad);
         }
     }
 }

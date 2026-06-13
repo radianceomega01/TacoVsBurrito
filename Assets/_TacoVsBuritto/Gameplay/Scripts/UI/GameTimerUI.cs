@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 namespace TacoVsBurrito
 {
-    public class UiGameTimer : MonoBehaviour
+    public class GameTimerUI : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI timerText;
 

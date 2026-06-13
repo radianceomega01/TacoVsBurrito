@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class UiTurnIndicator : MonoBehaviour
+    public class TurnIndicatorUI : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI turnTxt;
 

@@ -10,6 +10,7 @@ namespace TacoVsBurrito
         private PlayerMealBase meal;
         FullScalePlayerView fullScaleView;
         MinifiedPlayerView minifiedView;
+        EmojiHolder emojiHolder;
         public int Index { get; private set; }
         public string Name { get; private set; }
 
@@ -29,6 +30,7 @@ namespace TacoVsBurrito
             meal = GetComponentInChildren<PlayerMealBase>();
             fullScaleView = GetComponentInChildren<FullScalePlayerView>();
             minifiedView = GetComponentInChildren<MinifiedPlayerView>(true);
+            emojiHolder = GetComponentInChildren<EmojiHolder>();
         }
 
         protected virtual void OnEnable()
@@ -52,6 +54,7 @@ namespace TacoVsBurrito
 
         public int Score => Meal.CalculateScore();
         public Vector3 GetFoodFightCardPosition() => minifiedView.GetFoodFightCardPosition();
+        public void ShowEmoji(EmojiType type) => emojiHolder.ShowEmoji(type);
 
         protected void ManagePlayerOnFoodFightOver()
         {

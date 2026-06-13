@@ -54,10 +54,10 @@ namespace TacoVsBurrito
                     InitializeOpponentPlayer(playerObj1_2, 2);
                     break;
                 case 4:
-                    GameObject playerObj2_1 = Instantiate(opponentPlayerVerticalPrefab, opponentPositions[1].position, Quaternion.identity, playersParent);
-                    InitializeOpponentPlayer(playerObj2_1, 1);
                     GameObject playerObj2_2 = Instantiate(opponentPlayerHorizontalPrefab, opponentPositions[0].position, Quaternion.identity, playersParent);
                     InitializeOpponentPlayer(playerObj2_2, 2);
+                    GameObject playerObj2_1 = Instantiate(opponentPlayerVerticalPrefab, opponentPositions[1].position, Quaternion.identity, playersParent);
+                    InitializeOpponentPlayer(playerObj2_1, 1);
                     GameObject playerObj2_3 = Instantiate(opponentPlayerVerticalPrefab, opponentPositions[2].position, Quaternion.identity, playersParent);
                     InitializeOpponentPlayer(playerObj2_3, 3);
                     break;

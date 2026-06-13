@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace TacoVsBurrito
 {
-    public class UiFeedbackTxt : MonoBehaviour
+    public class FeedbackTxtUI : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI feedbackText;
         CancellationTokenSource cts;
