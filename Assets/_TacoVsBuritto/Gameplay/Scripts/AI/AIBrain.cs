@@ -61,7 +61,9 @@ namespace TacoVsBurrito
         // ===========================================================
         private AIDecision DecideNormal(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
         {
-            var hand = ai.Hand;
+            // Food Fight
+            int ff = FindFirstAction(ai, typeof(FoodFightCard));
+            if (ff >= 0) return new AIDecision { cardIndex = ff, destIndex = -1 };
 
             // Priority 1: Play Hot Sauce Boss into own meal (huge value)
             int hsb = FindFirstInHand<HotSauceBossCard>(ai);
@@ -81,8 +83,7 @@ namespace TacoVsBurrito
 
             // Priority 4: Play any action card
             int act = FindFirstAction(ai, typeof(CraftyCrowCard),
-                                        typeof(TrashPandaCard),
-                                        typeof(FoodFightCard));
+                                        typeof(TrashPandaCard));
             if (act >= 0)
                 return new AIDecision { cardIndex = act, destIndex = -1 };
 
@@ -95,6 +96,10 @@ namespace TacoVsBurrito
         // ===========================================================
         private AIDecision DecideHard(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
         {
+            // Food Fight
+            int ff = FindFirstAction(ai, typeof(FoodFightCard));
+            if (ff >= 0) return new AIDecision { cardIndex = ff, destIndex = -1 };
+
             //1. If we have Hot Sauce Boss AND at least 3 ingredients in meal → play it
             int hsb = FindFirstInHand<HotSauceBossCard>(ai);
             if (hsb >= 0 && ai.Meal.IngredientCardCount >= 3)
@@ -139,10 +144,6 @@ namespace TacoVsBurrito
             int tp = FindFirstAction(ai, typeof(TrashPandaCard));
             if (tp >= 0 && GameplayManager.Instance.GetTrashPile().TrashCount > 0)
                 return new AIDecision { cardIndex = tp, destIndex = -1 };
-
-            // 8. Food Fight
-            int ff = FindFirstAction(ai, typeof(FoodFightCard));
-            if (ff >= 0) return new AIDecision { cardIndex = ff, destIndex = -1 };
 
             // 9. Crafty Crow against anyone with a meal card
             if (cc >= 0)
@@ -250,7 +251,12 @@ namespace TacoVsBurrito
         }
         private CardBase PickBestCardFromOpponentMeal(PlayerBase opponent)
         {
-            return opponent.Meal.Cards.OrderByDescending(c => c is HotSauceBossCard ? 100 : (c is IngredientCardBase ib ? ib.CardValue : 0)).FirstOrDefault();
+            CardBase card = opponent.Meal.Cards.OrderByDescending(c => c is HotSauceBossCard ? 100 : (c is IngredientCardBase ic ? ic.CardValue : 0)).FirstOrDefault();
+            if(card == null)
+            {
+                card = opponent.Meal.Cards[0];
+            }
+            return card;
         }
         private bool IsCurrentlyWinning(AIPlayer ai, IReadOnlyList<PlayerBase> allPlayers)
         {
