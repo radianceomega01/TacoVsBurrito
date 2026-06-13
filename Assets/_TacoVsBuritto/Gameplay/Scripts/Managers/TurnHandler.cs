@@ -258,7 +258,21 @@ namespace TacoVsBurrito
 
             //Valid no bueno thown during no bueno phase
             noBuenoCardsPlayed.Add(noBuenoCard);
-            ManageStartNoBuenoInterruptWindow();
+            if(noBuenoCard.NoBuenoPlayer.Hand.Count == 0) //No bueno was last card of the player
+            {
+                trashPile.Trash(currentPlayedActionCard);
+                noBuenoCardsPlayed.ForEach(card =>
+                {
+                    trashPile.Trash(card);
+                });
+                noBuenoCardsPlayed.Clear();
+                GameEvents.OnGameFinished?.Invoke();
+            }
+            else
+            {
+                ManageStartNoBuenoInterruptWindow();
+            }
+                
         }
         
         void ManageTargetAction(TargetTypeContext context)
