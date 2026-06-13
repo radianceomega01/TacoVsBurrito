@@ -17,6 +17,9 @@ namespace TacoVsBurrito
         [SerializeField] AudioClip sfxCardDeal;
         [SerializeField] AudioClip sfxCardFlip;
         [SerializeField] AudioClip sfxCardDraw;
+        [SerializeField] AudioClip sfxLaugh1;
+        [SerializeField] AudioClip sfxLaugh2;
+        [SerializeField] AudioClip sfxCry1;
         [SerializeField] AudioClip sfxNoBueno;
         [SerializeField] AudioClip sfxCraftyCrow;
         [SerializeField] AudioClip sfxOrderEnvy;
@@ -47,6 +50,9 @@ namespace TacoVsBurrito
             GameEvents.OnCardMovedSFX += OnCardDealed;
             GameEvents.OnCardFlippedSFX += OnCardFlipped;
             GameEvents.OnCardDrawSFX += OnCardDraw;
+            GameEvents.OnLaugh1Sfx += OnLaugh1Sfx;
+            GameEvents.OnLaugh2Sfx += OnLaugh2Sfx;
+            GameEvents.OnCrySfx += OnCrySfx;
             GameEvents.OnCardClickedForActionTarget += OnCardClickedForActionTarget;
             GameEvents.OnTurnStarted += OnTurnStarted;
             GameEvents.OnHealthInspectorSFX += OnHealthInspector;
@@ -62,6 +68,9 @@ namespace TacoVsBurrito
             GameEvents.OnCardMovedSFX -= OnCardDealed;
             GameEvents.OnCardFlippedSFX -= OnCardFlipped;
             GameEvents.OnCardDrawSFX -= OnCardDraw;
+            GameEvents.OnLaugh1Sfx -= OnLaugh1Sfx;
+            GameEvents.OnLaugh2Sfx -= OnLaugh2Sfx;
+            GameEvents.OnCrySfx -= OnCrySfx;
             GameEvents.OnCardClickedForActionTarget -= OnCardClickedForActionTarget;
             GameEvents.OnTurnStarted -= OnTurnStarted;
             GameEvents.OnHealthInspectorSFX -= OnHealthInspector;
@@ -74,6 +83,9 @@ namespace TacoVsBurrito
         private void OnCardDealed() => PlaySFX(sfxCardDeal);
         private void OnCardFlipped() => PlaySFX(sfxCardFlip);
         private void OnCardDraw() => PlaySFX(sfxCardDraw);
+        private void OnLaugh1Sfx() => PlaySFX(sfxLaugh1);
+        private void OnLaugh2Sfx() => PlaySFX(sfxLaugh2);
+        private void OnCrySfx() => PlaySFX(sfxCry1);
         private void OnCardClickedForActionTarget(CardBase card) => PlaySFX(sfxCardDeal);
         private void OnGUIClicked() => PlaySFX(sfxClick);
         private void OnTurnStarted(PlayerBase player) => PlaySFX(sfxTurnStart);

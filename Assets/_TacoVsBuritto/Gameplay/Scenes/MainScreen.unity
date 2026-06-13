@@ -542,6 +542,9 @@ MonoBehaviour:
   sfxCardDeal: {fileID: 8300000, guid: 50e0f09b7b0d74897a4b4d17e45fe73b, type: 3}
   sfxCardFlip: {fileID: 8300000, guid: 286701cbadc3c4c9b8aec720f3e00175, type: 3}
   sfxCardDraw: {fileID: 8300000, guid: f07787af54ffc43b0b596587ca6a2cb1, type: 3}
+  sfxLaugh1: {fileID: 8300000, guid: 64ff71ec2015a45a293be17bd1ee1192, type: 3}
+  sfxLaugh2: {fileID: 8300000, guid: 3b4369f44e9194ca5a4b02c5cb7d380a, type: 3}
+  sfxCry1: {fileID: 8300000, guid: 16b44b0abbd7e4f4a9a661bb651d374d, type: 3}
   sfxNoBueno: {fileID: 0}
   sfxCraftyCrow: {fileID: 0}
   sfxOrderEnvy: {fileID: 0}

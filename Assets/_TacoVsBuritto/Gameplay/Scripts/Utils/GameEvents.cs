@@ -63,5 +63,8 @@ namespace TacoVsBurrito
         public static Action                        OnCardMovedSFX;
         public static Action                        OnCardFlippedSFX;
         public static Action                        OnCardDrawSFX;
+        public static Action                        OnLaugh1Sfx;
+        public static Action                        OnLaugh2Sfx;
+        public static Action                        OnCrySfx;
     }
 }

@@ -42,8 +42,26 @@ namespace TacoVsBurrito
                 await Task.Delay(FEEDBACK_DEALY_IN_MS);
             }
             transform.DOScale(HOLDER_SCALE,SCALE_TIME_IN_SECS).SetEase(Ease.OutElastic);
+            PlaySfx(emojiType);
             await Task.Delay(DURATION_IN_MS);
             transform.DOScale(0f,SCALE_TIME_IN_SECS).SetEase(Ease.OutElastic);
+        }
+
+        private void PlaySfx(EmojiType type)
+        {
+            switch (type)
+            {
+                case EmojiType.Sad:
+                GameEvents.OnCrySfx?.Invoke();
+                break;
+                case EmojiType.Evil:
+                GameEvents.OnLaugh1Sfx?.Invoke();
+                break;
+                case EmojiType.Laughing:
+                GameEvents.OnLaugh2Sfx?.Invoke();
+                break;
+
+            }
         }
     }
     public enum EmojiType
