@@ -47,8 +47,6 @@ namespace TacoVsBurrito
         [SerializeField] TrashPile trashPile;
         [SerializeField] PlayArea playArea;
 
-        const int FRAME_RATE = 90;
-
         // -------------------------------------------------------
         //  Singleton
         // -------------------------------------------------------
@@ -87,13 +85,6 @@ namespace TacoVsBurrito
         private void OnDisable()
         {
             GameEvents.OnGameFinished -= ManageGameOver;
-        }
-
-        void Start()
-        {
-            Application.targetFrameRate = FRAME_RATE;
-            Screen.sleepTimeout = SleepTimeout.NeverSleep;
-            Input.multiTouchEnabled = false;
         }
 
         // -------------------------------------------------------
