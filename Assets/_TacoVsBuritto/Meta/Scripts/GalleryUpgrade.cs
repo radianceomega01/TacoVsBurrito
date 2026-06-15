@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +9,23 @@ namespace TacoVsBurrito
         [SerializeField] private List<GalleryObjectAnimation> upgradeObjects;
         [SerializeField] private float staggerDelay = 0.15f;
 
-        public void PlayAll()
+        void Start()
         {
-            StartCoroutine(PlaySequence());
+            PlayAll();
         }
 
+        public void PlayAll()
+        {
+            ResetAll();
+            StartCoroutine(PlaySequence());
+        }
+        private void ResetAll()
+        {
+            foreach (var item in upgradeObjects)
+            {
+                item.Reset();
+            }
+        }
         private IEnumerator PlaySequence()
         {
             foreach (var item in upgradeObjects)

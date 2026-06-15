@@ -7,6 +7,7 @@ namespace TacoVsBurrito
 {
     public class GalleryObjectAnimation : MonoBehaviour
     {
+        [SerializeField] private InitialValues initialValues;
         [SerializeField] private List<AnimationData> animations;
 
         private Sequence sequence;
@@ -27,6 +28,13 @@ namespace TacoVsBurrito
             }
 
             sequence.Play();
+        }
+
+        public void Reset()
+        {
+            transform.localPosition = initialValues.position;
+            transform.localRotation = Quaternion.Euler(initialValues.rotation);
+            transform.localScale = initialValues.scale;
         }
 
         private Tween CreateTween(AnimationData data)
@@ -61,6 +69,13 @@ namespace TacoVsBurrito
             public float delay = 0f;
 
             public Ease ease = Ease.OutBack;
+        }
+        [Serializable]
+        public class InitialValues
+        {
+            public Vector3 position;
+            public Vector3 rotation;
+            public Vector3 scale = Vector3.one;
         }
 
         public enum AnimationType

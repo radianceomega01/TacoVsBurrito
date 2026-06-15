@@ -119,6 +119,94 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &42754027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 42754028}
+  - component: {fileID: 42754029}
+  m_Layer: 5
+  m_Name: Upgrade Objects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &42754028
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42754027}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1078645042}
+  - {fileID: 1406199113}
+  - {fileID: 821439373}
+  - {fileID: 1031708452}
+  - {fileID: 1575343529}
+  - {fileID: 1086831334}
+  - {fileID: 2127959241}
+  - {fileID: 1492505884}
+  - {fileID: 237219174}
+  - {fileID: 1077653646}
+  - {fileID: 1642020527}
+  - {fileID: 1757975158}
+  m_Father: {fileID: 1642786737}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &42754029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42754027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4dee5f7cb0724862bb6acf950cb486c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryUpgrade
+  upgradeObjects:
+  - {fileID: 1406199116}
+  - {fileID: 1492505887}
+  - {fileID: 237219177}
+  - {fileID: 821439376}
+  - {fileID: 1031708455}
+  - {fileID: 1575343532}
+  - {fileID: 1086831337}
+  - {fileID: 445299077}
+  - {fileID: 1165545284}
+  - {fileID: 1809951190}
+  - {fileID: 853564247}
+  - {fileID: 1118643483}
+  - {fileID: 1252596060}
+  - {fileID: 1642020530}
+  - {fileID: 140250721}
+  - {fileID: 940919353}
+  - {fileID: 221251258}
+  - {fileID: 647895795}
+  - {fileID: 1614759262}
+  - {fileID: 379410321}
+  - {fileID: 918756054}
+  - {fileID: 1321075705}
+  - {fileID: 620733685}
+  - {fileID: 1047540724}
+  - {fileID: 553984295}
+  - {fileID: 2006689005}
+  staggerDelay: 0.025
 --- !u!1 &140250717
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +218,7 @@ GameObject:
   - component: {fileID: 140250718}
   - component: {fileID: 140250720}
   - component: {fileID: 140250719}
+  - component: {fileID: 140250721}
   m_Layer: 5
   m_Name: Chair1 (1)
   m_TagString: Untagged
@@ -144,12 +233,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 140250717}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 2127959241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -194,6 +283,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 140250717}
   m_CullTransparentMesh: 1
+--- !u!114 &140250721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140250717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 383, y: -524, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 383, y: -454, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 383, y: -524, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 358, y: -524, z: 0}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &221251254
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,6 +326,7 @@ GameObject:
   - component: {fileID: 221251255}
   - component: {fileID: 221251257}
   - component: {fileID: 221251256}
+  - component: {fileID: 221251258}
   m_Layer: 5
   m_Name: Plate (1)
   m_TagString: Untagged
@@ -219,13 +341,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221251254}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 647895792}
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 1757975158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -270,6 +392,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221251254}
   m_CullTransparentMesh: 1
+--- !u!114 &221251258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221251254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -164.6, y: -318.33, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -164.6, y: -248.33, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -164.6, y: -318.33, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
 --- !u!1 &237219173
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +430,7 @@ GameObject:
   - component: {fileID: 237219174}
   - component: {fileID: 237219176}
   - component: {fileID: 237219175}
+  - component: {fileID: 237219177}
   m_Layer: 5
   m_Name: Wall Lantern (1)
   m_TagString: Untagged
@@ -295,12 +445,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 237219173}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -345,6 +495,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 237219173}
   m_CullTransparentMesh: 1
+--- !u!114 &237219177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237219173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 395.7, y: 111.8, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 0
+    vectorValue: {x: 0.7, y: 0.7, z: 0.7}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1.2, y: 1.2, z: 1.2}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1, y: 1, z: 1}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &290366806
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,8 +754,9 @@ GameObject:
   - component: {fileID: 379410318}
   - component: {fileID: 379410320}
   - component: {fileID: 379410319}
+  - component: {fileID: 379410321}
   m_Layer: 5
-  m_Name: Cup
+  m_Name: Cup(4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -636,6 +819,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379410317}
   m_CullTransparentMesh: 1
+--- !u!114 &379410321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379410317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -3.7, y: 12.5, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 50, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 12.5, z: 0}
+    duration: 0.2
+    delay: 0.3
+    ease: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,6 +1029,7 @@ GameObject:
   - component: {fileID: 445299074}
   - component: {fileID: 445299076}
   - component: {fileID: 445299075}
+  - component: {fileID: 445299077}
   m_Layer: 5
   m_Name: Chair1
   m_TagString: Untagged
@@ -833,12 +1044,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445299073}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 2127959241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -883,6 +1094,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445299073}
   m_CullTransparentMesh: 1
+--- !u!114 &445299077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445299073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 336, y: -451.91, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 336, y: -378, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 336, y: -451.91, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 311, y: -451.91, z: 0}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &553984291
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,6 +1137,7 @@ GameObject:
   - component: {fileID: 553984292}
   - component: {fileID: 553984294}
   - component: {fileID: 553984293}
+  - component: {fileID: 553984295}
   m_Layer: 5
   m_Name: Plate (5)
   m_TagString: Untagged
@@ -908,13 +1152,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 553984291}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2006689002}
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 1757975158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -958,6 +1202,172 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 553984291}
+  m_CullTransparentMesh: 1
+--- !u!114 &553984295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553984291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 188, y: -350.72, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 188, y: -280.72, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 188, y: -350.72, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+--- !u!1 &581660873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 581660874}
+  - component: {fileID: 581660876}
+  - component: {fileID: 581660875}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &581660874
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581660873}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1323040071}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &581660875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581660873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 'Animate
+
+'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 46
+  m_fontSizeBase: 46
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 0
+  m_fontSizeMax: 0
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 0
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &581660876
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581660873}
   m_CullTransparentMesh: 1
 --- !u!1 &585990479
 GameObject:
@@ -1128,6 +1538,7 @@ GameObject:
   - component: {fileID: 620733682}
   - component: {fileID: 620733684}
   - component: {fileID: 620733683}
+  - component: {fileID: 620733685}
   m_Layer: 5
   m_Name: Plate (2)
   m_TagString: Untagged
@@ -1142,13 +1553,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 620733681}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1047540721}
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 1757975158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1193,6 +1604,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 620733681}
   m_CullTransparentMesh: 1
+--- !u!114 &620733685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620733681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -196.48, y: -350.72, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -196.48, y: -280.72, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -196.48, y: -350.72, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
 --- !u!1 &647895791
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,8 +1642,9 @@ GameObject:
   - component: {fileID: 647895792}
   - component: {fileID: 647895794}
   - component: {fileID: 647895793}
+  - component: {fileID: 647895795}
   m_Layer: 5
-  m_Name: Cup
+  m_Name: Cup(1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1268,6 +1707,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647895791}
   m_CullTransparentMesh: 1
+--- !u!114 &647895795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647895791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -3.7, y: 12.5, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 50, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 12.5, z: 0}
+    duration: 0.2
+    delay: 0.3
+    ease: 0
 --- !u!1 &680028057
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,8 +1959,9 @@ GameObject:
   - component: {fileID: 821439373}
   - component: {fileID: 821439375}
   - component: {fileID: 821439374}
+  - component: {fileID: 821439376}
   m_Layer: 5
-  m_Name: Flower Pot
+  m_Name: Flower Pot1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1507,12 +1974,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 821439372}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1557,6 +2024,48 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 821439372}
   m_CullTransparentMesh: 1
+--- !u!114 &821439376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821439372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -332, y: -318.33, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -300, y: -318.33, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: -6}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -332, y: -318.33, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 5}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 0}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1617,6 +2126,7 @@ GameObject:
   - component: {fileID: 853564244}
   - component: {fileID: 853564246}
   - component: {fileID: 853564245}
+  - component: {fileID: 853564247}
   m_Layer: 5
   m_Name: Cup
   m_TagString: Untagged
@@ -1681,6 +2191,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 853564243}
   m_CullTransparentMesh: 1
+--- !u!114 &853564247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853564243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -3.7, y: 12.5, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 50, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 12.5, z: 0}
+    duration: 0.2
+    delay: 0.3
+    ease: 0
 --- !u!1 &918756050
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,6 +2229,7 @@ GameObject:
   - component: {fileID: 918756051}
   - component: {fileID: 918756053}
   - component: {fileID: 918756052}
+  - component: {fileID: 918756054}
   m_Layer: 5
   m_Name: Chair1 (2)
   m_TagString: Untagged
@@ -1706,12 +2244,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918756050}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 2127959241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1756,6 +2294,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918756050}
   m_CullTransparentMesh: 1
+--- !u!114 &918756054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918756050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 417, y: -589.32, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 417, y: -516.32, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 417, y: -589.32, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 392, y: -589.32, z: 0}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &934159828
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,6 +2470,7 @@ GameObject:
   - component: {fileID: 940919350}
   - component: {fileID: 940919352}
   - component: {fileID: 940919351}
+  - component: {fileID: 940919353}
   m_Layer: 5
   m_Name: Chair1 (4)
   m_TagString: Untagged
@@ -1914,12 +2485,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 940919349}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 2127959241}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1964,6 +2535,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 940919349}
   m_CullTransparentMesh: 1
+--- !u!114 &940919353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940919349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -377, y: -521, z: 0}
+    rotation: {x: 0, y: 180, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -377, y: -451, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -377, y: -521, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -352, y: -521, z: 0}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &987824789
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,8 +2711,9 @@ GameObject:
   - component: {fileID: 1031708452}
   - component: {fileID: 1031708454}
   - component: {fileID: 1031708453}
+  - component: {fileID: 1031708455}
   m_Layer: 5
-  m_Name: Flower Pot (1)
+  m_Name: Flower Pot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2122,13 +2726,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031708451}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 42754028}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 3.2720003}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 312, y: -387}
@@ -2172,6 +2776,48 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031708451}
   m_CullTransparentMesh: 1
+--- !u!114 &1031708455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031708451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 312, y: -387, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 312, y: -340, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 312, y: -387, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: -6}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 5}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 0}
+    duration: 0.2
+    delay: 0.6
+    ease: 0
 --- !u!1 &1047540720
 GameObject:
   m_ObjectHideFlags: 0
@@ -2183,8 +2829,9 @@ GameObject:
   - component: {fileID: 1047540721}
   - component: {fileID: 1047540723}
   - component: {fileID: 1047540722}
+  - component: {fileID: 1047540724}
   m_Layer: 5
-  m_Name: Cup
+  m_Name: Cup(2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2247,6 +2894,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1047540720}
   m_CullTransparentMesh: 1
+--- !u!114 &1047540724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047540720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -3.7, y: 12.5, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 50, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 12.5, z: 0}
+    duration: 0.2
+    delay: 0.3
+    ease: 0
 --- !u!1 &1077653645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,7 +2932,6 @@ GameObject:
   - component: {fileID: 1077653646}
   - component: {fileID: 1077653649}
   - component: {fileID: 1077653648}
-  - component: {fileID: 1077653647}
   m_Layer: 5
   m_Name: Table
   m_TagString: Untagged
@@ -2273,35 +2946,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077653645}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -258}
   m_SizeDelta: {x: 1142.17, y: 662.63}
   m_Pivot: {x: 0.5, y: 1}
---- !u!111 &1077653647
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077653645}
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Animation: {fileID: 0}
-  m_Animations:
-  - {fileID: 7400000, guid: 4e92894f34b3e429f835c7b484c711e7, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_UpdateMode: 0
-  m_CullingType: 0
 --- !u!114 &1077653648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2365,12 +3021,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078645041}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2426,6 +3082,7 @@ GameObject:
   - component: {fileID: 1086831334}
   - component: {fileID: 1086831336}
   - component: {fileID: 1086831335}
+  - component: {fileID: 1086831337}
   m_Layer: 5
   m_Name: Wooden Box (1)
   m_TagString: Untagged
@@ -2440,12 +3097,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086831333}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2490,6 +3147,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086831333}
   m_CullTransparentMesh: 1
+--- !u!114 &1086831337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086831333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 79.89, y: -174.2, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 79.89, y: -140, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 79.89, y: -174.2, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 79.89, y: -165, z: 0}
+    duration: 0.1
+    delay: 0.4
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 79.89, y: -174.2, z: 0}
+    duration: 0.1
+    delay: 0.6
+    ease: 0
 --- !u!1 &1118643479
 GameObject:
   m_ObjectHideFlags: 0
@@ -2501,6 +3195,7 @@ GameObject:
   - component: {fileID: 1118643480}
   - component: {fileID: 1118643482}
   - component: {fileID: 1118643481}
+  - component: {fileID: 1118643483}
   m_Layer: 5
   m_Name: Plate (3)
   m_TagString: Untagged
@@ -2515,13 +3210,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118643479}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1252596057}
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 1757975158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2566,6 +3261,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118643479}
   m_CullTransparentMesh: 1
+--- !u!114 &1118643483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118643479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 148.4, y: -300.23, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 148.4, y: -230.23, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 148.4, y: -300.23, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
 --- !u!1 &1165545280
 GameObject:
   m_ObjectHideFlags: 0
@@ -2577,6 +3299,7 @@ GameObject:
   - component: {fileID: 1165545281}
   - component: {fileID: 1165545283}
   - component: {fileID: 1165545282}
+  - component: {fileID: 1165545284}
   m_Layer: 5
   m_Name: Chair1 (3)
   m_TagString: Untagged
@@ -2591,12 +3314,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1165545280}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 2127959241}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2641,6 +3364,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1165545280}
   m_CullTransparentMesh: 1
+--- !u!114 &1165545284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165545280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -332, y: -455, z: 0}
+    rotation: {x: 0, y: 180, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -332, y: -382, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -332, y: -455, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -307, y: -455, z: 0}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &1252596056
 GameObject:
   m_ObjectHideFlags: 0
@@ -2652,8 +3407,9 @@ GameObject:
   - component: {fileID: 1252596057}
   - component: {fileID: 1252596059}
   - component: {fileID: 1252596058}
+  - component: {fileID: 1252596060}
   m_Layer: 5
-  m_Name: Cup
+  m_Name: Cup(3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2716,6 +3472,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1252596056}
   m_CullTransparentMesh: 1
+--- !u!114 &1252596060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252596056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -3.7, y: 12.5, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 50, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 12.5, z: 0}
+    duration: 0.2
+    delay: 0.3
+    ease: 0
 --- !u!1 &1321075700
 GameObject:
   m_ObjectHideFlags: 0
@@ -2727,6 +3510,7 @@ GameObject:
   - component: {fileID: 1321075701}
   - component: {fileID: 1321075703}
   - component: {fileID: 1321075702}
+  - component: {fileID: 1321075705}
   m_Layer: 5
   m_Name: Chair1 (5)
   m_TagString: Untagged
@@ -2741,12 +3525,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1321075700}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 2127959241}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2791,6 +3575,171 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1321075700}
   m_CullTransparentMesh: 1
+--- !u!114 &1321075705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321075700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -419, y: -601, z: 0}
+    rotation: {x: 0, y: 180, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -419, y: -531, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -419, y: -601, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -394, y: -601, z: 0}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
+--- !u!1 &1323040070
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1323040071}
+  - component: {fileID: 1323040074}
+  - component: {fileID: 1323040073}
+  - component: {fileID: 1323040072}
+  m_Layer: 5
+  m_Name: Animate Btn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1323040071
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1323040070}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 581660874}
+  m_Father: {fileID: 1815610362}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 700}
+  m_SizeDelta: {x: 500, y: 160}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1323040072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1323040070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1323040073}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 42754029}
+        m_TargetAssemblyTypeName: TacoVsBurrito.GalleryUpgrade, Assembly-CSharp
+        m_MethodName: PlayAll
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1323040073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1323040070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.101960786, g: 0.79607844, b: 0.19215687, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -387909434, guid: dd767ac4ca31d4956b9981c3f651b84f, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1.5
+--- !u!222 &1323040074
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1323040070}
+  m_CullTransparentMesh: 1
 --- !u!1 &1406199112
 GameObject:
   m_ObjectHideFlags: 0
@@ -2822,11 +3771,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 1343}
   m_SizeDelta: {x: 400, y: 900}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1406199114
@@ -2867,23 +3816,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406199112}
   m_CullTransparentMesh: 1
---- !u!111 &1406199116
-Animation:
+--- !u!114 &1406199116
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406199112}
   m_Enabled: 1
-  serializedVersion: 4
-  m_Animation: {fileID: 7400000, guid: 15b2175ca705f4b85a73f00e040b1e8b, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 15b2175ca705f4b85a73f00e040b1e8b, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_UpdateMode: 0
-  m_CullingType: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 0, y: 2243, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 0, y: 1343, z: 0}
+    duration: 0.5
+    delay: 0
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 5}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: -3}
+    duration: 0.2
+    delay: 0.6
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 0}
+    duration: 0.2
+    delay: 0.8
+    ease: 0
 --- !u!1 &1485299806
 GameObject:
   m_ObjectHideFlags: 0
@@ -3028,6 +3997,7 @@ GameObject:
   - component: {fileID: 1492505884}
   - component: {fileID: 1492505886}
   - component: {fileID: 1492505885}
+  - component: {fileID: 1492505887}
   m_Layer: 5
   m_Name: Wall Lantern
   m_TagString: Untagged
@@ -3042,12 +4012,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492505883}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3092,6 +4062,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492505883}
   m_CullTransparentMesh: 1
+--- !u!114 &1492505887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492505883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -377.3, y: 111.8, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 0
+    vectorValue: {x: 0.7, y: 0.7, z: 0.7}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1.2, y: 1.2, z: 1.2}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1, y: 1, z: 1}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
 --- !u!1 &1575343528
 GameObject:
   m_ObjectHideFlags: 0
@@ -3103,6 +4105,7 @@ GameObject:
   - component: {fileID: 1575343529}
   - component: {fileID: 1575343531}
   - component: {fileID: 1575343530}
+  - component: {fileID: 1575343532}
   m_Layer: 5
   m_Name: Wooden Box
   m_TagString: Untagged
@@ -3117,12 +4120,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575343528}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3167,6 +4170,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575343528}
   m_CullTransparentMesh: 1
+--- !u!114 &1575343532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575343528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -88.835, y: -174.2, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -88.835, y: -140, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -88.835, y: -174.2, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -88.835, y: -165, z: 0}
+    duration: 0.1
+    delay: 0.4
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -88.835, y: -174.2, z: 0}
+    duration: 0.1
+    delay: 0.6
+    ease: 0
 --- !u!1 &1614759258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3178,6 +4218,7 @@ GameObject:
   - component: {fileID: 1614759259}
   - component: {fileID: 1614759261}
   - component: {fileID: 1614759260}
+  - component: {fileID: 1614759262}
   m_Layer: 5
   m_Name: Plate (4)
   m_TagString: Untagged
@@ -3192,13 +4233,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1614759258}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 379410318}
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 1757975158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3243,6 +4284,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1614759258}
   m_CullTransparentMesh: 1
+--- !u!114 &1614759262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614759258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 163.6, y: -318.33, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 163.6, y: -248.33, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 163.6, y: -318.33, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
 --- !u!1 &1642020526
 GameObject:
   m_ObjectHideFlags: 0
@@ -3254,6 +4322,7 @@ GameObject:
   - component: {fileID: 1642020527}
   - component: {fileID: 1642020529}
   - component: {fileID: 1642020528}
+  - component: {fileID: 1642020530}
   m_Layer: 5
   m_Name: Flower Vas
   m_TagString: Untagged
@@ -3268,12 +4337,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1642020526}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3318,6 +4387,48 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1642020526}
   m_CullTransparentMesh: 1
+--- !u!114 &1642020530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642020526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 0, y: -249, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 7}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: -5}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 3}
+    duration: 0.2
+    delay: 0.4
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: -1}
+    duration: 0.2
+    delay: 0.6
+    ease: 0
+  - animationType: 2
+    vectorValue: {x: 0, y: 0, z: 0}
+    duration: 0.2
+    delay: 0.8
+    ease: 0
 --- !u!1 &1642786733
 GameObject:
   m_ObjectHideFlags: 0
@@ -3366,12 +4477,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_ReferenceResolution: {x: 1242, y: 2688}
+  m_ScreenMatchMode: 1
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -3412,28 +4523,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1078645042}
-  - {fileID: 1406199113}
-  - {fileID: 821439373}
-  - {fileID: 1031708452}
-  - {fileID: 445299074}
-  - {fileID: 140250718}
-  - {fileID: 918756051}
-  - {fileID: 1165545281}
-  - {fileID: 940919350}
-  - {fileID: 1321075701}
-  - {fileID: 1575343529}
-  - {fileID: 1086831334}
-  - {fileID: 1492505884}
-  - {fileID: 237219174}
-  - {fileID: 1077653646}
-  - {fileID: 1642020527}
-  - {fileID: 1809951187}
-  - {fileID: 221251255}
-  - {fileID: 620733682}
-  - {fileID: 1118643480}
-  - {fileID: 1614759259}
-  - {fileID: 553984292}
+  - {fileID: 42754028}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3578,6 +4668,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725930109}
   m_CullTransparentMesh: 1
+--- !u!1 &1757975157
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1757975158}
+  m_Layer: 5
+  m_Name: Plates
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1757975158
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757975157}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1809951187}
+  - {fileID: 221251255}
+  - {fileID: 620733682}
+  - {fileID: 1118643480}
+  - {fileID: 1614759259}
+  - {fileID: 553984292}
+  m_Father: {fileID: 42754028}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1809951186
 GameObject:
   m_ObjectHideFlags: 0
@@ -3589,6 +4720,7 @@ GameObject:
   - component: {fileID: 1809951187}
   - component: {fileID: 1809951189}
   - component: {fileID: 1809951188}
+  - component: {fileID: 1809951190}
   m_Layer: 5
   m_Name: Plate
   m_TagString: Untagged
@@ -3603,13 +4735,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1809951186}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 853564244}
-  m_Father: {fileID: 1642786737}
+  m_Father: {fileID: 1757975158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3654,6 +4786,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1809951186}
   m_CullTransparentMesh: 1
+--- !u!114 &1809951190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809951186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -147, y: -300.23, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -147, y: -230.23, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -147, y: -300.23, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
 --- !u!1 &1815610358
 GameObject:
   m_ObjectHideFlags: 0
@@ -3753,6 +4912,7 @@ RectTransform:
   - {fileID: 934159829}
   - {fileID: 987824790}
   - {fileID: 1485299807}
+  - {fileID: 1323040071}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3908,8 +5068,9 @@ GameObject:
   - component: {fileID: 2006689002}
   - component: {fileID: 2006689004}
   - component: {fileID: 2006689003}
+  - component: {fileID: 2006689005}
   m_Layer: 5
-  m_Name: Cup
+  m_Name: Cup(5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3972,6 +5133,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006689001}
   m_CullTransparentMesh: 1
+--- !u!114 &2006689005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006689001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: -3.7, y: 12.5, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 50, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: -3.7, y: 12.5, z: 0}
+    duration: 0.2
+    delay: 0.3
+    ease: 0
 --- !u!1 &2071443846
 GameObject:
   m_ObjectHideFlags: 0
@@ -4109,6 +5297,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2071443846}
   m_CullTransparentMesh: 1
+--- !u!1 &2127959240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2127959241}
+  m_Layer: 5
+  m_Name: Chairs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2127959241
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127959240}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 445299074}
+  - {fileID: 140250718}
+  - {fileID: 918756051}
+  - {fileID: 1165545281}
+  - {fileID: 940919350}
+  - {fileID: 1321075701}
+  m_Father: {fileID: 42754028}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
