@@ -10,6 +10,7 @@ namespace TacoVsBurrito
         }
         void Start()
         {
+            Application.runInBackground = true;
             Application.targetFrameRate = FRAME_RATE;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Input.multiTouchEnabled = false;

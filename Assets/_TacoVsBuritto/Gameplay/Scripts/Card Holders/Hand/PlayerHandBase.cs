@@ -26,6 +26,7 @@ namespace TacoVsBurrito
         public virtual void AddCard(CardBase c)
         {
             _cards.Add(c);
+            CheckAndSetPlayerToNoBuenoCard(c);
             UpdateCountTxt();
         }
         public virtual void AddCardWithoutArranging(CardBase c)
@@ -49,7 +50,7 @@ namespace TacoVsBurrito
         {
             if(c is NoBuenoCard @noBuenoCard)
             {
-                @noBuenoCard.NoBuenoPlayer = GetComponentInParent<PlayerBase>();;
+                @noBuenoCard.NoBuenoPlayer = GetComponentInParent<PlayerBase>();
             }
         }
 

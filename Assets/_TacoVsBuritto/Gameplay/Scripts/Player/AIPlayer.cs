@@ -33,6 +33,7 @@ namespace TacoVsBurrito
             base.OnEnable();
 
             GameEvents.OnTurnStarted += ManageTurnStarted;
+            GameEvents.OnTurnEnded += ManageOnTurnEnded;
             GameEvents.OnTurnStateChanged += ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow += ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
@@ -47,6 +48,7 @@ namespace TacoVsBurrito
         {
             base.OnDisable();
             GameEvents.OnTurnStarted -= ManageTurnStarted;
+            GameEvents.OnTurnEnded -= ManageOnTurnEnded;
             GameEvents.OnTurnStateChanged -= ManageTurnStateChanged;
             GameEvents.OnStartNoBuenoInterruptWindow -= ManageNoBuenoInterruptWindow;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
@@ -78,6 +80,10 @@ namespace TacoVsBurrito
             {
                 DrawACard();
             }
+        }
+        void ManageOnTurnEnded(PlayerBase player)
+        {
+            currentNoBuenoPlayer = null;
         }
 
         async void DrawACard()

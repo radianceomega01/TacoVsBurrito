@@ -186,6 +186,7 @@ MonoBehaviour:
   - {fileID: 237219177}
   - {fileID: 821439376}
   - {fileID: 1031708455}
+  - {fileID: 1077653650}
   - {fileID: 1575343532}
   - {fileID: 1086831337}
   - {fileID: 445299077}
@@ -2933,6 +2934,7 @@ GameObject:
   - component: {fileID: 1077653646}
   - component: {fileID: 1077653649}
   - component: {fileID: 1077653648}
+  - component: {fileID: 1077653650}
   m_Layer: 5
   m_Name: Table
   m_TagString: Untagged
@@ -2997,6 +2999,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077653645}
   m_CullTransparentMesh: 1
+--- !u!114 &1077653650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077653645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 0, y: -258, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 1
+    vectorValue: {x: 0, y: -245, z: 0}
+    duration: 0.2
+    delay: 0
+    ease: 0
+  - animationType: 1
+    vectorValue: {x: 0, y: -258, z: 0}
+    duration: 0.2
+    delay: 0.2
+    ease: 0
 --- !u!1 &1078645041
 GameObject:
   m_ObjectHideFlags: 0
