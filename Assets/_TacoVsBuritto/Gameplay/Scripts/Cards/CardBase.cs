@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using DG.Tweening;
 using TMPro;
@@ -34,6 +35,7 @@ namespace TacoVsBurrito
         private InteractionType interactionType = InteractionType.Click;
         private ICardPickupTarget currentPickupTarget;
         private bool canDrag;
+        private bool isDragging;
 
 
         public string Name { get { return cardName; } }
@@ -48,13 +50,15 @@ namespace TacoVsBurrito
         protected virtual void OnEnable()
         {
             GameEvents.OnCardDragBegin += DisableInteraction;
-            GameEvents.OnCardDragEnd += ResumeInteraction; ;
+            GameEvents.OnCardDragEnd += ResumeInteraction;
+            GameEvents.OnResetCurrentDraggingCard += ResetCurrentDraggingCard;
         }
 
         protected virtual void OnDisable()
         {
             GameEvents.OnCardDragBegin -= DisableInteraction;
             GameEvents.OnCardDragEnd -= ResumeInteraction;
+            GameEvents.OnResetCurrentDraggingCard -= ResetCurrentDraggingCard;
         }
 
         protected virtual void Start()
@@ -108,6 +112,7 @@ namespace TacoVsBurrito
             canDrag = DragManager.TryStartDrag(this);
             if(!canDrag) return;
 
+            isDragging = true;
             GameEvents.OnCardDragBegin?.Invoke();
 
             _originalScale = transform.localScale;
@@ -139,7 +144,7 @@ namespace TacoVsBurrito
             if(interactionType == InteractionType.Click || !canDrag) return;
 
             _rectTransform.anchoredPosition +=
-                eventData.delta / canvas.scaleFactor;
+                eventData.delta / canvas.scaleFactor;    
         }
 
         // =========================================================
@@ -148,12 +153,12 @@ namespace TacoVsBurrito
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(interactionType == InteractionType.Click|| !canDrag) return;
-
+            if(interactionType == InteractionType.Click|| !canDrag || !isDragging) return;
             GameEvents.OnCardDragEnd?.Invoke();
             _canvasGroup.blocksRaycasts = true;
 
             transform.localScale = _originalScale;
+            isDragging = false;
 
             GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
             if (targetObject != null)
@@ -192,6 +197,14 @@ namespace TacoVsBurrito
         void ResumeInteraction()
         {
             _canvasGroup.blocksRaycasts = wasInteractionEnabledBeforeDrag;
+        }
+        void ResetCurrentDraggingCard()
+        {
+            if(!isDragging) return;
+
+            isDragging = false;
+            DragManager.EndDrag(this);
+            ReturnToHandOnNoTarget();
         }
         public void EnableInteraction()
         {

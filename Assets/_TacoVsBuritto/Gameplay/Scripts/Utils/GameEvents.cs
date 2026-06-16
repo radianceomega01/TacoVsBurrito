@@ -44,6 +44,7 @@ namespace TacoVsBurrito
         // ---- Card Drag ----
         public static Action           OnCardDragBegin;
         public static Action           OnCardDragEnd;
+        public static Action           OnResetCurrentDraggingCard;
         public static Action<CardBase> OnCardClickedForActionTarget;
 
         // ---- Action cards ----

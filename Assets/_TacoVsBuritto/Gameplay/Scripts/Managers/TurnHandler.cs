@@ -194,6 +194,7 @@ namespace TacoVsBurrito
 
                 Debug.Log("No Bueno window expired");
                 GameEvents.OnLogMessage?.Invoke("⏰ No Bueno window expired!");
+                GameEvents.OnResetCurrentDraggingCard?.Invoke();
                 if(noBuenoCardsPlayed.Count % 2 == 0)
                 {
                     //CheckAndResolveAction();

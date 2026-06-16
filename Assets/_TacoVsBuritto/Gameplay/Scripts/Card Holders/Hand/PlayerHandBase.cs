@@ -30,7 +30,7 @@ namespace TacoVsBurrito
         }
         public virtual void AddCardWithoutArranging(CardBase c)
         {
-            SetPlayerToNoBuenoCard(c);
+            CheckAndSetPlayerToNoBuenoCard(c);
         }
 
         public virtual void RemoveCard(CardBase c)
@@ -45,7 +45,7 @@ namespace TacoVsBurrito
             _cards.Clear();
             return all;
         }
-        protected void SetPlayerToNoBuenoCard(CardBase c)
+        protected void CheckAndSetPlayerToNoBuenoCard(CardBase c)
         {
             if(c is NoBuenoCard @noBuenoCard)
             {
