@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryUpgrade
   upgradeObjects:
+  - {fileID: 1078645045}
   - {fileID: 1406199116}
   - {fileID: 1492505887}
   - {fileID: 237219177}
@@ -206,7 +207,7 @@ MonoBehaviour:
   - {fileID: 1047540724}
   - {fileID: 553984295}
   - {fileID: 2006689005}
-  staggerDelay: 0.025
+  staggerDelay: 0.02
 --- !u!1 &140250717
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,13 +693,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.23098378, w: 0.9729576}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 26.71}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -918,7 +919,7 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 5000
+  m_ColorTemperature: 1900
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
@@ -3007,6 +3008,7 @@ GameObject:
   - component: {fileID: 1078645042}
   - component: {fileID: 1078645044}
   - component: {fileID: 1078645043}
+  - component: {fileID: 1078645045}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -3021,10 +3023,10 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078645041}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 42754028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3071,6 +3073,48 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078645041}
   m_CullTransparentMesh: 1
+--- !u!114 &1078645045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078645041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0445d13d3e7467484b84feb9bfd97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TacoVsBurrito.GalleryObjectAnimation
+  initialValues:
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  animations:
+  - animationType: 0
+    vectorValue: {x: 1.03, y: 1.03, z: 1.03}
+    duration: 0.1
+    delay: 0
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1.015, y: 1.015, z: 1.015}
+    duration: 0.1
+    delay: 0.1
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1.025, y: 1.025, z: 1.025}
+    duration: 0.1
+    delay: 0.2
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1.01, y: 1.01, z: 1.01}
+    duration: 0.1
+    delay: 0.3
+    ease: 0
+  - animationType: 0
+    vectorValue: {x: 1, y: 1, z: 1}
+    duration: 0.1
+    delay: 0.4
+    ease: 0
 --- !u!1 &1086831333
 GameObject:
   m_ObjectHideFlags: 0
@@ -4497,7 +4541,7 @@ Canvas:
   m_GameObject: {fileID: 1642786733}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 330585545}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -4524,7 +4568,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 42754028}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1981547126}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4920,6 +4964,38 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1981547125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1981547126}
+  m_Layer: 0
+  m_Name: Gameplay holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1981547126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981547125}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1642786737}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2004919080
 GameObject:
   m_ObjectHideFlags: 0
@@ -5389,7 +5465,7 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 1642786737}
+  - {fileID: 1981547126}
   - {fileID: 1815610362}
   - {fileID: 290366809}
   - {fileID: 436048781}
