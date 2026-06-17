@@ -92,7 +92,7 @@ namespace TacoVsBurrito
         private void OnHealthInspector() => PlaySFX(sfxHealthInspector);
         private void OnNoBuenoPlayed(NoBuenoCard card) => PlaySFX(sfxNoBueno);
         private void OnCraftyCrowActionTargeted(TargetTypeContext ctx) => PlaySFX(sfxCraftyCrow);
-        private void OnOrderEnvyActionTargeted(TargetTypeContext ctx) => PlaySFX(sfxCardDraw);
+        private void OnOrderEnvyActionTargeted(TargetTypeContext ctx) => PlaySFX(sfxOrderEnvy);
         private void OnGameFinished() => PlaySFX(sfxWin);
 
         private void PlayMusic(AudioClip clip)
