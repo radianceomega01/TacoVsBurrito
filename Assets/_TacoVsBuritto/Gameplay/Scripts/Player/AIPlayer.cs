@@ -16,7 +16,7 @@ namespace TacoVsBurrito
 
         const int CARD_DRAW_DELAY_IN_MS = 750;
         const int THINKING_DELAY_IN_MS = 1500;
-        const int PLAY_NO_BUENO_DELAY_IN_MS = 1500;
+        const int PLAY_NO_BUENO_DELAY_IN_MS = 3500;
 
         bool isSelfTurnRunning = false;
         int noBuenoCounter = 0;
@@ -131,7 +131,10 @@ namespace TacoVsBurrito
             await Task.Delay(THINKING_DELAY_IN_MS);
             var envyVictim = aIBrain.ChooseOrderEnvyVictim(this, _players);
             if (envyVictim != null)
+            {
                 GameEvents.OnOrderEnvyActionTargeted?.Invoke(new TargetTypeContext(this, envyVictim, null));
+                GameEvents.OnGUIClickSFX?.Invoke();
+            }
         }
 
         async void ManageCraftyCraftyCrowAction()
@@ -165,8 +168,9 @@ namespace TacoVsBurrito
             GameEvents.OnCardClickedForActionTarget?.Invoke(cardPicked);
         }
 
-        void ManageNoBuenoInterruptWindow(ActionCardBase card)
+        async void ManageNoBuenoInterruptWindow(ActionCardBase card)
         {
+            await Task.Delay(PLAY_NO_BUENO_DELAY_IN_MS);
             if (!isSelfTurnRunning)
             {
                 AIConsiderNoBueno(card);
@@ -192,9 +196,8 @@ namespace TacoVsBurrito
                 PlayNoBueno();
             }
         }
-        async void PlayNoBueno()
+        void PlayNoBueno()
         {
-            await Task.Delay(PLAY_NO_BUENO_DELAY_IN_MS);
             int index = aIBrain.FindFirstInHand<NoBuenoCard>(this);
             if (index == -1)
             {
