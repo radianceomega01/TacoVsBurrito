@@ -21,7 +21,7 @@ namespace TacoVsBurrito
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
         const int CARD_TRASH_DELAY_IN_MS = 500;
-        const int NO_BUENO_START_DELAY_IN_MS = 100; //To avoid race condition of nobueno played and turnstate changed
+        const int STATE_TRANSITION_DELAY_IN_MS = 100; //To avoid race condition like nobueno played and turnstate changed
 
         public TurnHandler(TrashPile trashPile)
         {
@@ -124,7 +124,7 @@ namespace TacoVsBurrito
             }
         }
 
-        void ManageTurnEnded(PlayerBase oldPlayer)
+        async void ManageTurnEnded(PlayerBase oldPlayer)
         {
             currentActiveActionCard = null;
             currentPlayedActionCard = null;
@@ -134,6 +134,7 @@ namespace TacoVsBurrito
             }
             
             currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.Count;
+            await Task.Delay(STATE_TRANSITION_DELAY_IN_MS);
             GameEvents.OnTurnStarted?.Invoke(CurrentPlayer);
 
             if(isDrawPileEmpty)
@@ -178,7 +179,7 @@ namespace TacoVsBurrito
         }
         async Task ManageStartNoBuenoInterruptWindow()
         {
-            await Task.Delay(NO_BUENO_START_DELAY_IN_MS);
+            await Task.Delay(STATE_TRANSITION_DELAY_IN_MS);
             SwitchState(TurnState.NoBuenoWindowPhase);
             GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(currentActiveActionCard);
             StartNoBuenoTimer();

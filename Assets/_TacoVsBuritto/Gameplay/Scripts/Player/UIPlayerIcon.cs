@@ -16,6 +16,7 @@ namespace TacoVsBurrito
             GameEvents.OnOrderEnvyAction += ManageOrderEnvyAction;
             GameEvents.OnOrderEnvyActionTargeted += ManageOrderEnvyActionTargeted;
             GameEvents.OnActionResolved += ManageActionResolved;
+            GameEvents.OnTurnStarted += ManageTurnStarted;
             GameEvents.OnTurnEnded += ManageTurnEnded;
         }
 
@@ -24,7 +25,8 @@ namespace TacoVsBurrito
             GameEvents.OnOrderEnvyAction -= ManageOrderEnvyAction;
             GameEvents.OnOrderEnvyActionTargeted -= ManageOrderEnvyActionTargeted;
             GameEvents.OnActionResolved -= ManageActionResolved;
-            GameEvents.OnTurnEnded += ManageTurnEnded;
+            GameEvents.OnTurnStarted -= ManageTurnStarted;
+            GameEvents.OnTurnEnded -= ManageTurnEnded;
         }
 
         void Start()
@@ -63,6 +65,15 @@ namespace TacoVsBurrito
             if(parentPlayer != targetTypeContext.victim)
                 DeactivateGlow();
         }
+        private void ManageTurnStarted(PlayerBase player)
+        {
+            if(parentPlayer.Index == player.Index)
+            {
+                ActivateGlow();
+                Debug.LogWarning(parentPlayer.Index+ ", "+ player.Index);
+            }
+        }
+
         void ManageTurnEnded(PlayerBase player)
         {
             if(glowBG.IsGlowActive)
@@ -85,6 +96,7 @@ namespace TacoVsBurrito
 
         public void DeactivateGlow()
         {
+            Debug.LogWarning("deactivated");
             glowBG.Reset();
         }
     }

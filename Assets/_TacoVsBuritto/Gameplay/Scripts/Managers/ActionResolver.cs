@@ -168,6 +168,7 @@ namespace TacoVsBurrito
                 return;
             }
             winner.Hand.AddCard(chosenCard);
+            GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
             GameEvents.OnTurnChangedInFoodFight?.Invoke(winner);
         }
 
