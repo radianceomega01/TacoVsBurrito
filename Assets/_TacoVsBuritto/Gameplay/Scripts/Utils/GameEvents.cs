@@ -20,7 +20,7 @@ namespace TacoVsBurrito
         public static Action<PlayerBase>                OnTurnStarted;
         public static Action<TurnState, PlayerBase>     OnTurnStateChanged;
         public static Action<PlayerBase>                OnTurnEnded;
-        public static Action<PlayerBase>                OnTurnChangedInFoodFight;
+        public static Action<PlayerBase>                OnTurnChangedAfterFoodFight;
         public static Action<TurnState, PlayerBase>     OnPlayerAndTurnStateChanged;
         public static Action                            OnGameFinished;
         public static Action<Tuple<PlayerBase, int>>    OnGameWinner;         // Winning player and score

@@ -30,7 +30,7 @@ namespace TacoVsBurrito
             GameEvents.OnGameInit += DecidePlayers;
             GameEvents.OnCardsDistributed += StartGame;
             GameEvents.OnTurnEnded += ManageTurnEnded;
-            GameEvents.OnTurnChangedInFoodFight += ManageTurnChangedInFoodFight;
+            GameEvents.OnTurnChangedAfterFoodFight += ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPileEmpty += ManageDrawPileEmpty;
             GameEvents.OnActionCardPlayed += ManageActionCardPlayed;
             GameEvents.OnNoBuenoPlayed += ManageNoBuenoPlayed;
@@ -46,7 +46,7 @@ namespace TacoVsBurrito
             GameEvents.OnGameInit -= DecidePlayers;
             GameEvents.OnCardsDistributed -= StartGame;
             GameEvents.OnTurnEnded -= ManageTurnEnded;
-            GameEvents.OnTurnChangedInFoodFight -= ManageTurnChangedInFoodFight;
+            GameEvents.OnTurnChangedAfterFoodFight -= ManageTurnChangedInFoodFight;
             GameEvents.OnDrawPileEmpty -= ManageDrawPileEmpty;
             GameEvents.OnActionCardPlayed -= ManageActionCardPlayed;
             GameEvents.OnNoBuenoPlayed -= ManageNoBuenoPlayed;
