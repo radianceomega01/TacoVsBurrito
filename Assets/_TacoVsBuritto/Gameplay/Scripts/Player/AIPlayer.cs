@@ -142,7 +142,6 @@ namespace TacoVsBurrito
             if (!isSelfTurnRunning)
                 return;
 
-
             await Task.Delay(THINKING_DELAY_IN_MS);
             aIBrain.ChooseCraftyCrowVictim(this, _players, out PlayerBase victim, out CardBase cardToSteal);
             if (victim != null)

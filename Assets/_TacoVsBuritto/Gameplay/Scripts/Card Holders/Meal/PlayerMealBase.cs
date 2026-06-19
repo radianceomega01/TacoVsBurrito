@@ -273,11 +273,15 @@ namespace TacoVsBurrito
         }
         protected void ManageCraftyCrowAction()
         {
+            //Highlight and enable cards other than current players card for craftycrow
             if (GameplayManager.Instance.CurrentPlayer != parentPlayer)
             {
                 _cards.ForEach(card =>
                 {
-                    card.EnableInteraction();
+                    if(GameplayManager.Instance.CurrentPlayer is SelfPlayer) //Enable interaction only if currentPlayer is selfPlayer
+                    {
+                        card.EnableInteraction();
+                    } 
                     card.ActivateGlow();
                 });
             }
