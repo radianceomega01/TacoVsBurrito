@@ -11,7 +11,7 @@ namespace TacoVsBurrito
         [Range(2, 4)]
         [SerializeField] int numberOfPlayers = 2;
         [SerializeField] GameDataSO gameData;
-        [SerializeField] GameMode gameMode = GameMode.VsAI;
+        [SerializeField] GameplayMode gameMode = GameplayMode.VsAI;
 
         [SerializeField] Transform playersParent;
         [SerializeField] PlayerBase selfPlayer;
@@ -72,7 +72,7 @@ namespace TacoVsBurrito
         }
         void InitializeOpponentPlayer(GameObject opponentPrefab, int index)
         {
-            if (gameMode == GameMode.VsAI)
+            if (gameMode == GameplayMode.VsAI)
             {
                 opponentPrefab.AddComponent<AIPlayer>();
             }
@@ -98,7 +98,7 @@ namespace TacoVsBurrito
             GameEvents.OnDistributeCards?.Invoke(activePlayers);
         }
     }
-    public enum GameMode
+    public enum GameplayMode
     {
         VsPlayer,
         VsAI
