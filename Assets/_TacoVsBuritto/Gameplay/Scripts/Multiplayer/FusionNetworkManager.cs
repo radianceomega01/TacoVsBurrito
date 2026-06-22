@@ -10,7 +10,10 @@ namespace TacoVsBurrito
     {
         public static FusionNetworkManager Instance;
 
-        private NetworkRunner Runner;
+        public NetworkRunner Runner {get; private set;}
+        public List<SessionInfo> AvailableSessions {get; private set;}
+
+        NetworkSceneManagerDefault sceneManager;
 
         private void Awake()
         {
@@ -25,19 +28,30 @@ namespace TacoVsBurrito
             }
         }
 
-        private async Task EnsureRunner()
+        private void Start()
+        {
+            EnsureRunner();
+            EnsureSceneManager();
+        }
+
+        private void EnsureRunner()
         {
             if (Runner != null)
                 return;
 
             Runner = gameObject.AddComponent<NetworkRunner>();
             Runner.ProvideInput = true;
+
+            Runner.AddCallbacks(this);
+        }
+        private void EnsureSceneManager()
+        {
+            if(sceneManager == null)
+                sceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>();
         }
 
         public async Task CreateFriendRoom(string roomCode)
         {
-            await EnsureRunner();
-
             var result = await Runner.StartGame(new StartGameArgs
             {
                 GameMode = GameMode.Host,
@@ -50,12 +64,11 @@ namespace TacoVsBurrito
 
         public async Task JoinFriendRoom(string roomCode)
         {
-            await EnsureRunner();
-
             var result = await Runner.StartGame(new StartGameArgs
             {
                 GameMode = GameMode.Client,
-                SessionName = roomCode
+                SessionName = roomCode,
+                SceneManager = sceneManager
             });
 
             Debug.Log($"Join Result: {result.Ok}");
@@ -63,23 +76,19 @@ namespace TacoVsBurrito
 
         public async Task JoinLobby()
         {
-            await EnsureRunner();
-
             await Runner.JoinSessionLobby(SessionLobby.ClientServer);
         }
 
         public async Task JoinOnlineGame(string sessionName)
         {
-            await EnsureRunner();
-
             await Runner.StartGame(new StartGameArgs
             {
                 GameMode = GameMode.Client,
-                SessionName = sessionName
+                SessionName = sessionName,
+                SceneManager = sceneManager
             });
         }
 
-        public List<SessionInfo> AvailableSessions = new();
 
         public void OnSessionListUpdated(
             NetworkRunner runner,
