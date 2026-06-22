@@ -115,7 +115,6 @@ namespace TacoVsBurrito
 
         public void DeactivateGlow()
         {
-            Debug.LogWarning("deactivated");
             glowBG.Reset();
         }
     }
