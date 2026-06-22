@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_TacoVsBuritto/Gameplay/Scenes/GameplayScreen.unity
     guid: da32a3d23eec07e4da61e73b34f62382
+  - enabled: 1
+    path: Assets/_TacoVsBuritto/Gameplay/Scenes/PlayOnlineScreen.unity
+    guid: 812bcf6b6798140d486d253bd4b39d05
+  - enabled: 1
+    path: Assets/_TacoVsBuritto/Gameplay/Scenes/PlayOfflineScreen.unity
+    guid: 8373abe0942a7411e8fb53c0e454e26f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
