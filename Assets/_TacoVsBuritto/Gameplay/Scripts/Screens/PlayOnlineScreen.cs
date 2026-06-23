@@ -54,13 +54,13 @@ namespace TacoVsBurrito
         {
             BeginProgressBar();
             joinType = JoinRoomType.CreateRoom;
-            await FusionNetworkManager.Instance.CreateFriendRoom(4);
+            FusionNetworkManager.Instance.CreateFriendRoom(4);
         }
         public async void OnJoinRoomClicked()
         {
             BeginProgressBar();
             joinType = JoinRoomType.JoinRoom;
-            await FusionNetworkManager.Instance.CreateFriendRoom(4);
+            FusionNetworkManager.Instance.CreateFriendRoom(4);
         }
         public async void OnPlayRandomClicked()
         {

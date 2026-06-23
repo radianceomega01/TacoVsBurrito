@@ -18,10 +18,10 @@ namespace TacoVsBurrito
 
         NetworkSceneManagerDefault sceneManager;
 
-        public event Action<NetworkRunner> OnConnectedToServerEvent;
-        public event Action<NetworkRunner, string> OnConnectFailedEvent;
+        public event Action<NetworkRunner, string> OnJoinLobbyFailedEvent;
         public event Action<NetworkRunner, NetDisconnectReason> OnDisconnectedFromServerEvent;
         public event Action<NetworkRunner, PlayerRef> OnPlayerJoinedEvent;
+        public event Action<string> OnJoinFailedEvent;
 
         private void Awake()
         {
@@ -34,14 +34,13 @@ namespace TacoVsBurrito
             {
                 Destroy(gameObject);
             }
+            Init();
         }
 
-        public async Task Init()
+        void Init()
         {
             EnsureRunner();
             EnsureSceneManager();
-
-            await JoinLobby();
         }
 
         private void EnsureRunner()
@@ -52,7 +51,7 @@ namespace TacoVsBurrito
             Runner = gameObject.AddComponent<NetworkRunner>();
             Runner.ProvideInput = true;
 
-            Runner.AddCallbacks(this);
+            Runner.AddCallbacks(this); 
         }
 
         private void EnsureSceneManager()
@@ -61,53 +60,54 @@ namespace TacoVsBurrito
                 sceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>();
         }
 
-        async Task JoinLobby()
+        public async void JoinLobby()
         {
-            var result = await Runner.JoinSessionLobby(SessionLobby.Shared);
+            var result = await Runner.JoinSessionLobby(SessionLobby.ClientServer);
             if (result.Ok)
             {
-                OnConnectedToServerEvent?.Invoke(Runner);
+                JoinOnlineGame(Runner.SessionInfo.Name);
             }
             else
             {
-                OnConnectFailedEvent?.Invoke(Runner, result.ErrorMessage);
+                OnJoinLobbyFailedEvent?.Invoke(Runner, result.ErrorMessage);
             }
         }
 
-        public async Task CreateFriendRoom(int playerCount)
+        public async void CreateFriendRoom(int playerCount)
         {
             var result = await Runner.StartGame(new StartGameArgs
             {
-                GameMode = GameMode.Shared,
+                GameMode = GameMode.Host,
                 SessionName = GenerateRoomCode(),
                 SceneManager = sceneManager,
                 PlayerCount = playerCount
             });
-
+            InvokeRoomJoinedEvent(result);
             Debug.Log($"Host Result: {result.Ok}");
         }
 
-        public async Task JoinFriendRoom(string roomCode)
+        public async void JoinFriendRoom(string roomCode)
         {
             var result = await Runner.StartGame(new StartGameArgs
             {
-                GameMode = GameMode.Shared,
+                GameMode = GameMode.Client,
                 SessionName = roomCode,
                 SceneManager = sceneManager
             });
-
+            InvokeRoomJoinedEvent(result);
             Debug.Log($"Join Result: {result.Ok}");
         }
 
 
-        public async Task JoinOnlineGame(string sessionName)
+        async void JoinOnlineGame(string sessionName)
         {
-            await Runner.StartGame(new StartGameArgs
+            var result = await Runner.StartGame(new StartGameArgs
             {
-                GameMode = GameMode.Shared,
+                GameMode = GameMode.AutoHostOrClient,
                 SessionName = sessionName,
                 SceneManager = sceneManager
             });
+            InvokeRoomJoinedEvent(result);
         }
 
 
@@ -125,7 +125,7 @@ namespace TacoVsBurrito
             }
         }
 
-        private string GenerateRoomCode(int length = 6)
+        string GenerateRoomCode(int length = 6)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -139,17 +139,27 @@ namespace TacoVsBurrito
 
             return new string(code);
         }
-
-
-        public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) => OnDisconnectedFromServerEvent?.Invoke(runner, reason);
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        void InvokeRoomJoinedEvent(StartGameResult startGameResult)
         {
-            OnPlayerJoinedEvent?.Invoke(runner, player);
+            if(startGameResult.Ok)
+            {
+                OnPlayerJoinedEvent?.Invoke(Runner, Runner.LocalPlayer);
+            }
+            else
+            {
+                OnJoinFailedEvent?.Invoke(startGameResult.ErrorMessage);
+            }
+        }
+
+        public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+        {
+            OnDisconnectedFromServerEvent?.Invoke(runner, reason);
         }
 
         #region Unused Callbacks
         public void OnConnectedToServer(NetworkRunner runner){}
         public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason){}
+        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player){}
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
         public void OnInput(NetworkRunner runner, NetworkInput input) { }
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
