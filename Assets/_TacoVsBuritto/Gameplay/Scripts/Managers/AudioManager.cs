@@ -27,16 +27,24 @@ namespace TacoVsBurrito
         [SerializeField] AudioClip sfxWin;
         [SerializeField] AudioClip sfxTurnStart;
 
-        [Range(0f, 1f)] [SerializeField] float musicVolume = 0.8f;
-        [Range(0f, 1f)] [SerializeField] float sfxVolume = 1f;
+        [Range(0f, 1f)][SerializeField] float musicVolume = 0.8f;
+        [Range(0f, 1f)][SerializeField] float sfxVolume = 1f;
 
         private AudioSource _src;
+        private static AudioManager instance;
 
         void Awake()
         {
+            if (instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+
             _src = GetComponent<AudioSource>();
             _src.playOnAwake = false;
-            DontDestroyOnLoad(gameObject);
         }
 
         void Start()
@@ -106,7 +114,7 @@ namespace TacoVsBurrito
                 _src.Play();
             }
         }
-        
+
         private void PlaySFX(AudioClip clip)
         {
             if (clip && _src) _src.PlayOneShot(clip, sfxVolume);

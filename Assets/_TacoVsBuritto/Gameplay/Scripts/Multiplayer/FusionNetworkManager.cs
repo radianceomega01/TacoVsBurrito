@@ -3,9 +3,7 @@ using Fusion.Sockets;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEditor.PackageManager;
 using System;
-using Unity.VectorGraphics;
 
 namespace TacoVsBurrito
 {
@@ -13,15 +11,18 @@ namespace TacoVsBurrito
     {
         public static FusionNetworkManager Instance;
 
-        public NetworkRunner Runner { get; private set; }
+        NetworkRunner Runner;
         public List<SessionInfo> AvailableSessions { get; private set; }
 
         NetworkSceneManagerDefault sceneManager;
 
+        public event Action<NetworkRunner> OnSceneLoadDoneEvent;
         public event Action<NetworkRunner, string> OnJoinLobbyFailedEvent;
         public event Action<NetworkRunner, NetDisconnectReason> OnDisconnectedFromServerEvent;
         public event Action<NetworkRunner, PlayerRef> OnPlayerJoinedEvent;
+        public event Action<NetworkRunner> OnLocalPlayerJoinedEvent;
         public event Action<string> OnJoinFailedEvent;
+        public event Action<NetworkRunner, PlayerRef> OnPlayerLeftEvent;
 
         private void Awake()
         {
@@ -34,10 +35,9 @@ namespace TacoVsBurrito
             {
                 Destroy(gameObject);
             }
-            Init();
         }
 
-        void Init()
+        public void Init()
         {
             EnsureRunner();
             EnsureSceneManager();
@@ -51,7 +51,7 @@ namespace TacoVsBurrito
             Runner = gameObject.AddComponent<NetworkRunner>();
             Runner.ProvideInput = true;
 
-            Runner.AddCallbacks(this); 
+            Runner.AddCallbacks(this);
         }
 
         private void EnsureSceneManager()
@@ -72,6 +72,17 @@ namespace TacoVsBurrito
                 OnJoinLobbyFailedEvent?.Invoke(Runner, result.ErrorMessage);
             }
         }
+        public async Task LeaveRoom()
+        {
+            if (Runner == null)
+                return;
+
+            await Runner.Shutdown();
+            Runner.RemoveCallbacks(this);
+
+            Destroy(Runner);
+            Runner = null;
+        }
 
         public async void CreateFriendRoom(int playerCount)
         {
@@ -82,7 +93,10 @@ namespace TacoVsBurrito
                 SceneManager = sceneManager,
                 PlayerCount = playerCount
             });
-            InvokeRoomJoinedEvent(result);
+            if(result.Ok)
+                OnLocalPlayerJoinedEvent?.Invoke(Runner);
+            else
+                OnJoinFailedEvent?.Invoke(result.ErrorMessage);
             Debug.Log($"Host Result: {result.Ok}");
         }
 
@@ -94,7 +108,11 @@ namespace TacoVsBurrito
                 SessionName = roomCode,
                 SceneManager = sceneManager
             });
-            InvokeRoomJoinedEvent(result);
+
+            if(result.Ok)
+                OnLocalPlayerJoinedEvent?.Invoke(Runner);
+            else
+                OnJoinFailedEvent?.Invoke(result.ErrorMessage);
             Debug.Log($"Join Result: {result.Ok}");
         }
 
@@ -107,7 +125,8 @@ namespace TacoVsBurrito
                 SessionName = sessionName,
                 SceneManager = sceneManager
             });
-            InvokeRoomJoinedEvent(result);
+            if (!result.Ok)
+                OnJoinFailedEvent?.Invoke(result.ErrorMessage);
         }
 
 
@@ -139,28 +158,27 @@ namespace TacoVsBurrito
 
             return new string(code);
         }
-        void InvokeRoomJoinedEvent(StartGameResult startGameResult)
-        {
-            if(startGameResult.Ok)
-            {
-                OnPlayerJoinedEvent?.Invoke(Runner, Runner.LocalPlayer);
-            }
-            else
-            {
-                OnJoinFailedEvent?.Invoke(startGameResult.ErrorMessage);
-            }
-        }
 
         public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
         {
             OnDisconnectedFromServerEvent?.Invoke(runner, reason);
         }
+        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        {
+            OnPlayerJoinedEvent?.Invoke(Runner, player);
+        }
+        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+        {
+            OnPlayerLeftEvent?.Invoke(Runner, player);
+        }
+        public void OnSceneLoadDone(NetworkRunner runner)
+        {
+            OnSceneLoadDoneEvent?.Invoke(runner);
+        }
 
         #region Unused Callbacks
-        public void OnConnectedToServer(NetworkRunner runner){}
-        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason){}
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player){}
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+        public void OnConnectedToServer(NetworkRunner runner) { }
+        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
         public void OnInput(NetworkRunner runner, NetworkInput input) { }
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
         public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
@@ -169,7 +187,6 @@ namespace TacoVsBurrito
         public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, System.ArraySegment<byte> data) { }
         public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
         public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
-        public void OnSceneLoadDone(NetworkRunner runner) { }
         public void OnSceneLoadStart(NetworkRunner runner) { }
 
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }

@@ -4,10 +4,18 @@ namespace TacoVsBurrito
     public class GameManager : MonoBehaviour
     {
         const int FRAME_RATE = 90;
+        private static GameManager instance;
         void Awake()
         {
-            DontDestroyOnLoad(this);
+            if (instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
+
         void Start()
         {
             Application.runInBackground = true;

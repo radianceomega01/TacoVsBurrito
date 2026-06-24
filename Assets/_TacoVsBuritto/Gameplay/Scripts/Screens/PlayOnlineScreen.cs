@@ -1,78 +1,209 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Fusion;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 namespace TacoVsBurrito
 {
     public class PlayOnlineScreen : MonoBehaviour
     {
+        [SerializeField] RoomManager roomManager;
+        [SerializeField] GameDataSO gameDataSO;
         [SerializeField] GameObject modeSelectionPanel;
         [SerializeField] GameObject playerSelectionPanel;
         [SerializeField] GameObject createAndJoinPanel;
         [SerializeField] RoomPlayersPanel roomPlayersPanel;
         [SerializeField] TMP_InputField nameInputField;
+        [SerializeField] TMP_InputField roomNameInputField;
         [SerializeField] Slider progressBar;
+        [SerializeField] TextMeshProUGUI errorMsg;
 
-        const float PROGRESS_TIME = 3f;
+        const float PROGRESS_TIME_IN_SECS = 3f;
+        const int ERRRO_MSG_DURATION_IN_MS = 2000;
         JoinRoomType joinType = JoinRoomType.None;
 
-        void OnEnable()
+        void Start()
         {
-            FusionNetworkManager.Instance.OnPlayerJoinedEvent += ManagePlayerJoined;
-        }
-        void OnDisable()
-        {
-            FusionNetworkManager.Instance.OnPlayerJoinedEvent -= ManagePlayerJoined;
+            FusionNetworkManager.Instance.Init();
+
+            FusionNetworkManager.Instance.OnLocalPlayerJoinedEvent += ManageLocalPlayerJoined;
+            FusionNetworkManager.Instance.OnJoinLobbyFailedEvent += ManageJoinLobbyFailed;
+            FusionNetworkManager.Instance.OnJoinFailedEvent += ManageJoinFailed;
+            FusionNetworkManager.Instance.OnSceneLoadDoneEvent += ManageSceneLoadDone;
+
+            roomManager.OnRoomPlayersUpdated += ManageRoomPlayersUpdated;
         }
 
-        void ManagePlayerJoined(NetworkRunner runner, PlayerRef player)
+        void OnDestroy()
+        {
+            FusionNetworkManager.Instance.OnLocalPlayerJoinedEvent -= ManageLocalPlayerJoined;
+            FusionNetworkManager.Instance.OnJoinLobbyFailedEvent -= ManageJoinLobbyFailed;
+            FusionNetworkManager.Instance.OnJoinFailedEvent -= ManageJoinFailed;
+            FusionNetworkManager.Instance.OnSceneLoadDoneEvent -= ManageSceneLoadDone;
+
+            roomManager.OnRoomPlayersUpdated -= ManageRoomPlayersUpdated;
+        }
+
+        private void ManageLocalPlayerJoined(NetworkRunner runner)
         {
             EndProgressBar();
-            switch(joinType)
+            switch (joinType)
             {
                 case JoinRoomType.CreateRoom:
+                    playerSelectionPanel.SetActive(false);
+                    break;
                 case JoinRoomType.JoinRoom:
                     createAndJoinPanel.SetActive(false);
-                    roomPlayersPanel.gameObject.SetActive(true);
-                    roomPlayersPanel.InitWithRoomName(runner.SessionInfo.Name);
-                    roomPlayersPanel.AddPlayer(player.PlayerId.ToString());
                     break;
             }
+            roomPlayersPanel.gameObject.SetActive(true);
+            roomPlayersPanel.InitWithRoomName(runner.SessionInfo.Name);
+            SendPlayerNameRPC();
+        }
+
+        private async void SendPlayerNameRPC()
+        {
+            while(!roomManager.IsSpawned)
+            {
+                await Task.Yield();
+            }
+            roomManager.RPC_SetPlayerName(nameInputField.text);
+        }
+
+        private void ManageRoomPlayersUpdated(List<PlayerData> players)
+        {
+            if(roomPlayersPanel.NumOfPlayers == players.Count)
+            {
+                roomPlayersPanel.UpdatePlayerNames(players);
+            }
+            else if(roomPlayersPanel.NumOfPlayers < players.Count)
+            {
+                roomPlayersPanel.AddPlayer(players[^1]);
+            }
+            else
+            {
+                //roomPlayersPanel.RemovePlayer(players);
+            }
+            
+        }
+
+        private void ManageSceneLoadDone(NetworkRunner runner)
+        {
+            if(runner.IsServer)
+            {
+                runner.Spawn(roomManager, Vector3.zero, Quaternion.identity);
+            }
+        }
+
+        void ManageJoinFailed(string msg)
+        {
+            ShowErrorMsg(msg);
+        }
+
+        void ManageJoinLobbyFailed(NetworkRunner runner, string msg)
+        {
+            ShowErrorMsg(msg);
         }
 
         public async void OnPlayWithFriendsClicked()
         {
-            modeSelectionPanel.SetActive(false);
-            createAndJoinPanel.SetActive(true);
+            if (ValidatePlayerName())
+            {
+                modeSelectionPanel.SetActive(false);
+                createAndJoinPanel.SetActive(true);
+            }
         }
         public async void OnCreateRoomClicked()
         {
-            BeginProgressBar();
-            joinType = JoinRoomType.CreateRoom;
-            FusionNetworkManager.Instance.CreateFriendRoom(4);
+            createAndJoinPanel.SetActive(false);
+            playerSelectionPanel.SetActive(true);
         }
+
+        public void OnPlay2pClicked()
+        {
+            BeginProgressBar();
+            gameDataSO.numOfPlayers = 2;
+            joinType = JoinRoomType.CreateRoom;
+            FusionNetworkManager.Instance.CreateFriendRoom(gameDataSO.numOfPlayers);
+        }
+        public void OnPlay3pClicked()
+        {
+            BeginProgressBar();
+            gameDataSO.numOfPlayers = 3;
+            joinType = JoinRoomType.CreateRoom;
+            FusionNetworkManager.Instance.CreateFriendRoom(gameDataSO.numOfPlayers);
+        }
+        public void OnPlay4pClicked()
+        {
+            BeginProgressBar();
+            gameDataSO.numOfPlayers = 4;
+            joinType = JoinRoomType.CreateRoom;
+            FusionNetworkManager.Instance.CreateFriendRoom(gameDataSO.numOfPlayers);
+        }
+
         public async void OnJoinRoomClicked()
         {
-            BeginProgressBar();
-            joinType = JoinRoomType.JoinRoom;
-            FusionNetworkManager.Instance.CreateFriendRoom(4);
+            if (ValidateRoomName())
+            {
+                BeginProgressBar();
+                joinType = JoinRoomType.JoinRoom;
+                FusionNetworkManager.Instance.JoinFriendRoom(roomNameInputField.text.ToUpper());
+            }
         }
+
+        public async void OnBackBtnClicked()
+        {
+            await FusionNetworkManager.Instance.LeaveRoom();
+            SceneManager.LoadScene(NamingUtils._MainScreen);
+        }
+
         public async void OnPlayRandomClicked()
         {
+            //Todo: Implement later
             //BeginProgressBar();
+        }
+
+        bool ValidatePlayerName()
+        {
+            if (nameInputField.text.IsNullOrEmpty())
+            {
+                ShowErrorMsg("Name cannot be empty!");
+                return false;
+            }
+            return true;
+        }
+        bool ValidateRoomName()
+        {
+            if (roomNameInputField.text.IsNullOrEmpty())
+            {
+                ShowErrorMsg("Room Name cannot be empty!");
+                return false;
+            }
+            return true;
+        }
+        async void ShowErrorMsg(String msg)
+        {
+            errorMsg.SetText(msg);
+            await Task.Delay(ERRRO_MSG_DURATION_IN_MS);
+            errorMsg.SetText(String.Empty);
         }
 
         void BeginProgressBar()
         {
-            progressBar.DOValue(1f, PROGRESS_TIME);
+            progressBar.DOValue(1f, PROGRESS_TIME_IN_SECS);
         }
         void EndProgressBar()
         {
+            if (progressBar.value == 0f)
+                return;
+            progressBar.DOKill();
             progressBar.value = 0f;
         }
     }

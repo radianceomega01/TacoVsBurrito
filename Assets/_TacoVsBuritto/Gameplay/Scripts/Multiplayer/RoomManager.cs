@@ -2,6 +2,7 @@ using Fusion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace TacoVsBurrito
@@ -12,16 +13,43 @@ namespace TacoVsBurrito
         [Networked, Capacity(4)]
         public NetworkLinkedList<PlayerData> Players => default;
 
+        [Networked, OnChangedRender(nameof(OnPlayersChanged))]
+        public int PlayersUpdateVersion { get; set; }
 
+
+        public bool IsSpawned { get; private set; }
         public event Action<List<PlayerData>> OnRoomPlayersUpdated;
 
         public override void Spawned()
         {
-            NotifyPlayersUpdated();
+            IsSpawned = true;
+            FusionNetworkManager.Instance.OnPlayerJoinedEvent += ManagePlayerJoined;
+            FusionNetworkManager.Instance.OnPlayerLeftEvent += ManagePlayerLeft;
+
+            //AddPlayersInitially();
         }
 
+        public override void Despawned(NetworkRunner runner, bool hasState)
+        {
+            IsSpawned = false;
+            FusionNetworkManager.Instance.OnPlayerJoinedEvent -= ManagePlayerJoined;
+            FusionNetworkManager.Instance.OnPlayerLeftEvent -= ManagePlayerLeft;
+        }
 
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        private void AddPlayersInitially()
+        {
+            foreach (var player in Runner.ActivePlayers)
+            {
+                var data = new PlayerData(
+                    player
+                );
+
+                Players.Add(data);
+            }
+            OnPlayersChanged();
+        }
+
+        void ManagePlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"Player joined {player}");
 
@@ -32,13 +60,13 @@ namespace TacoVsBurrito
                 );
 
                 Players.Add(data);
+                PlayersUpdateVersion++;
+                Debug.LogWarning($"PlayersUpdateVersion = {PlayersUpdateVersion}");
             }
 
-            NotifyPlayersUpdated();
         }
 
-
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+        void ManagePlayerLeft(NetworkRunner runner, PlayerRef player)
         {
             if (runner.IsServer)
             {
@@ -47,12 +75,11 @@ namespace TacoVsBurrito
                     if (p.Player == player)
                     {
                         Players.Remove(p);
+                        PlayersUpdateVersion++;
                         break;
                     }
                 }
             }
-
-            NotifyPlayersUpdated();
         }
 
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
@@ -61,36 +88,25 @@ namespace TacoVsBurrito
             if (!Runner.IsServer)
                 return;
 
-
             for (int i = 0; i < Players.Count; i++)
             {
                 var data = Players[i];
-
                 if (data.Player == info.Source)
                 {
                     data.Name = playerName;
-
                     Players.Set(i, data);
-
+                    PlayersUpdateVersion++;
                     break;
                 }
             }
-
-            NotifyPlayersUpdated();
         }
 
-
-        private void NotifyPlayersUpdated()
+        void OnPlayersChanged()
         {
-            List<PlayerData> currentPlayers = new();
-
-            foreach (var player in Players)
-            {
-                currentPlayers.Add(player);
-            }
-
-            OnRoomPlayersUpdated?.Invoke(currentPlayers);
+            Debug.LogWarning("invoking event players updated");
+            OnRoomPlayersUpdated?.Invoke(Players.ToList());
         }
+
     }
 
     public struct PlayerData : INetworkStruct
