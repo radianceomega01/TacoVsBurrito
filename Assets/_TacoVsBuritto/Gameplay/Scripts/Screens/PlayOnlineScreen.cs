@@ -79,6 +79,7 @@ namespace TacoVsBurrito
 
         private void ManageRoomPlayersUpdated(List<PlayerData> players)
         {
+            Debug.LogWarning("reached ManageRoomPlayersUpdated");
             if(roomPlayersPanel.NumOfPlayers == players.Count)
             {
                 roomPlayersPanel.UpdatePlayerNames(players);

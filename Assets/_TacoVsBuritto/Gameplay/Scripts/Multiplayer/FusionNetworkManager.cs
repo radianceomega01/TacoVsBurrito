@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using UnityEngine.SceneManagement;
 
 namespace TacoVsBurrito
 {
@@ -15,6 +16,7 @@ namespace TacoVsBurrito
         public List<SessionInfo> AvailableSessions { get; private set; }
 
         NetworkSceneManagerDefault sceneManager;
+        SceneRef currentSceneRef;
 
         public event Action<NetworkRunner> OnSceneLoadDoneEvent;
         public event Action<NetworkRunner, string> OnJoinLobbyFailedEvent;
@@ -41,6 +43,7 @@ namespace TacoVsBurrito
         {
             EnsureRunner();
             EnsureSceneManager();
+            currentSceneRef = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void EnsureRunner()
@@ -91,6 +94,7 @@ namespace TacoVsBurrito
                 GameMode = GameMode.Host,
                 SessionName = GenerateRoomCode(),
                 SceneManager = sceneManager,
+                Scene = currentSceneRef,
                 PlayerCount = playerCount
             });
             if(result.Ok)
@@ -106,6 +110,7 @@ namespace TacoVsBurrito
             {
                 GameMode = GameMode.Client,
                 SessionName = roomCode,
+                Scene = currentSceneRef,
                 SceneManager = sceneManager
             });
 
@@ -123,6 +128,7 @@ namespace TacoVsBurrito
             {
                 GameMode = GameMode.AutoHostOrClient,
                 SessionName = sessionName,
+                Scene = currentSceneRef,
                 SceneManager = sceneManager
             });
             if (!result.Ok)
@@ -173,6 +179,7 @@ namespace TacoVsBurrito
         }
         public void OnSceneLoadDone(NetworkRunner runner)
         {
+            Debug.LogWarning("scene load event invoked");
             OnSceneLoadDoneEvent?.Invoke(runner);
         }
 
