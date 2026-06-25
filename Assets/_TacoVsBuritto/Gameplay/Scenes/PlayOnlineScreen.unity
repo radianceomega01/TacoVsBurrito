@@ -3797,7 +3797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5115b7afab754c5b89c7e4731f88114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayOnlineScreen
-  roomManager: {fileID: 2475876667295589110, guid: 75fa5d8c14684458a9818a8bcabb55ce, type: 3}
+  roomManagerPrefab: {fileID: 2475876667295589110, guid: 75fa5d8c14684458a9818a8bcabb55ce, type: 3}
   gameDataSO: {fileID: 11400000, guid: 97283dfd7404f40cc8550d64a74fe9c3, type: 2}
   modeSelectionPanel: {fileID: 132270382}
   playerSelectionPanel: {fileID: 330385566}

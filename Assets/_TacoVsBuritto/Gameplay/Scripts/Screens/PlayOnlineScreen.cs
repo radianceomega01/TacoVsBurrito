@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Fusion;
@@ -14,7 +15,7 @@ namespace TacoVsBurrito
 {
     public class PlayOnlineScreen : MonoBehaviour
     {
-        [SerializeField] RoomManager roomManager;
+        [SerializeField] RoomManager roomManagerPrefab;
         [SerializeField] GameDataSO gameDataSO;
         [SerializeField] GameObject modeSelectionPanel;
         [SerializeField] GameObject playerSelectionPanel;
@@ -28,8 +29,9 @@ namespace TacoVsBurrito
         const float PROGRESS_TIME_IN_SECS = 3f;
         const int ERRRO_MSG_DURATION_IN_MS = 2000;
         JoinRoomType joinType = JoinRoomType.None;
+        RoomManager roomManager;
 
-        void Start()
+        void OnEnable()
         {
             FusionNetworkManager.Instance.Init();
 
@@ -37,16 +39,28 @@ namespace TacoVsBurrito
             FusionNetworkManager.Instance.OnJoinLobbyFailedEvent += ManageJoinLobbyFailed;
             FusionNetworkManager.Instance.OnJoinFailedEvent += ManageJoinFailed;
             FusionNetworkManager.Instance.OnSceneLoadDoneEvent += ManageSceneLoadDone;
-
-            roomManager.OnRoomPlayersUpdated += ManageRoomPlayersUpdated;
+            FusionNetworkManager.Instance.OnRoomManagerRegistered += ManageRoomManagerRegistered;
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             FusionNetworkManager.Instance.OnLocalPlayerJoinedEvent -= ManageLocalPlayerJoined;
             FusionNetworkManager.Instance.OnJoinLobbyFailedEvent -= ManageJoinLobbyFailed;
             FusionNetworkManager.Instance.OnJoinFailedEvent -= ManageJoinFailed;
             FusionNetworkManager.Instance.OnSceneLoadDoneEvent -= ManageSceneLoadDone;
+            FusionNetworkManager.Instance.OnRoomManagerRegistered -= ManageRoomManagerRegistered;
+
+            UnSubscribeToROomManagerEvents();
+        }
+
+        void SubscribeToRoomManagerEvents()
+        {
+            roomManager.OnRoomPlayersUpdated += ManageRoomPlayersUpdated;
+        }
+        void UnSubscribeToROomManagerEvents()
+        {
+            if (roomManager == null)
+                return;
 
             roomManager.OnRoomPlayersUpdated -= ManageRoomPlayersUpdated;
         }
@@ -70,7 +84,7 @@ namespace TacoVsBurrito
 
         private async void SendPlayerNameRPC()
         {
-            while(!roomManager.IsSpawned)
+            while (roomManager == null || !roomManager.IsSpawned)
             {
                 await Task.Yield();
             }
@@ -79,28 +93,38 @@ namespace TacoVsBurrito
 
         private void ManageRoomPlayersUpdated(List<PlayerData> players)
         {
-            Debug.LogWarning("reached ManageRoomPlayersUpdated");
-            if(roomPlayersPanel.NumOfPlayers == players.Count)
+            if (roomPlayersPanel.NumOfPlayers == players.Count)
             {
                 roomPlayersPanel.UpdatePlayerNames(players);
             }
-            else if(roomPlayersPanel.NumOfPlayers < players.Count)
+            else if (roomPlayersPanel.NumOfPlayers < players.Count)
             {
-                roomPlayersPanel.AddPlayer(players[^1]);
+                roomPlayersPanel.AddPlayer(players);
             }
             else
             {
-                //roomPlayersPanel.RemovePlayer(players);
+                roomPlayersPanel.RemovePlayer(players);
             }
-            
+
         }
 
         private void ManageSceneLoadDone(NetworkRunner runner)
         {
-            if(runner.IsServer)
+            if (runner.IsServer)
             {
-                runner.Spawn(roomManager, Vector3.zero, Quaternion.identity);
+                // Server spawns it locally and assigns the reference
+                roomManager = runner.Spawn(roomManagerPrefab, Vector3.zero, Quaternion.identity);
+                SubscribeToRoomManagerEvents();
             }
+        }
+        private void ManageRoomManagerRegistered(RoomManager manager)
+        {
+            //Client gets room manager object from event and proceeds execution.
+            roomManager = manager;
+            SubscribeToRoomManagerEvents();
+
+            // Instantly refresh UI
+            //ManageRoomPlayersUpdated(roomManager.Players.ToList());
         }
 
         void ManageJoinFailed(string msg)

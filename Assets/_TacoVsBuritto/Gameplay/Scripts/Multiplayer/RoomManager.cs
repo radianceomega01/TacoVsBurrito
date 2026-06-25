@@ -23,6 +23,8 @@ namespace TacoVsBurrito
         public override void Spawned()
         {
             IsSpawned = true;
+            FusionNetworkManager.Instance.RegisterRoomManagerInstance(this);
+
             FusionNetworkManager.Instance.OnPlayerJoinedEvent += ManagePlayerJoined;
             FusionNetworkManager.Instance.OnPlayerLeftEvent += ManagePlayerLeft;
 
@@ -36,23 +38,24 @@ namespace TacoVsBurrito
             FusionNetworkManager.Instance.OnPlayerLeftEvent -= ManagePlayerLeft;
         }
 
-        private void AddPlayersInitially()
-        {
-            foreach (var player in Runner.ActivePlayers)
-            {
-                var data = new PlayerData(
-                    player
-                );
+        // private void AddPlayersInitially()
+        // {
+        //     if (Runner.IsServer)
+        //         return;
 
-                Players.Add(data);
-            }
-            OnPlayersChanged();
-        }
+        //     foreach (var player in Runner.ActivePlayers)
+        //     {
+        //         var data = new PlayerData(
+        //             player
+        //         );
+
+        //         Players.Add(data);
+        //     }
+        //     OnPlayersChanged();
+        // }
 
         void ManagePlayerJoined(NetworkRunner runner, PlayerRef player)
         {
-            Debug.Log($"Player joined {player}");
-
             if (runner.IsServer)
             {
                 var data = new PlayerData(
@@ -61,9 +64,7 @@ namespace TacoVsBurrito
 
                 Players.Add(data);
                 PlayersUpdateVersion++;
-                Debug.LogWarning($"PlayersUpdateVersion = {PlayersUpdateVersion}");
             }
-
         }
 
         void ManagePlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -82,16 +83,19 @@ namespace TacoVsBurrito
             }
         }
 
-        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_SetPlayerName(NetworkString<_32> playerName, RpcInfo info = default)
         {
             if (!Runner.IsServer)
                 return;
 
+            // Architectural Rule: If Source is None, it originated internally from the host/server player
+            PlayerRef actualSender = info.Source == PlayerRef.None ? Runner.LocalPlayer : info.Source;
+
             for (int i = 0; i < Players.Count; i++)
             {
                 var data = Players[i];
-                if (data.Player == info.Source)
+                if (data.Player == actualSender)
                 {
                     data.Name = playerName;
                     Players.Set(i, data);
@@ -103,7 +107,6 @@ namespace TacoVsBurrito
 
         void OnPlayersChanged()
         {
-            Debug.LogWarning("invoking event players updated");
             OnRoomPlayersUpdated?.Invoke(Players.ToList());
         }
 

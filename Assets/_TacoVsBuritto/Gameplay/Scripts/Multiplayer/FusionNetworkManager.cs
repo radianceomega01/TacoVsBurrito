@@ -25,6 +25,7 @@ namespace TacoVsBurrito
         public event Action<NetworkRunner> OnLocalPlayerJoinedEvent;
         public event Action<string> OnJoinFailedEvent;
         public event Action<NetworkRunner, PlayerRef> OnPlayerLeftEvent;
+        public event Action<RoomManager> OnRoomManagerRegistered;
 
         private void Awake()
         {
@@ -97,7 +98,7 @@ namespace TacoVsBurrito
                 Scene = currentSceneRef,
                 PlayerCount = playerCount
             });
-            if(result.Ok)
+            if (result.Ok)
                 OnLocalPlayerJoinedEvent?.Invoke(Runner);
             else
                 OnJoinFailedEvent?.Invoke(result.ErrorMessage);
@@ -114,7 +115,7 @@ namespace TacoVsBurrito
                 SceneManager = sceneManager
             });
 
-            if(result.Ok)
+            if (result.Ok)
                 OnLocalPlayerJoinedEvent?.Invoke(Runner);
             else
                 OnJoinFailedEvent?.Invoke(result.ErrorMessage);
@@ -142,12 +143,7 @@ namespace TacoVsBurrito
         {
             AvailableSessions = sessionList;
 
-            Debug.Log($"Sessions Found: {sessionList.Count}");
-
-            foreach (var session in sessionList)
-            {
-                Debug.Log(session.Name);
-            }
+            //Debug.Log($"Sessions Found: {sessionList.Count}");
         }
 
         string GenerateRoomCode(int length = 6)
@@ -164,6 +160,10 @@ namespace TacoVsBurrito
 
             return new string(code);
         }
+        public void RegisterRoomManagerInstance(RoomManager manager)
+        {
+            OnRoomManagerRegistered?.Invoke(manager);
+        }
 
         public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
         {
@@ -179,7 +179,6 @@ namespace TacoVsBurrito
         }
         public void OnSceneLoadDone(NetworkRunner runner)
         {
-            Debug.LogWarning("scene load event invoked");
             OnSceneLoadDoneEvent?.Invoke(runner);
         }
 
