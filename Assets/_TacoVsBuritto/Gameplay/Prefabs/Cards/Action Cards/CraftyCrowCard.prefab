@@ -116,6 +116,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 584044444015055092}
   m_SourcePrefab: {fileID: 100100000, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!114 &1505168632986056713 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2518429485150487684, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 3895662759059291277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!224 &1823948716739866031 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3413687913257193762, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -132,6 +143,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &4210748916925608574 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 900642372084584179, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 3895662759059291277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
+--- !u!114 &4775762625684847546 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8383105930903570231, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 3895662759059291277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!1 &5914505246591407631 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -156,6 +189,9 @@ MonoBehaviour:
   backFaceImage: {fileID: 1823948716739866031}
   glowBG: {fileID: 6302419446867920412}
   cardsCount: {fileID: 8568350188490382240}
+  feedbackDragBegin: {fileID: 4210748916925608574}
+  feedbackDragEnd: {fileID: 4775762625684847546}
+  feedbackCardPlay: {fileID: 1505168632986056713}
 --- !u!114 &6302419446867920412 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

@@ -165,6 +165,31 @@ MonoBehaviour:
   backFaceImage: {fileID: 7212683276620390278}
   glowBG: {fileID: 3035953433753908277}
   cardsCount: {fileID: 846548709881293193}
+  feedbackDragBegin: {fileID: 5132128151805280343}
+  feedbackDragEnd: {fileID: 4544558936822172051}
+  feedbackCardPlay: {fileID: 7616713341459057184}
+--- !u!114 &4544558936822172051 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8383105930903570231, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5424377032264289956}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
+--- !u!114 &5132128151805280343 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 900642372084584179, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5424377032264289956}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!114 &6583749860005039225 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -181,3 +206,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3413687913257193762, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
   m_PrefabInstance: {fileID: 5424377032264289956}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7616713341459057184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2518429485150487684, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5424377032264289956}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player

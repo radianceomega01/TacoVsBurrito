@@ -108,11 +108,33 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2266344987657155032}
   m_SourcePrefab: {fileID: 100100000, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+--- !u!114 &126217133318181309 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2518429485150487684, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 2536418940091651385}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!224 &895354877646013467 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3413687913257193762, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
   m_PrefabInstance: {fileID: 2536418940091651385}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3408260514495077322 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 900642372084584179, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 2536418940091651385}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!114 &3686834150225614820 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -159,6 +181,20 @@ MonoBehaviour:
   backFaceImage: {fileID: 895354877646013467}
   glowBG: {fileID: 4779926886729756584}
   cardsCount: {fileID: 7191089911650382356}
+  feedbackDragBegin: {fileID: 3408260514495077322}
+  feedbackDragEnd: {fileID: 6297701319734333966}
+  feedbackCardPlay: {fileID: 126217133318181309}
+--- !u!114 &6297701319734333966 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8383105930903570231, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 2536418940091651385}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!114 &7191089911650382356 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4681713616950175533, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

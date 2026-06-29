@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +21,11 @@ namespace TacoVsBurrito
         [SerializeField] protected Transform backFaceImage;
         [SerializeField] protected GlowBGUI glowBG;
         [SerializeField] protected CardsCount cardsCount;
+
+        [Header("Feel - MMF Players")]
+        public MMF_Player feedbackDragBegin;
+        public MMF_Player feedbackDragEnd;
+        public MMF_Player feedbackCardPlay;
 
 
         private const float DRAG_SCALE = 1.5f;
@@ -40,12 +46,12 @@ namespace TacoVsBurrito
 
         public string Name { get { return cardName; } }
 
-        protected virtual void Awake() 
+        protected virtual void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
             canvas = GetComponentInParent<Canvas>();
-            
+
         }
         protected virtual void OnEnable()
         {
@@ -98,7 +104,7 @@ namespace TacoVsBurrito
         // =========================================================
         public void OnPointerDown(PointerEventData eventData)
         {
-            if(interactionType == InteractionType.Drag) return;
+            if (interactionType == InteractionType.Drag) return;
 
             GameEvents.OnCardClickedForActionTarget?.Invoke(this);
         }
@@ -108,9 +114,9 @@ namespace TacoVsBurrito
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if(interactionType == InteractionType.Click) return;
+            if (interactionType == InteractionType.Click) return;
             canDrag = DragManager.TryStartDrag(this);
-            if(!canDrag) return;
+            if (!canDrag) return;
 
             isDragging = true;
             GameEvents.OnCardDragBegin?.Invoke();
@@ -122,11 +128,13 @@ namespace TacoVsBurrito
             _canvasGroup.blocksRaycasts = false;
 
             // Optional visual feedback
-            transform.localScale = Vector3.one * DRAG_SCALE;
+            //transform.localScale = Vector3.one * DRAG_SCALE;
             ChangeParent(canvas.transform); // Move to top-level canvas to avoid clipping
 
             //StartCoroutine(PickCardBeforeDrag());
             currentPickupTarget?.PickCardBeforeDrag(this);
+
+            feedbackDragBegin?.PlayFeedbacks();
 
         }
         IEnumerator PickCardBeforeDrag()
@@ -141,10 +149,10 @@ namespace TacoVsBurrito
 
         public void OnDrag(PointerEventData eventData)
         {
-            if(interactionType == InteractionType.Click || !canDrag) return;
+            if (interactionType == InteractionType.Click || !canDrag) return;
 
             _rectTransform.anchoredPosition +=
-                eventData.delta / canvas.scaleFactor;    
+                eventData.delta / canvas.scaleFactor;
         }
 
         // =========================================================
@@ -153,11 +161,11 @@ namespace TacoVsBurrito
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(interactionType == InteractionType.Click|| !canDrag || !isDragging) return;
+            if (interactionType == InteractionType.Click || !canDrag || !isDragging) return;
             GameEvents.OnCardDragEnd?.Invoke();
             _canvasGroup.blocksRaycasts = true;
 
-            transform.localScale = _originalScale;
+            //transform.localScale = _originalScale;
             isDragging = false;
 
             GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
@@ -177,6 +185,7 @@ namespace TacoVsBurrito
             {
                 ReturnToHandOnNoTarget();
             }
+            feedbackDragEnd?.PlayFeedbacks();
             DragManager.EndDrag(this);
         }
 
@@ -200,11 +209,15 @@ namespace TacoVsBurrito
         }
         void ResetCurrentDraggingCard()
         {
-            if(!isDragging) return;
+            if (!isDragging) return;
 
             isDragging = false;
             DragManager.EndDrag(this);
             ReturnToHandOnNoTarget();
+        }
+        public void PlayDropEffect()
+        {
+            feedbackCardPlay?.PlayFeedbacks();
         }
         public void EnableInteraction()
         {
