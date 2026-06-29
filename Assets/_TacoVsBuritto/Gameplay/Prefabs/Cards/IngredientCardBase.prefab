@@ -274,7 +274,7 @@ MonoBehaviour:
   cardsCount: {fileID: 3313074224432218122}
   feedbackDragBegin: {fileID: 7024797080365427156}
   feedbackDragEnd: {fileID: 1825198799461539856}
-  feedbackCardPlay: {fileID: 5760645471368799139}
+  feedbackCardDropped: {fileID: 5760645471368799139}
   cardValue: 1
   ValueTxtField: {fileID: 660552813068261590}
 --- !u!114 &892895204565343670 stripped

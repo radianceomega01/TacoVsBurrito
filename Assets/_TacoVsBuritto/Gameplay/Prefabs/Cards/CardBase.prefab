@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 8251197136345540235}
   - component: {fileID: 461633453491839463}
   m_Layer: 5
-  m_Name: CardPlay
+  m_Name: CardDropped
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

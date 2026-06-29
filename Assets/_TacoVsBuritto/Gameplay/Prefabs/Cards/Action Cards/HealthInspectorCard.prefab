@@ -167,7 +167,8 @@ MonoBehaviour:
   cardsCount: {fileID: 1580464195271925099}
   feedbackDragBegin: {fileID: 6442855573888234677}
   feedbackDragEnd: {fileID: 2396161398548659569}
-  feedbackCardPlay: {fileID: 8639421630575509186}
+  feedbackCardDropped: {fileID: 8639421630575509186}
+  feedbackCardPlayed: {fileID: 4327019417380093746}
 --- !u!114 &3778726584281022679 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -179,6 +180,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a07e22f9a1c64dc69e05c37b166e0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlowBGUI
+--- !u!114 &4327019417380093746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7573523267075229044, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 6131130226882951750}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!114 &4976277216565590171 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1160081207980344029, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

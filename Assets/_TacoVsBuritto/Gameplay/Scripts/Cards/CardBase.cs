@@ -25,7 +25,7 @@ namespace TacoVsBurrito
         [Header("Feel - MMF Players")]
         public MMF_Player feedbackDragBegin;
         public MMF_Player feedbackDragEnd;
-        public MMF_Player feedbackCardPlay;
+        public MMF_Player feedbackCardDropped;
 
 
         private const float DRAG_SCALE = 1.5f;
@@ -217,7 +217,7 @@ namespace TacoVsBurrito
         }
         public void PlayDropEffect()
         {
-            feedbackCardPlay?.PlayFeedbacks();
+            feedbackCardDropped?.PlayFeedbacks();
         }
         public void EnableInteraction()
         {

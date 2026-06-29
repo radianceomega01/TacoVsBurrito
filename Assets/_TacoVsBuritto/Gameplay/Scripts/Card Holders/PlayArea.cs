@@ -67,7 +67,14 @@ namespace TacoVsBurrito
         public void DropCardAfterDrag(CardBase card)
         {
             PlayAction(card);
-            card.PlayDropEffect();
+            if(card is ActionCardBase @actionCard)
+            {
+                @actionCard.PlayCardPlayedEffect();
+            }
+            else
+            {
+                card.PlayDropEffect();
+            }
             GameEvents.OnCardMovedSFX?.Invoke();
         }
 

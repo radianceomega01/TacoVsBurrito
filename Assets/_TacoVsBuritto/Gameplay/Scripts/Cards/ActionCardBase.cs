@@ -1,5 +1,6 @@
 
 using System;
+using MoreMountains.Feedbacks;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ namespace TacoVsBurrito
 {
     public abstract class ActionCardBase : CardBase
     {
+        [Header("Feel - MMF Players")]
+        public MMF_Player feedbackCardPlayed;
+
         protected const int EXECUTION_DEALY_IN_MS = 500;
         protected ActionResolver resolver;
 
@@ -23,6 +27,8 @@ namespace TacoVsBurrito
         {
             this.resolver = resolver;
         }
+
+        public void PlayCardPlayedEffect() => feedbackCardPlayed?.PlayFeedbacks();
         
         public abstract void ExecuteAction();
         public virtual bool CanExecuteAction() => true;

@@ -130,6 +130,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &2675253133323940979 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7573523267075229044, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 5492957532989878535}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
 --- !u!1 &2899825893073181573 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -156,7 +167,8 @@ MonoBehaviour:
   cardsCount: {fileID: 919348397709088298}
   feedbackDragBegin: {fileID: 4631211913805479924}
   feedbackDragEnd: {fileID: 4065661570352461360}
-  feedbackCardPlay: {fileID: 7983093800818521475}
+  feedbackCardDropped: {fileID: 7983093800818521475}
+  feedbackCardPlayed: {fileID: 2675253133323940979}
 --- !u!114 &3268622112126602134 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
