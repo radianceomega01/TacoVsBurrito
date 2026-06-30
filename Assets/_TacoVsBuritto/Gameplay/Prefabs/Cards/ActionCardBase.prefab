@@ -146,7 +146,7 @@ MonoBehaviour:
   - rid: 8927278637947027520
   - rid: 8927278615702011984
   - rid: 8927278615702011981
-  KeepPlayModeChanges: 1
+  KeepPlayModeChanges: 0
   PerformanceMode: 0
   RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
@@ -228,7 +228,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 7573523267075229044}
         DebugActive: 0
-        Mode: 0
+        Mode: 2
         AnimateScaleTarget: {fileID: 2626736977738751358}
         MovementMode: 0
         AnimateScaleDuration: 0.4
@@ -335,7 +335,7 @@ MonoBehaviour:
         UniformScaling: 0
         AllowAdditivePlays: 0
         DetermineScaleOnPlay: 1
-        DestinationScale: {x: 1.4, y: 1.4, z: 1.4}
+        DestinationScale: {x: 2.5, y: 2.5, z: 2.5}
         AnimateScaleX:
           serializedVersion: 2
           m_Curve: []
@@ -937,10 +937,10 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 7573523267075229044}
         DebugActive: 0
-        Mode: 0
+        Mode: 2
         AnimateScaleTarget: {fileID: 2626736977738751358}
         MovementMode: 0
-        AnimateScaleDuration: 0.2
+        AnimateScaleDuration: 0.01
         AnimatePositionSpeed: 1
         RemapCurveZero: 2.5
         RemapCurveOne: 1
@@ -955,18 +955,18 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 2
+              outSlope: 2
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
@@ -987,18 +987,18 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 2
+              outSlope: 2
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
@@ -1019,18 +1019,18 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 2
+              outSlope: 2
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
@@ -1044,7 +1044,7 @@ MonoBehaviour:
         UniformScaling: 0
         AllowAdditivePlays: 0
         DetermineScaleOnPlay: 1
-        DestinationScale: {x: 1.4, y: 1.4, z: 1.4}
+        DestinationScale: {x: 1, y: 1, z: 1}
         AnimateScaleX:
           serializedVersion: 2
           m_Curve: []
@@ -1141,7 +1141,7 @@ MonoBehaviour:
         Mode: 2
         RotationSpace: 1
         MovementMode: 0
-        AnimateRotationDuration: 0.2
+        AnimateRotationDuration: 0.01
         AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 360
@@ -1155,18 +1155,18 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 2
+              outSlope: 2
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
@@ -1187,18 +1187,18 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 2
+              outSlope: 2
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
@@ -1219,18 +1219,18 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 2
+              outSlope: 2
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 1
-              outSlope: 1
-              tangentMode: 34
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0
               outWeight: 0

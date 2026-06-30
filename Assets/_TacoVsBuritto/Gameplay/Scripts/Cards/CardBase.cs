@@ -185,7 +185,6 @@ namespace TacoVsBurrito
             {
                 ReturnToHandOnNoTarget();
             }
-            feedbackDragEnd?.PlayFeedbacks();
             DragManager.EndDrag(this);
         }
 
@@ -195,6 +194,7 @@ namespace TacoVsBurrito
 
         public void ReturnToHandOnNoTarget()
         {
+            feedbackDragEnd?.PlayFeedbacks();
             currentPickupTarget?.ReturnCardOnNoTarget(this);
         }
 
