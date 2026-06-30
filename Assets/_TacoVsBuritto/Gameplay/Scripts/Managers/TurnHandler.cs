@@ -20,7 +20,7 @@ namespace TacoVsBurrito
         private bool isDrawPileEmpty = false;
 
         const int NO_BUENO_WINDOW_DURATION_MS = 5000;
-        const int CARD_TRASH_DELAY_IN_MS = 500;
+        const int CARD_TRASH_DELAY_IN_MS = 1500;
         const int STATE_TRANSITION_DELAY_IN_MS = 100; //To avoid race condition like nobueno played and turnstate changed
 
         public TurnHandler(TrashPile trashPile)

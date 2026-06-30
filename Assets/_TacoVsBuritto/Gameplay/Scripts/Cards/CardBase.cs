@@ -244,6 +244,7 @@ namespace TacoVsBurrito
         public void DisableCountOnSimilarCards() => cardsCount.DisableCount();
         public RectTransform GetRect() => _rectTransform;
         public void SetCurrentPickupTarget(ICardPickupTarget cardHolder) => currentPickupTarget = cardHolder;
+        public int GetTimeToMove() => (int)TIME_TO_MOVE_IN_SECS * 1000;
 
     }
     public enum InteractionType

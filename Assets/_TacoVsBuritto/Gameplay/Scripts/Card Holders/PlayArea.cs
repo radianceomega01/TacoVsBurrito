@@ -33,6 +33,7 @@ namespace TacoVsBurrito
         public async void PlayAction(CardBase card)
         {
             SetCardOnPile(card);
+            await Task.Delay(card.GetTimeToMove());
             if (card is ActionCardBase @actionCard)
             {
                 GameEvents.OnActionCardPlayed?.Invoke(@actionCard);
