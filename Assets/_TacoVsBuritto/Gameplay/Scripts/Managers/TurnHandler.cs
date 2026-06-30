@@ -179,6 +179,7 @@ namespace TacoVsBurrito
         }
         async Task ManageStartNoBuenoInterruptWindow()
         {
+            await Task.Delay(1500);
             await Task.Delay(STATE_TRANSITION_DELAY_IN_MS);
             SwitchState(TurnState.NoBuenoWindowPhase);
             GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(currentActiveActionCard);

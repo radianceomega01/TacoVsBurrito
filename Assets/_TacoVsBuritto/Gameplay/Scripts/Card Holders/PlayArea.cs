@@ -46,8 +46,8 @@ namespace TacoVsBurrito
         }
         void SetCardOnPile(CardBase card)
         {
-            card.ChangeScale(CARD_SCALE);
-            card.ChangeRotation(Quaternion.identity);
+            if(card is not ActionCardBase) card.ChangeScale(CARD_SCALE);
+            if(card is not ActionCardBase) card.ChangeRotation(Quaternion.identity);
             card.ChangePosition(cardsParent.position);
             card.ChangeParent(cardsParent);
             card.DisableInteraction();
