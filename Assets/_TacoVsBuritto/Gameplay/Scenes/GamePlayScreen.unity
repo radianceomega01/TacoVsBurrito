@@ -11476,10 +11476,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1877611474}
   - {fileID: 820301213161601538}
   - {fileID: 622180950}
   - {fileID: 1085274521}
+  - {fileID: 1877611474}
   - {fileID: 741754810}
   m_Father: {fileID: 167491518}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11517,7 +11517,7 @@ MonoBehaviour:
   TargetTransform: {fileID: 1463503762}
   TargetRectTransform: {fileID: 0}
   ShakeSpeed: 50
-  ShakeRange: 15
+  ShakeRange: 10
   OscillationOffset: 0
   ShakeMainDirection: {x: 1, y: 1, z: 1}
   RandomizeDirection: 0

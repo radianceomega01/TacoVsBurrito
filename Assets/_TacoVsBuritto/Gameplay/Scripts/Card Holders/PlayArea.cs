@@ -14,6 +14,7 @@ namespace TacoVsBurrito
         private TrashPile trashPile;
 
         private const int TRASH_DEALY_IN_MS = 500;
+        private const int FEEL_ANIM_DELAY_IN_MS = 1500;
 
         void OnEnable()
         {
@@ -45,15 +46,17 @@ namespace TacoVsBurrito
                 GameEvents.OnTurnEnded?.Invoke(GameplayManager.Instance.CurrentPlayer);
             }
         }
-        void SetCardOnPile(CardBase card)
+        async void SetCardOnPile(CardBase card)
         {
             if(card is not ActionCardBase) card.ChangeScale(CARD_SCALE);
             if(card is not ActionCardBase) card.ChangeRotation(Quaternion.identity);
             card.ChangePosition(cardsParent.position);
-            card.ChangeParent(cardsParent);
             card.DisableInteraction();
             card.ToggleInteractionType(InteractionType.Click);
             card.ToggleBackFace(false);
+
+            await Task.Delay(FEEL_ANIM_DELAY_IN_MS);
+            card.ChangeParent(cardsParent);
         }
 
         public bool CanDrop(CardBase card)
