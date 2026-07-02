@@ -206,7 +206,7 @@ namespace TacoVsBurrito
             {
                 CardBase cardToPlay = Hand.GetAt(index);
                 Hand.RemoveCard(cardToPlay);
-                playArea.PlayAction(cardToPlay);
+                playArea.DropCardAfterDrag(cardToPlay);
             }
         }
     }

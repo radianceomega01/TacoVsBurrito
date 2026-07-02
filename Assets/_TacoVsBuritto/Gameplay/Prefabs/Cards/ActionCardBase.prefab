@@ -2438,8 +2438,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MMFRandomRotation
   mmfPlayer: {fileID: 7573523267075229044}
   rotationFeedbackIndex: 4
-  minAngle: -10
-  maxAngle: 10
+  minAngle: -15
+  maxAngle: 15
 --- !u!1 &3988154296900187710
 GameObject:
   m_ObjectHideFlags: 0

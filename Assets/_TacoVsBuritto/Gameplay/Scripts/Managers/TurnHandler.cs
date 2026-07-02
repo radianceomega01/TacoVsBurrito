@@ -248,6 +248,7 @@ namespace TacoVsBurrito
             //Player played no bueno as a regular action card in play area or no bueno phase expired
             if(currentTurnState != TurnState.NoBuenoWindowPhase)
             {
+                Debug.LogWarning("not nobueno phase");
                 if(currentTurnState == TurnState.PlayPhase) // means played on play area in play phase
                 {
                     await Task.Delay(CARD_TRASH_DELAY_IN_MS);
@@ -262,6 +263,7 @@ namespace TacoVsBurrito
             } 
 
             //Valid no bueno thown during no bueno phase
+            Debug.LogWarning("nobueno phase");
             noBuenoCardsPlayed.Add(noBuenoCard);
             ManageStartNoBuenoInterruptWindow();
             // if(noBuenoCard.NoBuenoPlayer.Hand.Count == 0) //No bueno was last card of the player
