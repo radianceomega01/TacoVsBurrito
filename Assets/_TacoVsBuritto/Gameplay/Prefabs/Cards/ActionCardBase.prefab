@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1316866891542252704}
   - component: {fileID: 7573523267075229044}
+  - component: {fileID: 7327592420249551433}
   m_Layer: 5
-  m_Name: Played
+  m_Name: ActionPlayed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1170,7 +1171,7 @@ MonoBehaviour:
           Mode: 0
           ChildIndex: 0
         RandomizeOutput: 0
-        RandomMultiplier: {x: 0.8, y: 1}
+        RandomMultiplier: {x: 0.8, y: 1.2}
         RandomizeDuration: 0
         RandomDurationMultiplier: {x: 0.5, y: 2}
         UseRange: 0
@@ -2423,6 +2424,22 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+--- !u!114 &7327592420249551433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3681016715574720662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c204215af07cd4814b1538572a96802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MMFRandomRotation
+  mmfPlayer: {fileID: 7573523267075229044}
+  rotationFeedbackIndex: 4
+  minAngle: -10
+  maxAngle: 10
 --- !u!1 &3988154296900187710
 GameObject:
   m_ObjectHideFlags: 0
@@ -7479,7 +7496,7 @@ GameObject:
   - component: {fileID: 5837493969415526848}
   - component: {fileID: 1484148240438942493}
   m_Layer: 0
-  m_Name: LoseParticlesWhite
+  m_Name: ParticlesWhite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

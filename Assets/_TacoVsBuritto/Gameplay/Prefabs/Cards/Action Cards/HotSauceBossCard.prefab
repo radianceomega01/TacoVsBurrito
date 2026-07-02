@@ -259,6 +259,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a07e22f9a1c64dc69e05c37b166e0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlowBGUI
+--- !u!114 &358462737047550493 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7327592420249551433, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 7010228365118355540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c204215af07cd4814b1538572a96802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MMFRandomRotation
 --- !u!1 &382227636921733846 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -287,6 +298,7 @@ MonoBehaviour:
   feedbackDragEnd: {fileID: 1522097805945306979}
   feedbackCardDropped: {fileID: 4880239295840713936}
   feedbackCardPlayed: {fileID: 600063725366672672}
+  mmfRandomRotation: {fileID: 358462737047550493}
   ValueTxtField: {fileID: 7118050974198936771}
 --- !u!114 &600063725366672672 stripped
 MonoBehaviour:

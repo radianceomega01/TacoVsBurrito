@@ -8,6 +8,7 @@ namespace TacoVsBurrito
         public PlayerBase NoBuenoPlayer { get; set; }
         public override void ExecuteAction()
         {
+            base.ExecuteAction();
             GameEvents.OnNoBuenoPlayed?.Invoke(this);
         }
         public override TurnState GetStateOnPlayed() => TurnState.NoBuenoWindowPhase;

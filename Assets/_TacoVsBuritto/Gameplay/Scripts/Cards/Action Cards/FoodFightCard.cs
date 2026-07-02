@@ -11,6 +11,7 @@ namespace TacoVsBurrito
         GameplayManager gameManager;
         public override void ExecuteAction()
         {
+            base.ExecuteAction();
             //GameEvents.OnStartNoBuenoInterruptWindow?.Invoke(this);
             
             GameEvents.OnFoodFightAction?.Invoke(this);

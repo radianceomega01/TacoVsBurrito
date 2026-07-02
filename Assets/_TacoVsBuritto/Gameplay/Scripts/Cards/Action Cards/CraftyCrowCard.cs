@@ -10,6 +10,7 @@ namespace TacoVsBurrito
         
         public override void ExecuteAction()
         {
+            base.ExecuteAction();
             GameEvents.OnLogMessage("Pick an Enemy Card from Meal!");
             GameEvents.OnCraftyCrowAction?.Invoke();
         }

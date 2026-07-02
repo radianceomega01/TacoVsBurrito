@@ -14,7 +14,6 @@ namespace TacoVsBurrito
         private TrashPile trashPile;
 
         private const int TRASH_DEALY_IN_MS = 500;
-        private const int FEEL_ANIM_DELAY_IN_MS = 1500;
 
         void OnEnable()
         {
@@ -48,14 +47,16 @@ namespace TacoVsBurrito
         }
         async void SetCardOnPile(CardBase card)
         {
+            //These are handled 
             if(card is not ActionCardBase) card.ChangeScale(CARD_SCALE);
             if(card is not ActionCardBase) card.ChangeRotation(Quaternion.identity);
+
             card.ChangePosition(cardsParent.position);
             card.DisableInteraction();
             card.ToggleInteractionType(InteractionType.Click);
             card.ToggleBackFace(false);
 
-            await Task.Delay(FEEL_ANIM_DELAY_IN_MS);
+            if(card is ActionCardBase @actionCard) await Task.Delay(@actionCard.FEEL_ANIM_DELAY_IN_MS);
             card.ChangeParent(cardsParent);
         }
 

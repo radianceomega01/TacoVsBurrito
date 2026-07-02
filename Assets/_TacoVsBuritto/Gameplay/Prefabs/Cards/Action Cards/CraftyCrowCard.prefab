@@ -193,6 +193,18 @@ MonoBehaviour:
   feedbackDragEnd: {fileID: 4775762625684847546}
   feedbackCardDropped: {fileID: 1505168632986056713}
   feedbackCardPlayed: {fileID: 6848466411579161081}
+  mmfRandomRotation: {fileID: 6026092107136220868}
+--- !u!114 &6026092107136220868 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7327592420249551433, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 3895662759059291277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c204215af07cd4814b1538572a96802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MMFRandomRotation
 --- !u!114 &6302419446867920412 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

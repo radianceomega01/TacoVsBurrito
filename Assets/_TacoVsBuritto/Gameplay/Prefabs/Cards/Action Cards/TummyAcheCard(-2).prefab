@@ -292,6 +292,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
+--- !u!114 &4208596442407740257 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7327592420249551433, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 6906030683794071848}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c204215af07cd4814b1538572a96802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MMFRandomRotation
 --- !u!1 &4310932058274778026 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -320,6 +331,7 @@ MonoBehaviour:
   feedbackDragEnd: {fileID: 3135033366186042911}
   feedbackCardDropped: {fileID: 9017442404742833580}
   feedbackCardPlayed: {fileID: 3948998369679156316}
+  mmfRandomRotation: {fileID: 4208596442407740257}
   cardValue: -2
   ValueTxtField: {fileID: 6408697752038776220}
 --- !u!114 &4517598518971440057 stripped

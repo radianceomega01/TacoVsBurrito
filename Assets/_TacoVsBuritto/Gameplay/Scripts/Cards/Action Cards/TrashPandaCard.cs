@@ -12,6 +12,7 @@ namespace TacoVsBurrito
 
         public override async void ExecuteAction()
         {
+            base.ExecuteAction();
             await Task.Delay(EXECUTION_DEALY_IN_MS);
             GameEvents.OnTrashPandaAction?.Invoke(GameplayManager.Instance.GetTrashPile().RetrieveFromTrash());
         }

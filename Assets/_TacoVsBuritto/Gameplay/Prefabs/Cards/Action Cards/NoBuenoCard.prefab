@@ -100,6 +100,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: NoBuenoCard
       objectReference: {fileID: 0}
+    - target: {fileID: 7573523267075229044, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+      propertyPath: managedReferences[8927278637947027521].RandomizeOutput
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7573523267075229044, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+      propertyPath: managedReferences[8927278637947027521].RandomMultiplier.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7573523267075229044, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+      propertyPath: managedReferences[8927278637947027521].RandomMultiplier.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7573523267075229044, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+      propertyPath: managedReferences[8927278637947027521].DestinationAngles.z
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -130,6 +146,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
+--- !u!114 &1730635696124874416 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7327592420249551433, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
+  m_PrefabInstance: {fileID: 9058046739804818681}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c204215af07cd4814b1538572a96802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MMFRandomRotation
 --- !u!1 &1850981682375698043 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7207069526980143746, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}
@@ -158,6 +185,7 @@ MonoBehaviour:
   feedbackDragEnd: {fileID: 712241543876561870}
   feedbackCardDropped: {fileID: 6865710980222961789}
   feedbackCardPlayed: {fileID: 1490175589563189645}
+  mmfRandomRotation: {fileID: 1730635696124874416}
 --- !u!114 &2076784223260407400 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7018470499049142929, guid: 62450d14fd0f9f542853646bf4525ce2, type: 3}

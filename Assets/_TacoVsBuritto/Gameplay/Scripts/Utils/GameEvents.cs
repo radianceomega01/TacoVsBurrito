@@ -48,7 +48,7 @@ namespace TacoVsBurrito
         public static Action<CardBase> OnCardClickedForActionTarget;
 
         // ---- Action cards ----
-        public static Action<ActionCardBase>                      OnActionCardPlayed;   // (card trashed)
+        public static Action<ActionCardBase>                      OnActionCardPlayed;   // (card played)
         public static Action<ActionCardBase>                      OnStartNoBuenoInterruptWindow;
         public static Action<NoBuenoCard>                         OnNoBuenoPlayed;  
 

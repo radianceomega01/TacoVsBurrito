@@ -9,9 +9,11 @@ namespace TacoVsBurrito
     public abstract class ActionCardBase : CardBase
     {
         [Header("Feel - MMF Players")]
-        public MMF_Player feedbackCardPlayed;
+        [SerializeField] private MMF_Player feedbackCardPlayed;
+        [SerializeField] private MMFRandomRotation mmfRandomRotation;
 
         protected const int EXECUTION_DEALY_IN_MS = 500;
+        public virtual int FEEL_ANIM_DELAY_IN_MS => 1500;
         protected ActionResolver resolver;
 
         protected override void OnEnable() {
@@ -28,9 +30,12 @@ namespace TacoVsBurrito
             this.resolver = resolver;
         }
 
-        public void PlayCardPlayedEffect() => feedbackCardPlayed?.PlayFeedbacks();
+        public virtual void PlayCardPlayedEffect() => feedbackCardPlayed?.PlayFeedbacks();
         
-        public abstract void ExecuteAction();
+        public virtual void ExecuteAction()
+        {
+            mmfRandomRotation?.ModifyValue();
+        }
         public virtual bool CanExecuteAction() => true;
         public virtual TurnState GetStateOnPlayed() => TurnState.ActionResolvePhase; 
     }
